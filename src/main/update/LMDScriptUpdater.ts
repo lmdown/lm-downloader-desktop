@@ -44,7 +44,7 @@ export default class LMDScriptUpdater {
 
   pullLatestChanges(localPath) {
     return new Promise ((resolve, reject) => {
-      exec('git pull', { cwd: localPath }, (error, stdout, stderr) => {
+      exec('git reset --hard origin/master && git pull --depth=1 --force --no-rebase', { cwd: localPath }, (error, stdout, stderr) => {
         let pullResult = false
           if (error) {
               console.error(`error: ${stderr}`);
