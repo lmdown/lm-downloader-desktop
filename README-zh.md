@@ -8,6 +8,10 @@
 
 [English](./README.md) · 中文
 
+## Download
+
+- [下载 最新版魔当](https://gitee.com/lmdown/lm-downloader-desktop/releases)
+
 ## 推荐的开发工具
 
 - [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
