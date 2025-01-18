@@ -8,7 +8,7 @@
 
 [English](./README.md) · 中文
 
-## Download
+## 下载
 
 - [下载 最新版魔当](https://gitee.com/lmdown/lm-downloader-desktop/releases)
 
