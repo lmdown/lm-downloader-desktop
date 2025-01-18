@@ -49,7 +49,7 @@ $ npm run build:linux
 
 <img width="220" src="docs/Architecture.png">
 
-## 🔗 Links
+## 🔗 链接
 
 - [LM Downloader Desktop](https://gitee.com/lmdown/lm-downloader-desktop)
 - [LM Downloader Frontend](https://gitee.com/lmdown/lm-downloader-frontend)

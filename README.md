@@ -17,7 +17,7 @@ English · [中文](./README-zh.md)
 This repository is the desktop app with Electron and TypeScript.
 
 ### Install
-dradra.
+
 ```bash
 $ npm install
 ```
