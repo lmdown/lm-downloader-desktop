@@ -58,7 +58,6 @@ app.whenReady().then(async () => {
   MenuManager.getInstance().init()
   new RunningAppWindowManager(ipcMain);
 
-  createWindow()
   await createWindowLoadFiles()
   initConfigAndServer()
 })

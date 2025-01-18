@@ -23,9 +23,7 @@ export default class ConfigManager {
         return ConfigManager.instance;
     }
 
-
     constructor() {
-
       this.checkAndInit()
       this.initHandlers()
     }

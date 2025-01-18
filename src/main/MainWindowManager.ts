@@ -21,6 +21,9 @@ export default class MainWindowManager {
   }
 
   createMainWindow(): BrowserWindow {
+    if(this.win) {
+      return this.win
+    }
     const preload = path.join(__dirname, '../preload/index.js')
     this.win = new BrowserWindow({
       width: 1200,
