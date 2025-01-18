@@ -1,0 +1,70 @@
+appId: com.lmdownloader.desktop
+productName: LM Downloader
+directories:
+  buildResources: build
+files:
+  - 'out/*'
+  - 'out/**'
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintignore,.eslintrc.js,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+asarUnpack:
+  - out/local-server/**
+  - resources/**
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  executableName: lm-downloader
+  artifactName: ${productName}-Windows-${version}-Setup.${ext}
+  icon: src/resource/build/icons/icon.ico
+nsis:
+  artifactName: ${name}-${version}-setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always # 创建桌面图标
+  # createDesktopShortcut: true
+  oneClick: false
+  allowToChangeInstallationDirectory: true # 允许修改安装目录
+  installerIcon: src/resource/build/icons/icon.ico # 安装图标
+  uninstallerIcon: src/resource/build/icons/icon.ico #卸载图标
+  installerHeaderIcon: src/resource/build/icons/icon.ico # 安装时头部图标
+
+  createStartMenuShortcut: true # 创建开始菜单图标
+
+mac:
+  entitlementsInherit: build/entitlements.mac.plist
+  extendInfo:
+    - NSCameraUsageDescription: Application requests access to the device's camera.
+    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
+    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
+    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+  notarize: false
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+  artifactName: ${productName}-Mac-${arch}-${version}-Installer.${ext}
+  icon: src/resource/build/icons/icon.icns
+dmg:
+  artifactName: ${name}-${version}-${arch}.${ext}
+linux:
+  target:
+    - AppImage
+    - snap
+    - deb
+  maintainer: electronjs.org
+  category: Utility
+appImage:
+  artifactName: ${name}-${version}.${ext}
+npmRebuild: false
+publish:
+  provider: generic
+  url: http://localhost:8088/auto-updates
+electronDownload:
+  mirror: https://npmmirror.com/mirrors/electron/

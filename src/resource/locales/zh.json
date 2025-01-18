@@ -1,0 +1,19 @@
+{
+  "welcome": "欢迎！",
+  "Menu": {
+      "Settings": "设置...",
+      "About": "关于LM Downloader"
+  },
+  "Update": {
+    "DialogTitle": "更新提示",
+    "Download": "下载",
+    "Close": "关闭",
+    "OutOfDate": "当前版本已经过时，是否下载新版本？"
+  },
+  "RunningWindow": {
+    "DialogTitle":"退出确认",
+    "DialogMessage":"确认退出应用吗?",
+    "Exit": "关闭并退出",
+    "Cancel": "取消"
+  }
+}

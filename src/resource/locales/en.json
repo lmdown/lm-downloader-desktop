@@ -1,0 +1,19 @@
+{
+  "welcome": "Welcome",
+  "Menu": {
+      "Settings": "Settings...",
+      "About": "About LM Downloader"
+  },
+  "Update": {
+    "DialogTitle": "Need Update",
+    "Download": "Download",
+    "Close": "Close",
+    "OutOfDate": "LM Downloader is out of date, please get the newest version."
+  },
+  "RunningWindow": {
+    "DialogTitle":"Exit Confirm",
+    "DialogMessage":"Do you want to exit?",
+    "Exit": "Close and Exit",
+    "Cancel": "Cancel"
+  }
+}
