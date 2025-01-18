@@ -8,6 +8,9 @@ LM Downloader is a free, open source, easy-to-use, and powerful AI Large Model A
 
 English · [中文](./README-zh.md)
 
+## Download
+- [Get latest LM Downloader](https://gitee.com/lmdown/lm-downloader-desktop/releases)
+
 ## Recommended IDE Setup
 
 - [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
