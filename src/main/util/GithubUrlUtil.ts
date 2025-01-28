@@ -3,8 +3,8 @@ import NetworkCheckUtil from "./NetworkCheckUtil";
 
 export default class GithubUrlUtil {
 
-  static addProxy(downloadUrl: string) {
-    if(NetworkCheckUtil.isGithubAvailable()) {
+  static async addProxy(downloadUrl: string): Promise<string> {
+    if (await NetworkCheckUtil.isGithubAvailable()) {
       return downloadUrl
     } else {
       const globalEnvVars = ConfigManager.getInstance().getENVVariables()

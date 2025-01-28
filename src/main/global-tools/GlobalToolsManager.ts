@@ -4,7 +4,7 @@ import path from 'path'
 import fs from 'fs'
 import OSUtil from "../util/OSUtil";
 import GithubUrlUtil from "../util/GithubUrlUtil";
-import { exec } from 'child_process';
+import { exec, execSync } from 'child_process';
 
 export default class GlobalToolsManager {
 
@@ -37,29 +37,28 @@ export default class GlobalToolsManager {
     fs.mkdirSync(unzipToolDir, {recursive: true})
     const sevenZExec = path.join(unzipToolDir, '7zr.exe')
     await DownloadUtil.download(installer7zUrl, sevenZExec)
-
+    console.log('7z download ok. ', installer7zUrl)
 
     const gitInstallerFileName = 'PortableGit-2.47.1.2-64-bit.7z.exe'
-    const installerGitUrl = GithubUrlUtil.addProxy(`https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.2/${gitInstallerFileName}`)
+    const installerGitUrl = await GithubUrlUtil.addProxy(
+      `https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.2/${gitInstallerFileName}`
+    )
     const gitDir = path.join(appGlobalToolsDir, '/git')
     fs.mkdirSync(gitDir, {recursive: true})
     const gitInstallerFilePath = path.join(gitDir, gitInstallerFileName)
+    console.log('installerGitUrl', installerGitUrl)
     await DownloadUtil.download(installerGitUrl, gitInstallerFilePath)
 
-    // use 7z to uncompress portable git.
-    const portableGitDir = path.join(appGlobalToolsDir, '/git')
-    const command = `${sevenZExec} x ${gitInstallerFilePath} -o ${portableGitDir} -y`
-    exec(command, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error: `, stderr);
-            return;
-        }
-        console.log(`git install done: ${gitDir}`);
-        console.log(stdout);
-    });
-
-    // const unzipToolPath = unzipToolExec
-
+    // use 7z to extract portable git.
+    const portableGitDir = path.join(gitDir, '/portable')
+    const command = `${sevenZExec} x ${gitInstallerFilePath} -o${portableGitDir} -y`
+    console.log('extract portable git command: ', command)
+    try {
+      const stdout = execSync(command);
+      console.log(`extract portable git done ${stdout.toString()}`)
+    } catch (error) {
+      console.error('extract portable git err', error);
+    }
   }
 
 }
