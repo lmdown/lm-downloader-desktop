@@ -23,7 +23,7 @@ export default class ConfigManager {
         return ConfigManager.instance;
     }
 
-    constructor() {
+    init() {
       this.checkAndInit()
       this.initHandlers()
     }
@@ -40,14 +40,18 @@ export default class ConfigManager {
         // return EnvUtil.writeEnvFile(configFilePath, configData)
       })
       ipcMain.handle(IPCHandleName.GET_ENV_VARIABLES, (_) => {
-        const envFilePath = this.ensureEnvFileExist()
-        return EnvUtil.getEnvFile(envFilePath)
+        return this.getENVVariables()
       })
       ipcMain.handle(IPCHandleName.SAVE_ENV_VARIABLES, (_, globalEnvVars) => {
         const envFilePath = this.ensureEnvFileExist()
         globalEnvVars = typeof globalEnvVars === 'object' ? globalEnvVars : JSON.parse(globalEnvVars)
         return EnvUtil.writeEnvFile(envFilePath, globalEnvVars)
       })
+    }
+
+    getENVVariables(): LMDGlobalEnv {
+      const envFilePath = this.ensureEnvFileExist()
+      return EnvUtil.getEnvFile(envFilePath) as unknown as LMDGlobalEnv
     }
 
     getBaseConfig(): LMDBaseConfig {

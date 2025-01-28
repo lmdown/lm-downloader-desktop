@@ -1,6 +1,6 @@
 {
   "name": "lm-downloader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "LM Downloader Desktop App",
   "main": "./out/main/index.js",
   "author": "lmdown",
@@ -27,7 +27,8 @@
     "adm-zip": "^0.5.16",
     "compare-versions": "^6.1.1",
     "dotenv": "^16.4.7",
-    "electron-log": "^5.2.4"
+    "electron-log": "^5.2.4",
+    "in-gfw": "^1.2.0"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",

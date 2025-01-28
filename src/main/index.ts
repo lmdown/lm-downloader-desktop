@@ -12,6 +12,7 @@ import LogManager from './log/LogManager'
 import LMDScriptUpdater from './update/LMDScriptUpdater'
 import MainWindowManager from './MainWindowManager'
 import LocaleManager from './locales/LocaleManager'
+import GlobalToolsManager from './global-tools/GlobalToolsManager'
 
 dotenv.config();
 
@@ -45,27 +46,33 @@ async function createWindow() {
   MenuManager.getInstance().mainWindow = win
 }
 
-function initConfigAndServer() {
-  const configMgr = ConfigManager.getInstance();
+function initServer() {
   const startLmdServer = process.env.START_LMD_SERVER!==undefined ? parseInt(process.env.START_LMD_SERVER) : 1
   if(startLmdServer) {
-    new LMDServerManager(configMgr)
+    new LMDServerManager()
   }
 }
 
 app.whenReady().then(async () => {
+  ConfigManager.getInstance().init();
+  //
+  await GlobalToolsManager.getInstance().install()
+
+  // Locale
   LocaleManager.getInstance().init()
   MenuManager.getInstance().init()
   new RunningAppWindowManager(ipcMain);
 
   await createWindowLoadFiles()
-  initConfigAndServer()
+  initServer()
 })
 
 const createWindowLoadFiles = async () => {
   createWindow()
+  // load scripts
   const updateResult = await new LMDScriptUpdater().update()
 
+  // load main html page
   console.log('loadLMDHtml')
   mainWindowMgr.loadLMDHtml()
 }
