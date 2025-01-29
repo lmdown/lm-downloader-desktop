@@ -60,7 +60,8 @@ export default class ConfigManager {
     }
 
     checkAndInit() {
-      this.ensureConfigFileExist()
+      const configFilePath = this.ensureConfigFileExist()
+      EnvUtil.checkConfigKV(configFilePath)
       const envFilePath = this.ensureEnvFileExist()
       EnvUtil.checkEnvVarsKV(envFilePath)
     }
