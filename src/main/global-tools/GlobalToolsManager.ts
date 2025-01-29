@@ -4,10 +4,10 @@ import path from 'path'
 import fs from 'fs'
 import OSUtil from "../util/OSUtil";
 import GithubUrlUtil from "../util/GithubUrlUtil";
-import { exec, execSync } from 'child_process';
-import { checkGitFilesExist } from "./GitCheck";
-import { DEFAULT_LMD_BASE_CONFIG } from "../../template/base_config_template";
-import ReplaceUtil from "../util/ReplaceUtil";
+import { execSync } from 'child_process';
+import { checkGitFilesExist, getGitInstallDir } from "./GitCheck";
+import LMDBaseConfig from "../../types/LMDBaseConfig";
+import LMDGlobalEnv from "../../types/LMDGlobalEnv";
 
 export default class GlobalToolsManager {
 
@@ -18,6 +18,8 @@ export default class GlobalToolsManager {
 
   private appGlobalToolsDir: string = ''
   private sevenZExec: string = ''
+  private currentBaseConfig: LMDBaseConfig | null = null
+  private globalEnv: LMDGlobalEnv | null = null
 
   static getInstance(): GlobalToolsManager {
       if (!GlobalToolsManager.instance) {
@@ -26,31 +28,36 @@ export default class GlobalToolsManager {
       return GlobalToolsManager.instance;
   }
 
-  async install() {
+  async install(): Promise<void>  {
     if(OSUtil.isWindows()) {
-      const result = await this.checkGitAvailable();
-      console.log('git是否可用', result)
-      if(!result) {
-        await this.installToolsForWindows()
+      const configMgr = ConfigManager.getInstance()
+      this.currentBaseConfig = configMgr.getBaseConfig()
+      this.globalEnv = configMgr.getENVVariables()
+      if(this.globalEnv?.GIT_INSTALL_PATH) {
+        const result = checkGitFilesExist(this.globalEnv.GIT_INSTALL_PATH)
+        console.log('GitFilesExist ', result)
+        if(!result) {
+          const gitInstallDir = getGitInstallDir()
+          if(gitInstallDir) {
+            configMgr.updateEnvVarsKV('GIT_INSTALL_PATH', gitInstallDir)
+          } else {
+            await this.installToolsForWindows()
+          }
+        }
       }
+
     }
   }
-  async checkGitAvailable(): boolean {
 
-  }
-
-  async installToolsForWindows() {
+  async installToolsForWindows(): Promise<void> {
     console.log('installToolsForWindows')
-    const baseConfig = ConfigManager.getInstance().getBaseConfig()
-
-    this.appGlobalToolsDir = baseConfig.GLOBAL_TOOLS_DIR
-    // baseConfig.LMD_SCRIPTS_DIR + "/global-tools"
-    baseConfig.GIT_INSTALL_PATH
-    const gitFilesExist = checkGitFilesExist(this.appGlobalToolsDir)
-    if (!gitFilesExist) {
-      await this.install7z()
-      await this.installGit()
+    this.appGlobalToolsDir = this.currentBaseConfig?.GLOBAL_TOOLS_DIR || ''
+    if(!this.appGlobalToolsDir) {
+      console.error('GLOBAL_TOOLS_DIR value is not correct: ', this.appGlobalToolsDir)
+      return
     }
+    await this.install7z()
+    await this.installGit()
   }
 
   async install7z() {

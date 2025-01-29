@@ -5,7 +5,7 @@ import * as path from 'path';
 function checkIfGitIsInstalled(): string | null {
     try {
         // 获取git的安装路径
-        const gitPath = execSync('where.exe python', { encoding: 'utf8' });
+        const gitPath = execSync('where.exe git', { encoding: 'utf8' });
         if (gitPath) {
             const gitDir = path.dirname(gitPath.trim());
             return path.join(gitDir, '..');
@@ -31,19 +31,21 @@ function checkForBashExe(gitInstallDir: string): string | null {
     return null;
 }
 
-export function getGitInstallDir() {
+export function getGitInstallDir(): string {
     const gitInstallDir = checkIfGitIsInstalled();
     if (gitInstallDir) {
         console.log(`Git installation directory: ${gitInstallDir}`);
         const bashExePath = checkForBashExe(gitInstallDir);
         if (bashExePath) {
             console.log(`Found bash.exe at: ${bashExePath}`);
+            return gitInstallDir
         } else {
             console.log('Could not find bash.exe in the expected locations.');
         }
     } else {
         console.log('Git is not installed on this system.');
     }
+    return ''
 }
 
 export function getLMDPortableGit() {

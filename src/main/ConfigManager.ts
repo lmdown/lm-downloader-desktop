@@ -43,10 +43,20 @@ export default class ConfigManager {
         return this.getENVVariables()
       })
       ipcMain.handle(IPCHandleName.SAVE_ENV_VARIABLES, (_, globalEnvVars) => {
-        const envFilePath = this.ensureEnvFileExist()
-        globalEnvVars = typeof globalEnvVars === 'object' ? globalEnvVars : JSON.parse(globalEnvVars)
-        return EnvUtil.writeEnvFile(envFilePath, globalEnvVars)
+        this.saveENVVariables(globalEnvVars)
       })
+    }
+
+    saveENVVariables(globalEnvVars) {
+      const envFilePath = this.ensureEnvFileExist()
+      globalEnvVars = typeof globalEnvVars === 'object' ? globalEnvVars : JSON.parse(globalEnvVars)
+      return EnvUtil.writeEnvFile(envFilePath, globalEnvVars)
+    }
+
+    updateEnvVarsKV(key: string, value: string) {
+      const lmdGlobalEnv: LMDGlobalEnv = this.getENVVariables()
+      lmdGlobalEnv[key] = value
+      this.saveENVVariables(lmdGlobalEnv)
     }
 
     getENVVariables(): LMDGlobalEnv {

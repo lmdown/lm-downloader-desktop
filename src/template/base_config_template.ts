@@ -16,8 +16,6 @@ export const DEFAULT_LMD_BASE_CONFIG: LMDBaseConfig = {
   LMD_LOCALE: "",
 
   GLOBAL_TOOLS_DIR: '${LMD_DATA_ROOT}/scripts/global-tools',
-  // git安装目录，可访问git和bash命令
-  GIT_INSTALL_PATH: '${LMD_DATA_ROOT}/scripts/global-tools/git/portable',
 
   LMD_APP_STORY_GIT: "https://gitee.com/lmdown/lm-downloader-app-story",
 
