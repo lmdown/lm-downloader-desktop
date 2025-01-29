@@ -54,9 +54,6 @@ function initServer() {
 
 app.whenReady().then(async () => {
   ConfigManager.getInstance().init();
-  //
-  await GlobalToolsManager.getInstance().install()
-
   // Locale
   LocaleManager.getInstance().init()
   MenuManager.getInstance().init()
@@ -71,6 +68,7 @@ const createWindowLoadFiles = async () => {
   // load scripts
   const updateResult = await new LMDScriptUpdater().update()
 
+  await GlobalToolsManager.getInstance().install()
   // load main html page
   console.log('loadLMDHtml')
   mainWindowMgr.loadLMDHtml()

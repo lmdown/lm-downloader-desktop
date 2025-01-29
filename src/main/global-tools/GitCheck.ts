@@ -5,9 +5,10 @@ import * as path from 'path';
 function checkIfGitIsInstalled(): string | null {
     try {
         // 获取git的安装路径
-        const gitPath = execSync('where.exe git', { encoding: 'utf8' });
-        if (gitPath) {
-            const gitDir = path.dirname(gitPath.trim());
+        const gitPathStr = execSync('where.exe git', { encoding: 'utf8' })
+        const gitPathArr = gitPathStr.split('\r\n')
+        if (gitPathArr[0]) {
+            const gitDir = path.dirname(gitPathArr[0].trim());
             return path.join(gitDir, '..');
         }
     } catch (error) {

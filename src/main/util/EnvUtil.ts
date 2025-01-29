@@ -91,14 +91,14 @@ export class EnvUtil {
     const defaultGlobalEnv: LMDEnv = DEFAULT_GLOBAL_ENV;
     const envVars = this.getEnvFile(envFilePath)
     let isKVAdd = false
-    // let rootDir
+    let rootDir
 
     for(let key in defaultGlobalEnv) {
       if( envVars[key] === undefined ) {
-        // if(!rootDir) {
-        //   rootDir = ConfigPathUtil.getRootDir().rootDir
-        // }
-        // ReplaceUtil.replaceVars(defaultGlobalEnv, '${LMD_DATA_ROOT}', rootDir);
+        if(!rootDir) {
+          rootDir = ConfigPathUtil.getRootDir().rootDir
+        }
+        ReplaceUtil.replaceVars(defaultGlobalEnv, '${LMD_DATA_ROOT}', rootDir);
         envVars[key] = defaultGlobalEnv[key]
         isKVAdd = true
       }

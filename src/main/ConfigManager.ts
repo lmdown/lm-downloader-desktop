@@ -53,6 +53,17 @@ export default class ConfigManager {
       return EnvUtil.writeEnvFile(envFilePath, globalEnvVars)
     }
 
+    getDefaultGitInstallPath(): string {
+      const defaultGlobalEnv: LMDGlobalEnv = DEFAULT_GLOBAL_ENV;
+      const {rootDir} = ConfigPathUtil.getRootDir()
+      ReplaceUtil.replaceVars(defaultGlobalEnv, '${LMD_DATA_ROOT}', rootDir);
+      return defaultGlobalEnv.GIT_INSTALL_PATH
+    }
+
+    updateEnvGitInstallPath(value: string) {
+      this.updateEnvVarsKV('GIT_INSTALL_PATH', value)
+    }
+
     updateEnvVarsKV(key: string, value: string) {
       const lmdGlobalEnv: LMDGlobalEnv = this.getENVVariables()
       lmdGlobalEnv[key] = value

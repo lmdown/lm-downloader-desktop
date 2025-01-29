@@ -34,14 +34,24 @@ export default class GlobalToolsManager {
       this.currentBaseConfig = configMgr.getBaseConfig()
       this.globalEnv = configMgr.getENVVariables()
       if(this.globalEnv?.GIT_INSTALL_PATH) {
-        const result = checkGitFilesExist(this.globalEnv.GIT_INSTALL_PATH)
-        console.log('GitFilesExist ', result)
-        if(!result) {
+        let checkResult = checkGitFilesExist(this.globalEnv.GIT_INSTALL_PATH)
+        console.log('GitFilesExist with env ', checkResult)
+        const defaultGitInstallPath = configMgr.getDefaultGitInstallPath()
+        if(!checkResult) {
+          checkResult = checkGitFilesExist(defaultGitInstallPath)
+          console.log('GitFilesExist with defaultGitInstallPath ', checkResult)
+          if(checkResult) {
+            configMgr.updateEnvGitInstallPath(defaultGitInstallPath)
+          }
+        }
+
+        if(!checkResult) {
           const gitInstallDir = getGitInstallDir()
           if(gitInstallDir) {
-            configMgr.updateEnvVarsKV('GIT_INSTALL_PATH', gitInstallDir)
+            configMgr.updateEnvGitInstallPath(gitInstallDir)
           } else {
             await this.installToolsForWindows()
+            configMgr.updateEnvGitInstallPath(defaultGitInstallPath)
           }
         }
       }
