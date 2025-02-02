@@ -6,7 +6,6 @@ import * as https from 'https'
 import * as http from 'http'
 import * as url from 'url'
 
-// const syncArgv: string = "in-gfw-net-sync-argv";
 export default class GFWCheckUtil {
 
   static async asyncCheck(blockedHost: string = 'npmjs.com', cnHost: string = 'npmmirror.com'): Promise<boolean> {
