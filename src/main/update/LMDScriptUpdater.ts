@@ -44,10 +44,13 @@ export default class LMDScriptUpdater {
 
   pullLatestChanges(localPath) {
     return new Promise ((resolve, reject) => {
-      exec('git reset --hard origin/master && git pull --depth=1 --force --no-rebase', { cwd: localPath }, (error, stdout, stderr) => {
+      const pullCommand = 'git fetch origin master --depth=1 && git reset --hard origin/master'
+      console.log("pullCommand:", pullCommand)
+      exec(pullCommand, { cwd: localPath }, (error, stdout, stderr) => {
         let pullResult = false
           if (error) {
-              console.error(`error: ${stderr}`);
+              console.error(`error: `, error);
+              console.error(`stderr: ${stderr}`);
               // return;
           } else {
             console.log(`pull output: ${stdout}`);
@@ -116,7 +119,7 @@ export default class LMDScriptUpdater {
     const osTypeMap = {
       Linux: 'linux',
       Darwin: 'mac',
-      Windows: 'windows'
+      Windows_NT: 'windows'
     }
     return osTypeMap[osType]
   }
