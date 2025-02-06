@@ -57,7 +57,7 @@ app.whenReady().then(async () => {
   // Locale
   LocaleManager.getInstance().init()
   MenuManager.getInstance().init()
-  new RunningAppWindowManager(ipcMain);
+  new RunningAppWindowManager();
 
   await createWindowLoadFiles()
   initServer()
@@ -66,7 +66,10 @@ app.whenReady().then(async () => {
 const createWindowLoadFiles = async () => {
   createWindow()
   // load scripts
-  const updateResult = await new LMDScriptUpdater().update()
+  const shouldUpdateStory = process.env.UPDATE_STORY!==undefined ? parseInt(process.env.UPDATE_STORY) : 1
+  if(shouldUpdateStory) {
+    const updateResult = await new LMDScriptUpdater().update()
+  }
 
   await GlobalToolsManager.getInstance().install()
   // load main html page
