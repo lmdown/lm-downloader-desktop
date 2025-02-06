@@ -15,6 +15,8 @@ export const DEFAULT_LMD_BASE_CONFIG: LMDBaseConfig = {
 
   LMD_LOCALE: "",
 
+  GLOBAL_TOOLS_DIR: '${LMD_DATA_ROOT}/scripts/global-tools',
+
   LMD_APP_STORY_GIT: "https://gitee.com/lmdown/lm-downloader-app-story",
 
   LMD_APP_STORY_DIR: "${LMD_DATA_ROOT}/scripts/lm-downloader-app-story",

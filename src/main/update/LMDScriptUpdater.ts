@@ -44,10 +44,13 @@ export default class LMDScriptUpdater {
 
   pullLatestChanges(localPath) {
     return new Promise ((resolve, reject) => {
-      exec('git reset --hard origin/master && git pull --depth=1 --force --no-rebase', { cwd: localPath }, (error, stdout, stderr) => {
+      const pullCommand = 'git fetch origin master --depth=1 && git reset --hard origin/master'
+      console.log("pullCommand:", pullCommand)
+      exec(pullCommand, { cwd: localPath }, (error, stdout, stderr) => {
         let pullResult = false
           if (error) {
-              console.error(`error: ${stderr}`);
+              console.error(`error: `, error);
+              console.error(`stderr: ${stderr}`);
               // return;
           } else {
             console.log(`pull output: ${stdout}`);
@@ -80,10 +83,11 @@ export default class LMDScriptUpdater {
         const { MODULES_PREFIX } = EnvUtil.getEnvFile(appStoryEnvPath)
         for(const index in depencencies) {
           const fullServerDir = path.join(appStoryPath, serverPath)
-          let dept = depencencies[index]
-          dept = dept.replace('${ARCH}', os.arch())
-          const depUrl = dept.replace('${MODULES_PREFIX}', MODULES_PREFIX)
-          const depLocalFilePath = dept.replace('${MODULES_PREFIX}', fullServerDir)
+          let dep = depencencies[index]
+          dep = dep.replace('${OS}', this.getOSStr())
+          dep = dep.replace('${ARCH}', os.arch())
+          const depUrl = dep.replace('${MODULES_PREFIX}', MODULES_PREFIX)
+          const depLocalFilePath = dep.replace('${MODULES_PREFIX}', fullServerDir)
           let needUncompress = false
           if(!fs.existsSync(depLocalFilePath)) {
             await DownloadUtil.download(depUrl, depLocalFilePath)
@@ -106,6 +110,18 @@ export default class LMDScriptUpdater {
         this.showForceUpdateDialog()
       }
     })
+  }
+
+  getOSStr() {
+    // `'Linux'` on Linux, `'Darwin'` on macOS, and `'Windows_NT'` on Windows.
+    const osType = os.type()
+    // convert to linux, mac and windows
+    const osTypeMap = {
+      Linux: 'linux',
+      Darwin: 'mac',
+      Windows_NT: 'windows'
+    }
+    return osTypeMap[osType]
   }
 
   showForceUpdateDialog() {

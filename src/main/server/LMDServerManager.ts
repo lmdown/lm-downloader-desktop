@@ -6,8 +6,8 @@ import ConfigManager from '../ConfigManager';
 export default class LMDServerManager {
 
   private _configMgr:ConfigManager
-  constructor(configMgr: ConfigManager) {
-    this._configMgr = configMgr
+  constructor() {
+    this._configMgr = ConfigManager.getInstance()
     this.init()
   }
 

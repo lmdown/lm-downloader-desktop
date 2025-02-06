@@ -8,9 +8,10 @@ export default class DownloadUtil {
       console.error('url not valid',url)
       throw new Error('url not valid')
     }
+    console.log(`start download ${url}`);
     const execAsync = promisify(exec);
     try {
-      const command = `curl  -C - --retry 5 -L ${url} --output ${destination}`;
+      const command = `curl  -C - --retry 7 -L ${url} --output ${destination}`;
       await execAsync(command);
       console.log(`downloaded to ${destination}`);
     } catch (error) {

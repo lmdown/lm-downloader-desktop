@@ -12,6 +12,8 @@ export default interface LMDBaseConfig extends LMDEnv {
 
   LMD_LOCALE: string
 
+  GLOBAL_TOOLS_DIR: string
+
   LMD_APP_STORY_GIT: string
 
   LMD_APP_STORY_DIR: string
