@@ -23,7 +23,7 @@ export default class ConfigManager {
         return ConfigManager.instance;
     }
 
-    constructor() {
+    init() {
       this.checkAndInit()
       this.initHandlers()
     }
@@ -40,14 +40,39 @@ export default class ConfigManager {
         // return EnvUtil.writeEnvFile(configFilePath, configData)
       })
       ipcMain.handle(IPCHandleName.GET_ENV_VARIABLES, (_) => {
-        const envFilePath = this.ensureEnvFileExist()
-        return EnvUtil.getEnvFile(envFilePath)
+        return this.getENVVariables()
       })
       ipcMain.handle(IPCHandleName.SAVE_ENV_VARIABLES, (_, globalEnvVars) => {
-        const envFilePath = this.ensureEnvFileExist()
-        globalEnvVars = typeof globalEnvVars === 'object' ? globalEnvVars : JSON.parse(globalEnvVars)
-        return EnvUtil.writeEnvFile(envFilePath, globalEnvVars)
+        this.saveENVVariables(globalEnvVars)
       })
+    }
+
+    saveENVVariables(globalEnvVars) {
+      const envFilePath = this.ensureEnvFileExist()
+      globalEnvVars = typeof globalEnvVars === 'object' ? globalEnvVars : JSON.parse(globalEnvVars)
+      return EnvUtil.writeEnvFile(envFilePath, globalEnvVars)
+    }
+
+    getDefaultGitInstallPath(): string {
+      const defaultGlobalEnv: LMDGlobalEnv = DEFAULT_GLOBAL_ENV;
+      const {rootDir} = ConfigPathUtil.getRootDir()
+      ReplaceUtil.replaceVars(defaultGlobalEnv, '${LMD_DATA_ROOT}', rootDir);
+      return defaultGlobalEnv.GIT_INSTALL_PATH
+    }
+
+    updateEnvGitInstallPath(value: string) {
+      this.updateEnvVarsKV('GIT_INSTALL_PATH', value)
+    }
+
+    updateEnvVarsKV(key: string, value: string) {
+      const lmdGlobalEnv: LMDGlobalEnv = this.getENVVariables()
+      lmdGlobalEnv[key] = value
+      this.saveENVVariables(lmdGlobalEnv)
+    }
+
+    getENVVariables(): LMDGlobalEnv {
+      const envFilePath = this.ensureEnvFileExist()
+      return EnvUtil.getEnvFile(envFilePath) as unknown as LMDGlobalEnv
     }
 
     getBaseConfig(): LMDBaseConfig {
@@ -56,7 +81,8 @@ export default class ConfigManager {
     }
 
     checkAndInit() {
-      this.ensureConfigFileExist()
+      const configFilePath = this.ensureConfigFileExist()
+      EnvUtil.checkConfigKV(configFilePath)
       const envFilePath = this.ensureEnvFileExist()
       EnvUtil.checkEnvVarsKV(envFilePath)
     }

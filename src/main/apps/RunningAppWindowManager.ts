@@ -1,4 +1,4 @@
-import { app, BrowserWindow, IpcMain, dialog, shell } from 'electron';
+import { app, BrowserWindow, IpcMain, dialog, shell, ipcMain } from 'electron';
 import path from 'node:path'
 // import LocalAppRunner from './apps/LocalAppRunner';
 import { fileURLToPath } from 'node:url'
@@ -6,6 +6,7 @@ import RunningAppWindow from './RunningAppWindow';
 import { IPCHandleName } from '../../constant/IPCHandleName';
 import { IPCChannelName } from '../../constant/IPCChannelName';
 import ScriptPathUtil from '../util/ScriptPathUtil';
+import icon from '../../resource/build/icons/256x256.png?asset'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 /**
@@ -13,12 +14,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
  */
 export default class RunningAppWindowManager {
 
-    private _ipcMain: IpcMain;
-
     private _allWindows: Map<string, RunningAppWindow> = new Map();
 
-    constructor(ipcMain: IpcMain) {
-      this._ipcMain = ipcMain
+    constructor() {
       this.init()
     }
 
@@ -28,7 +26,7 @@ export default class RunningAppWindowManager {
     }
 
     // private startApp(installedInstanceId: string, appPath: string) {
-    //   const runner: LocalAppRunner = new LocalAppRunner(this._ipcMain);
+    //   const runner: LocalAppRunner = new LocalAppRunner(ipcMain);
     //   this._allAppRunners.set(installedInstanceId+"-path:"+appPath, runner)
     //   runner.startApp(appPath)
     // }
@@ -42,16 +40,16 @@ export default class RunningAppWindowManager {
     }
 
     private regHandles() {
-      // this._ipcMain?.handle(IPCHandleName.OPEN_RUNNING_WINDOW_AND_INSTALL, (_, installedInstanceId: string, windowPagePath: string) => {
+      // ipcMain?.handle(IPCHandleName.OPEN_RUNNING_WINDOW_AND_INSTALL, (_, installedInstanceId: string, windowPagePath: string) => {
       //   this.openWindow(installedInstanceId, windowPagePath, 'install')
       // })
 
-      this._ipcMain?.handle(IPCHandleName.OPEN_RUNNING_WINDOW, (_, installedInstanceId: string, windowPagePath: string) => {
+      ipcMain?.handle(IPCHandleName.OPEN_RUNNING_WINDOW, (_, installedInstanceId: string, windowPagePath: string) => {
         // console.log('call open-running-window', _, installedInstanceId, appPagePath)
         this.openWindow(installedInstanceId, windowPagePath)
       })
 
-      this._ipcMain.handle(IPCHandleName.OPEN_PATH, (_, path: string) => {
+      ipcMain.handle(IPCHandleName.OPEN_PATH, (_, path: string) => {
         console.log('IPCHandleName.OPEN_PATH',path)
         shell.openPath(path)
       })
@@ -69,7 +67,9 @@ export default class RunningAppWindowManager {
         return
       }
 
-      const childWindow = new RunningAppWindow(this._ipcMain, {
+      const childWindow = new RunningAppWindow(ipcMain, {
+        ...(process.platform !== 'darwin' ? { autoHideMenuBar: true } : {}),
+        ...(process.platform === 'linux' ? { icon } : {}),
         webPreferences: {
           preload,
           nodeIntegration: true,
@@ -107,7 +107,7 @@ export default class RunningAppWindowManager {
     }
 
     private regListeners() {
-      this._ipcMain.on(IPCChannelName.RUNNING_STATUS_CHANGE, (event, arg) => {
+      ipcMain.on(IPCChannelName.RUNNING_STATUS_CHANGE, (event, arg) => {
         const senderWindow: RunningAppWindow = BrowserWindow.fromWebContents(event.sender) as RunningAppWindow;
         senderWindow.isAppInstanceRunning = arg
       })

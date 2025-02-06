@@ -28,7 +28,6 @@ export default class MainWindowManager {
     this.win = new BrowserWindow({
       width: 1200,
       height: 800,
-      ...(process.platform === 'linux' ? { icon } : {}),
       // remove the default titlebar
       titleBarStyle: 'hidden',
       // expose window controlls in Windows/Linux

@@ -4,6 +4,8 @@ import * as dotenv from 'dotenv';
 import { DEFAULT_GLOBAL_ENV } from "../../template/global_vars_template";
 import ReplaceUtil from "./ReplaceUtil";
 import ConfigPathUtil from "./ConfigPathUtil";
+import { DEFAULT_LMD_BASE_CONFIG } from "../../template/base_config_template";
+import ConfigManager from "../ConfigManager";
 
 export class EnvUtil {
 
@@ -58,6 +60,29 @@ export class EnvUtil {
     } catch (error) {
       console.error('Error writing to .env file:', error.message);
       throw error;
+    }
+  }
+
+  static checkConfigKV(filePath: string) {
+    // 如果文件存在，也要检查key是否都存在。补充不存在的KV
+    const defaultGlobalEnv: LMDEnv = DEFAULT_LMD_BASE_CONFIG;
+    const configVars = this.getEnvFile(filePath)
+    let isKVAdd = false
+    let rootDir
+
+    for(let key in defaultGlobalEnv) {
+      if( configVars[key] === undefined ) {
+        if(!rootDir) {
+          const baseConfig = ConfigManager.getInstance().getBaseConfig()
+          rootDir = baseConfig.LMD_DATA_ROOT
+        }
+        ReplaceUtil.replaceVars(defaultGlobalEnv, '${LMD_DATA_ROOT}', rootDir);
+        configVars[key] = defaultGlobalEnv[key]
+        isKVAdd = true
+      }
+    }
+    if(isKVAdd) {
+      this.writeEnvFile(filePath, configVars as unknown as LMDEnv)
     }
   }
 

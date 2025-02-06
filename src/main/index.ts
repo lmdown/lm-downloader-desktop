@@ -6,12 +6,12 @@ import RunningAppWindowManager from './apps/RunningAppWindowManager'
 import ConfigManager from './ConfigManager'
 import MenuManager from './menu/MenuManager'
 import LMDServerManager from './server/LMDServerManager'
-// import icon from '../resource/build/icons/256x256.png?asset'
 import dotenv from 'dotenv'
 import LogManager from './log/LogManager'
 import LMDScriptUpdater from './update/LMDScriptUpdater'
 import MainWindowManager from './MainWindowManager'
 import LocaleManager from './locales/LocaleManager'
+import GlobalToolsManager from './global-tools/GlobalToolsManager'
 
 dotenv.config();
 
@@ -45,27 +45,34 @@ async function createWindow() {
   MenuManager.getInstance().mainWindow = win
 }
 
-function initConfigAndServer() {
-  const configMgr = ConfigManager.getInstance();
+function initServer() {
   const startLmdServer = process.env.START_LMD_SERVER!==undefined ? parseInt(process.env.START_LMD_SERVER) : 1
   if(startLmdServer) {
-    new LMDServerManager(configMgr)
+    new LMDServerManager()
   }
 }
 
 app.whenReady().then(async () => {
+  ConfigManager.getInstance().init();
+  // Locale
   LocaleManager.getInstance().init()
   MenuManager.getInstance().init()
-  new RunningAppWindowManager(ipcMain);
+  new RunningAppWindowManager();
 
   await createWindowLoadFiles()
-  initConfigAndServer()
+  initServer()
 })
 
 const createWindowLoadFiles = async () => {
   createWindow()
-  const updateResult = await new LMDScriptUpdater().update()
+  // load scripts
+  const shouldUpdateStory = process.env.UPDATE_STORY!==undefined ? parseInt(process.env.UPDATE_STORY) : 1
+  if(shouldUpdateStory) {
+    const updateResult = await new LMDScriptUpdater().update()
+  }
 
+  await GlobalToolsManager.getInstance().install()
+  // load main html page
   console.log('loadLMDHtml')
   mainWindowMgr.loadLMDHtml()
 }
