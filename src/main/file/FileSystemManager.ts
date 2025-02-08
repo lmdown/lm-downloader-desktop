@@ -21,8 +21,9 @@ export default class FileSystemManager {
   }
 
   initHandlers() {
-    ipcMain.handle(IPCHandleName.SELECT_DIR, async (event) => {
+    ipcMain.handle(IPCHandleName.SELECT_DIR, async (event, defaultPath) => {
       const result = await dialog.showOpenDialog({
+        defaultPath: defaultPath,
         properties: ['openDirectory']
       });
       console.log('openDirectory result', result)
