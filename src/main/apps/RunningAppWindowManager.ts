@@ -32,7 +32,7 @@ export default class RunningAppWindowManager {
     // }
 
     private onWindowClosed(installedInstanceId: string) {
-      console.log('窗口被关闭', installedInstanceId)
+      console.log('running window closed ', installedInstanceId)
       // 窗口被关闭，则从_allWins中删除窗口对象
       // console.log('removeWindow', installedInstanceId)
       // this._allWins.delete(installedInstanceId)
@@ -50,7 +50,6 @@ export default class RunningAppWindowManager {
       })
 
       ipcMain.handle(IPCHandleName.OPEN_PATH, (_, path: string) => {
-        console.log('IPCHandleName.OPEN_PATH',path)
         shell.openPath(path)
       })
     }
