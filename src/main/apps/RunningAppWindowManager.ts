@@ -69,6 +69,8 @@ export default class RunningAppWindowManager {
       const childWindow = new RunningAppWindow(ipcMain, {
         ...(process.platform !== 'darwin' ? { autoHideMenuBar: true } : {}),
         ...(process.platform === 'linux' ? { icon } : {}),
+        width: 1000,
+        height: 760,
         webPreferences: {
           preload,
           nodeIntegration: true,

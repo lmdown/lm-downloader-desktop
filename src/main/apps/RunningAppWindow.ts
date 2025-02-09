@@ -83,7 +83,7 @@ export default class RunningAppWindow extends BrowserWindow{
       this.webContents?.send(IPCChannelName.STOP_AI_RUNNING_INSTANCE, new Date().toLocaleString())
       setTimeout(()=>{
         resolve(1);
-      }, 2000)
+      }, 1000)
     })
   }
 
