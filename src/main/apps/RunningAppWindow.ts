@@ -44,7 +44,7 @@ export default class RunningAppWindow extends BrowserWindow{
       return;
     }
     const i18n = LocaleManager.getInstance().i18nInstance
-    // e.preventDefault
+    e.preventDefault()
     dialog.showMessageBox({
       type: 'info',
       title: i18n.t('RunningWindow.DialogTitle'),
