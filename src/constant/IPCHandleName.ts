@@ -9,5 +9,7 @@ export const IPCHandleName = {
   SHOW_ABOUT: 'show-about',
   OPEN_PATH: 'open-path',
   SELECT_DIR: 'select-dir',
+  GET_PROCESS_ENV: 'get-process-env',
+  RESTART_APP: 'restart-app',
 }
 

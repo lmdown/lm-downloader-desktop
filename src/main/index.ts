@@ -13,6 +13,7 @@ import MainWindowManager from './MainWindowManager'
 import LocaleManager from './locales/LocaleManager'
 import GlobalToolsManager from './global-tools/GlobalToolsManager'
 import FileSystemManager from './file/FileSystemManager'
+import LMDSystemManager from './system/LMDSystemManager'
 
 dotenv.config();
 
@@ -60,6 +61,7 @@ app.whenReady().then(async () => {
   MenuManager.getInstance().init()
   new RunningAppWindowManager();
   FileSystemManager.getInstance().init()
+  LMDSystemManager.getInstance().init()
 
   await createWindowLoadFiles()
   initServer()
