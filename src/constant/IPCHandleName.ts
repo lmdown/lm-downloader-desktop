@@ -8,5 +8,10 @@ export const IPCHandleName = {
   SAVE_ENV_VARIABLES: 'save-env-variables',
   SHOW_ABOUT: 'show-about',
   OPEN_PATH: 'open-path',
+  SELECT_DIR: 'select-dir',
+  GET_PROCESS_ENV: 'get-process-env',
+  RESTART_APP: 'restart-app',
+  RUN_COMMAND: 'run-command',
+  KILL_PROCESSES: 'kill-processes',
 }
 

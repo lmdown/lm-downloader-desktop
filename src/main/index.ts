@@ -12,6 +12,8 @@ import LMDScriptUpdater from './update/LMDScriptUpdater'
 import MainWindowManager from './MainWindowManager'
 import LocaleManager from './locales/LocaleManager'
 import GlobalToolsManager from './global-tools/GlobalToolsManager'
+import FileSystemManager from './file/FileSystemManager'
+import LMDSystemManager from './system/LMDSystemManager'
 
 dotenv.config();
 
@@ -58,6 +60,8 @@ app.whenReady().then(async () => {
   LocaleManager.getInstance().init()
   MenuManager.getInstance().init()
   new RunningAppWindowManager();
+  FileSystemManager.getInstance().init()
+  LMDSystemManager.getInstance().init()
 
   await createWindowLoadFiles()
   initServer()
@@ -79,7 +83,8 @@ const createWindowLoadFiles = async () => {
 
 app.on('window-all-closed', () => {
   win = null
-  if (process.platform !== 'darwin') app.quit()
+  app.quit()
+  // if (process.platform !== 'darwin') app.quit()
 })
 
 app.on('second-instance', () => {
