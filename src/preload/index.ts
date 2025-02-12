@@ -84,7 +84,7 @@ function useLoading() {
   background: #FFF;
   z-index: 9;
 }
-.lmd-title{10px;color: #333;font-family: Helvetica, Inter, system-ui, Avenir, Arial; }
+.lmd-title{10px;color: #333;font-family: Helvetica, Inter, system-ui, Avenir, Arial; margin-top:30px; }
 `
   const oStyle = document.createElement('style')
   const oDiv = document.createElement('div')
@@ -92,7 +92,9 @@ function useLoading() {
   oStyle.id = 'app-loading-style'
   oStyle.innerHTML = styleContent
   oDiv.className = 'app-loading-wrap'
-  oDiv.innerHTML = `<div class="${className}"><div></div></div><h2 class="lmd-title">&nbsp;&nbsp;LM Downloader</div>`
+  oDiv.innerHTML = `<div class="${className}"><div></div></div><h2 class="lmd-title">&nbsp;&nbsp;LM Downloader
+    <div style="color: #999;font-size: 18px;text-align: center;font-style: italic;font-weight: normal;">Loading</div>
+  </div>`
 
   return {
     appendLoading() {

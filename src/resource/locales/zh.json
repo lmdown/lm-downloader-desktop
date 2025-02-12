@@ -8,7 +8,9 @@
     "DialogTitle": "更新提示",
     "Download": "下载",
     "Close": "关闭",
-    "OutOfDate": "当前版本已经过时，是否下载新版本？"
+    "OutOfDate": "版本已经过时，是否下载新版本？",
+    "RequiredVersion": "最低版本要求：",
+    "YourVersion": "当前版本："
   },
   "RunningWindow": {
     "DialogTitle":"退出确认",
