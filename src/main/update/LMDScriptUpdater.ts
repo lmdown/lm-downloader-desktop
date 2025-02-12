@@ -75,7 +75,8 @@ export default class LMDScriptUpdater {
       return checkResult
     })
     .then(async (checkResult) => {
-      const { versionMatch, updateIndexData } = checkResult
+      const { versionMatch, updateIndexData, currentVersion } = checkResult
+      const minVersion = updateIndexData.desktop_app.min_version
       if(versionMatch) {
         const depencencies =  updateIndexData.server.depencencies
         const serverPath =  updateIndexData.server.path
@@ -107,7 +108,7 @@ export default class LMDScriptUpdater {
         }
       } else {
         console.log('不满足版本要求，无法更新')
-        this.showForceUpdateDialog()
+        this.showForceUpdateDialog(currentVersion, minVersion)
       }
     })
   }
@@ -124,12 +125,17 @@ export default class LMDScriptUpdater {
     return osTypeMap[osType]
   }
 
-  showForceUpdateDialog() {
+  showForceUpdateDialog(currentVersion: string, minVersion: string) {
     const i18n = LocaleManager.getInstance().i18nInstance
+    let outOfDateFullTip = i18n.t('Update.OutOfDate')
+    const requiredVersionLabel = i18n.t('Update.RequiredVersion')
+    const yourVersionLabel = i18n.t('Update.YourVersion')
+    outOfDateFullTip = `${outOfDateFullTip}\n${requiredVersionLabel}${minVersion}\n${yourVersionLabel}${currentVersion}`
+
     dialog.showMessageBox({
       type: 'info',
       title: i18n.t('Update.DialogTitle'),
-      message:i18n.t('Update.OutOfDate'),
+      message: outOfDateFullTip,
       buttons: [i18n.t('Update.Download'), i18n.t('Update.Close')],   //确认idx为0，取消为1
       cancelId: 1, //这个的值是如果直接把提示框×掉返回的值，这里设置成和“取消”按钮一样的值，下面的idx也会是1
     }).then(idx => {
@@ -144,14 +150,15 @@ export default class LMDScriptUpdater {
     let versionMatch = false
     let updateIndexData: UpdateIndexData = {} as UpdateIndexData
     const indexFilePath = path.join(appStoryPath, 'update_index.json')
+    let currentVersion = ''
     if (!fs.existsSync(indexFilePath)) {
       console.error(indexFilePath + ' dose not exist')
     } else {
       try {
         updateIndexData = JSON.parse(fs.readFileSync(indexFilePath, {encoding:'utf8', flag:'r'}));
         const minVersion = updateIndexData.desktop_app.min_version
-        const currentDesktopAppMinVersion = appPackage.version
-        if (compareVersions(currentDesktopAppMinVersion, minVersion) !== -1) {
+        currentVersion = appPackage.version
+        if (compareVersions(currentVersion, minVersion) !== -1) {
           versionMatch = true
         } else {
           versionMatch = false
@@ -160,7 +167,7 @@ export default class LMDScriptUpdater {
         console.error('parse error', err)
       }
     }
-    return {versionMatch, updateIndexData}
+    return {versionMatch, updateIndexData, currentVersion}
   }
 
 }

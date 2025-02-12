@@ -8,7 +8,9 @@
     "DialogTitle": "Need Update",
     "Download": "Download",
     "Close": "Close",
-    "OutOfDate": "LM Downloader is out of date, please get the newest version."
+    "OutOfDate": "LM Downloader is out of date, please get the newest version.",
+    "RequiredVersion": "Required version:",
+    "YourVersion": "Current Version:"
   },
   "RunningWindow": {
     "DialogTitle":"Exit Confirm",

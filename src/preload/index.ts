@@ -92,7 +92,9 @@ function useLoading() {
   oStyle.id = 'app-loading-style'
   oStyle.innerHTML = styleContent
   oDiv.className = 'app-loading-wrap'
-  oDiv.innerHTML = `<div class="${className}"><div></div></div><h2 class="lmd-title">&nbsp;&nbsp;LM Downloader</div>`
+  oDiv.innerHTML = `<div class="${className}"><div></div></div><h2 class="lmd-title">&nbsp;&nbsp;LM Downloader</h2>
+    <div style="color: #999;font-size: 18px;text-align: center;font-style: italic;font-weight: normal; padding:0; margin:0; line-height:130%;">Loading</div>
+  </div>`
 
   return {
     appendLoading() {
