@@ -17,7 +17,7 @@ English · [中文](./README-zh.md)
 
 #### View the introduction of the App, and click Install.
 
-<img width="220" src="docs/en/lm-downloader-home-en.jpg">
+<img width="220" src="docs/en/chatbox-install-en.jpg">
 
 #### If Ollama is installed, you can change settings, and choose the models you want to download. Do it all without having to enter commands.
 

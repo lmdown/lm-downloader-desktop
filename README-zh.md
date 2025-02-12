@@ -16,7 +16,7 @@
 
 #### 在App详情页，查看介绍，可点击安装。
 
-<img width="220" src="docs/zh/lm-downloader-home-zh.jpg">
+<img width="220" src="docs/zh/chatbox-install-zh.jpg">
 
 #### 如果安装了Ollama，可设置各种参数，可选择要下载的模型，你可以无需输入命令，实现所有操作。
 
