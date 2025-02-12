@@ -69,13 +69,12 @@ app.whenReady().then(async () => {
 
 const createWindowLoadFiles = async () => {
   createWindow()
+  await GlobalToolsManager.getInstance().install()
   // load scripts
   const shouldUpdateStory = process.env.UPDATE_STORY!==undefined ? parseInt(process.env.UPDATE_STORY) : 1
   if(shouldUpdateStory) {
     const updateResult = await new LMDScriptUpdater().update()
   }
-
-  await GlobalToolsManager.getInstance().install()
   // load main html page
   console.log('loadLMDHtml')
   mainWindowMgr.loadLMDHtml()
