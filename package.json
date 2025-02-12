@@ -1,6 +1,6 @@
 {
   "name": "lm-downloader",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "LM Downloader Desktop App",
   "main": "./out/main/index.js",
   "author": "lmdown",
@@ -34,7 +34,7 @@
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@types/node": "^20.14.8",
-    "electron": "^34.1.0",
+    "electron": "^34.1.1",
     "electron-builder": "^25.1.8",
     "electron-updater": "^6.3.9",
     "electron-vite": "^2.3.0",
