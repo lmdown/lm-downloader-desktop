@@ -1,6 +1,6 @@
 {
   "name": "lm-downloader",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "LM Downloader Desktop App",
   "main": "./out/main/index.js",
   "author": "lmdown",
@@ -17,7 +17,7 @@
     "build": "electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",
-    "build:win": "export CSC_IDENTITY_AUTO_DISCOVERY=false && npm run build && electron-builder --win",
+    "build:win": "npm run build && electron-builder --win",
     "build:mac": "export CSC_IDENTITY_AUTO_DISCOVERY=false && npm run build && electron-builder --mac",
     "build:linux": "npm run build && electron-builder --linux --x64"
   },
