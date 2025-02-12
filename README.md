@@ -8,6 +8,22 @@ LM Downloader is a free, open source, easy-to-use, and powerful AI Large Model A
 
 English · [中文](./README-zh.md)
 
+
+## Snapshots
+
+#### On the homepage of LM Downloader, you can see various types of Large Model Apps.
+
+<img width="220" src="docs/en/lm-downloader-home-en.jpg">
+
+#### View the introduction of the App, and click Install.
+
+<img width="220" src="docs/en/lm-downloader-home-en.jpg">
+
+#### If Ollama is installed, you can change settings, and choose the models you want to download. Do it all without having to enter commands.
+
+<img width="220" src="docs/en/ollama-install-models-en.jpg">
+
+
 ## Download
 
 - [Get latest LM Downloader](https://gitee.com/lmdown/lm-downloader-desktop/releases)

@@ -8,6 +8,20 @@
 
 [English](./README.md) · 中文
 
+## 软件截图
+
+#### 在魔当首页，能看到各种大模型App。
+
+<img width="220" src="docs/zh/lm-downloader-home-zh.jpg">
+
+#### 在App详情页，查看介绍，可点击安装。
+
+<img width="220" src="docs/zh/lm-downloader-home-zh.jpg">
+
+#### 如果安装了Ollama，可设置各种参数，可选择要下载的模型，你可以无需输入命令，实现所有操作。
+
+<img width="220" src="docs/zh/ollama-install-models-zh.jpg">
+
 ## 下载
 
 - [下载 最新版魔当](https://gitee.com/lmdown/lm-downloader-desktop/releases)
