@@ -33,10 +33,11 @@ export default class GlobalToolsManager {
       const configMgr = ConfigManager.getInstance()
       this.currentBaseConfig = configMgr.getBaseConfig()
       this.globalEnv = configMgr.getENVVariables()
+      let checkResult = false
+      const defaultGitInstallPath = configMgr.getDefaultGitInstallPath()
       if(this.globalEnv?.GIT_INSTALL_PATH) {
-        let checkResult = checkGitFilesExist(this.globalEnv.GIT_INSTALL_PATH)
+        checkResult = checkGitFilesExist(this.globalEnv.GIT_INSTALL_PATH)
         console.log('GitFilesExist with env ', checkResult)
-        const defaultGitInstallPath = configMgr.getDefaultGitInstallPath()
         if(!checkResult) {
           checkResult = checkGitFilesExist(defaultGitInstallPath)
           console.log('GitFilesExist with defaultGitInstallPath ', checkResult)
@@ -44,18 +45,44 @@ export default class GlobalToolsManager {
             configMgr.updateEnvGitInstallPath(defaultGitInstallPath)
           }
         }
-
-        if(!checkResult) {
-          const gitInstallDir = getGitInstallDir()
-          if(gitInstallDir) {
-            configMgr.updateEnvGitInstallPath(gitInstallDir)
-          } else {
-            await this.installToolsForWindows()
-            configMgr.updateEnvGitInstallPath(defaultGitInstallPath)
-          }
-        }
       }
 
+      if(!checkResult) {
+        const gitInstallDir = getGitInstallDir()
+        if(gitInstallDir) {
+          configMgr.updateEnvGitInstallPath(gitInstallDir)
+        } else {
+          await this.installToolsForWindows()
+          configMgr.updateEnvGitInstallPath(defaultGitInstallPath)
+        }
+      }
+      this.addToOSUserPath()
+    }
+  }
+
+  addToOSUserPath() {
+    const configMgr = ConfigManager.getInstance()
+    //再读取git安装路径，存到path中
+    this.globalEnv = configMgr.getENVVariables()
+    const finalGitInstallDir = this.globalEnv.GIT_INSTALL_PATH + '/bin'
+    console.log('finalGitInstallDir', finalGitInstallDir)
+
+    let currentPath = process.env.PATH || '';
+
+    // 检查新路径是否已经存在，避免重复添加
+    if (!currentPath.includes(finalGitInstallDir)) {
+      // 在 Windows 和其他操作系统中，路径分隔符不同
+      // 使用 process.platform 判断系统类型
+      if (OSUtil.isWindows()) {
+        // Windows 使用 ";"
+        process.env.PATH = `${currentPath};${finalGitInstallDir}`;
+      } else {
+        // 其他系统（如 Linux、macOS）使用 ":"
+        process.env.PATH = `${currentPath}:${finalGitInstallDir}`;
+      }
+      console.log('added to PATH');
+    } else {
+      console.log('git dir exist');
     }
   }
 

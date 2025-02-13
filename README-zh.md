@@ -31,34 +31,54 @@
 - [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 
 ## 项目运行
-本仓库是魔当的桌面客户端，使用Electron and TypeScript开发。
+本仓库是魔当的桌面客户端，使用Electron和TypeScript开发。
 
 ### 安装依赖
 
 ```bash
-$ npm install
+# 最常见的安装方式
+npm i
+
+# 如果访问npm官方的源太慢，可使用cnpm
+cnpm i
+
+# 或者加上--registry参数
+npm i --registry=https://registry.npmmirror.com
+
+# 还可以使用pnpm, yarn等工具安装依赖
+yarn install
+
 ```
 
 ### 本地运行
 
+请打开项目根目录的```.env```文件，如果想和其他几个项目完整地联调，那就保持```.env```不变。如果只是想快速看到运行效果，请修改，
 ```bash
-$ npm run dev
+# 前端项目的vite dev server，可以将其注释掉
+VITE_DEV_SERVER_URL=http://localhost:5173
+# 是否用主进程运行本地的Node.js服务，改为1，就会在启动App时运行本地服务
+START_LMD_SERVER=0
+# 是否在启动时更新App数据，这个可以暂时不管
+UPDATE_STORY=0
+```
+
+运行项目
+
+```bash
+npm run dev
 ```
 
 ### 构建
 
 ```bash
-# 跳过签名
-export CSC_IDENTITY_AUTO_DISCOVERY=false
-
 # For windows
-$ npm run build:win
+npm run build:win
 
 # For macOS
-$ npm run build:mac
+npm run build:mac
 
 # For Linux
-$ npm run build:linux
+npm run build:linux
 ```
 
 ## 完整架构
