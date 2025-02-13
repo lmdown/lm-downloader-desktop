@@ -39,13 +39,25 @@ This repository is the desktop app with Electron and TypeScript.
 ### Install
 
 ```bash
-$ npm install
+npm install
 ```
 
 ### Development
 
+Please open ```.env```. If you want to run this program quickly, edit this file; if you want to fully debug all functions, you don't need to modify it.
+
 ```bash
-$ npm run dev
+# Frontend - Local Vite Server.
+VITE_DEV_SERVER_URL=http://localhost:5173
+# Launch by electron main process
+START_LMD_SERVER=0
+# Update App Story files from git repo
+UPDATE_STORY=0
+```
+
+Run this app.
+```bash
+npm run dev
 ```
 
 ### Build
@@ -55,13 +67,13 @@ $ npm run dev
 export CSC_IDENTITY_AUTO_DISCOVERY=false
 
 # For windows
-$ npm run build:win
+npm run build:win
 
 # For macOS
-$ npm run build:mac
+npm run build:mac
 
 # For Linux
-$ npm run build:linux
+npm run build:linux
 ```
 
 ## LM Downloader Full Architecture
