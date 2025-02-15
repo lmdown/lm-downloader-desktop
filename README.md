@@ -48,9 +48,9 @@ Please open ```.env```. If you want to run this program quickly, edit this file;
 
 ```bash
 # Frontend - Local Vite Server.
-VITE_DEV_SERVER_URL=http://localhost:5173
+# VITE_DEV_SERVER_URL=http://localhost:5173
 # Launch by electron main process
-START_LMD_SERVER=0
+START_LMD_SERVER=1
 # Update App Story files from git repo
 UPDATE_STORY=0
 ```
