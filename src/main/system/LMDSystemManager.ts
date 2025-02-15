@@ -32,6 +32,10 @@ export default class LMDSystemManager {
       app.exit(0);
     });
 
+    ipcMain.handle(IPCHandleName.EXIT_APP, (_) => {
+      app.exit(0);
+    });
+
     ipcMain.handle(IPCHandleName.KILL_PROCESSES, (_, processNames: string[]) => {
       this.killProcesses(processNames)
     });
