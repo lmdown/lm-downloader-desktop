@@ -29,9 +29,20 @@ export default class ConfigManager {
     }
 
     initHandlers() {
-      ipcMain.handle(IPCHandleName.GET_BASE_CONFIG, (_, arg) => {
+      ipcMain.handle(IPCHandleName.GET_BASE_CONFIG, (_) => {
         return this.getBaseConfig()
       })
+
+      ipcMain.handle(IPCHandleName.GET_DEFAULT_ROOT_DIR, (_) => {
+        const configAndDir = ConfigPathUtil.getRootDir()
+        return configAndDir.rootDir
+      })
+
+      ipcMain.handle(IPCHandleName.GET_DEFAULT_CONFIG_AND_ROOT_DIR, (_) => {
+        const configAndDir = ConfigPathUtil.getRootDir()
+        return configAndDir
+      })
+
       ipcMain.handle(IPCHandleName.SAVE_BASE_CONFIG, (_, configData) => {
         configData = typeof configData === 'object' ? configData : JSON.parse(configData)
         const parsedConfigData: LMDBaseConfig = configData
