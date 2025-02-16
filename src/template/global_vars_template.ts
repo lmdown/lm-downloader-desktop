@@ -6,5 +6,7 @@ export const DEFAULT_GLOBAL_ENV: LMDGlobalEnv = {
   // git安装目录，可访问git和bash命令
   GIT_INSTALL_PATH: '${LMD_DATA_ROOT}/scripts/global-tools/git/portable',
   HF_MIRROR: 'https://hf-mirror.com/',
+  HF_HOME: '',
+  // HF_HOME: '${LMD_DATA_ROOT}/scripts/global-tools/hf',
   GITHUB_PROXY: 'https://gh.llkk.cc/',
 }
