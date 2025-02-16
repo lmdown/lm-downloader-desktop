@@ -96,6 +96,19 @@ export default class ConfigManager {
       EnvUtil.checkConfigKV(configFilePath)
       const envFilePath = this.ensureEnvFileExist()
       EnvUtil.checkEnvVarsKV(envFilePath)
+      this.initUA()
+    }
+
+    initUA() {
+      const { session } = require('electron');
+      session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+        let userAgent = details.requestHeaders['User-Agent'];
+        if (userAgent) {
+          userAgent = userAgent.replace(/Electron\/\d+\.\d+\.\d+/, '').replace(/lm-downloader\/[\d.]+/, '').trim();
+        }
+        details.requestHeaders['User-Agent'] = userAgent;
+        callback({ cancel: false, requestHeaders: details.requestHeaders });
+      });
     }
 
     ensureConfigFileExist(newRootVal: string = '', locale: string = '') {
