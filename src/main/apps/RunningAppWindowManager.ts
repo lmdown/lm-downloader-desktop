@@ -7,6 +7,7 @@ import { IPCHandleName } from '../../constant/IPCHandleName';
 import { IPCChannelName } from '../../constant/IPCChannelName';
 import ScriptPathUtil from '../util/ScriptPathUtil';
 import icon from '../../resource/build/icons/256x256.png?asset'
+import UrlUtil from '../util/UrlUtil';
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 /**
@@ -95,9 +96,13 @@ export default class RunningAppWindowManager {
       })
 
       if (VITE_DEV_SERVER_URL) {
-        childWindow.loadURL(`${VITE_DEV_SERVER_URL}#${windowPagePath}`)
+        const url = UrlUtil.addQueryParam(`${VITE_DEV_SERVER_URL}#${windowPagePath}`,
+          'UPDATE_INSTALL_SCRIPTS', process.env.UPDATE_INSTALL_SCRIPTS)
+        childWindow.loadURL(url)
       } else {
-        childWindow.loadFile(ScriptPathUtil.getFrontendPath(), { hash: windowPagePath })
+        const path = UrlUtil.addQueryParam(ScriptPathUtil.getFrontendPath(),
+          'UPDATE_INSTALL_SCRIPTS', process.env.UPDATE_INSTALL_SCRIPTS)
+        childWindow.loadFile(path, { hash: windowPagePath })
       }
 
       // this._allWins.set(installedInstanceId, childWindow)

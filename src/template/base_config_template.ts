@@ -23,5 +23,9 @@ export const DEFAULT_LMD_BASE_CONFIG: LMDBaseConfig = {
 
   LMD_FRONTEND_DIST_DIR: "${LMD_DATA_ROOT}/scripts/lm-downloader-app-story/frontend/index.html",
 
+  NODE_JS_DIR: '${LMD_DATA_ROOT}/scripts/global-tools/node',
+
+  SEVEN_Z_DIR: '${LMD_DATA_ROOT}/scripts/global-tools/7z',
+
 }
 

@@ -20,4 +20,8 @@ export default interface LMDBaseConfig extends LMDEnv {
 
   LMD_FRONTEND_DIST_DIR: string
 
+  NODE_JS_DIR: string
+
+  SEVEN_Z_DIR: string
+
 }

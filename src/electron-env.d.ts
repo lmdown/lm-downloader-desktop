@@ -9,5 +9,8 @@ declare namespace NodeJS {
     VITE_PUBLIC: string
 
     START_LMD_SERVER: string
+
+    UPDATE_INSTALL_SCRIPTS: string
+
   }
 }
