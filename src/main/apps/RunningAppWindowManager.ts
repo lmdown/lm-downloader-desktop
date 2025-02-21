@@ -45,9 +45,13 @@ export default class RunningAppWindowManager {
       //   this.openWindow(installedInstanceId, windowPagePath, 'install')
       // })
 
-      ipcMain?.handle(IPCHandleName.OPEN_RUNNING_WINDOW, (_, installedInstanceId: string, windowPagePath: string) => {
+      ipcMain?.handle(IPCHandleName.OPEN_RUNNING_WINDOW, (_, installedInstanceId: string, windowPagePath: string, reloadPage: boolean = false) => {
         // console.log('call open-running-window', _, installedInstanceId, appPagePath)
-        this.openWindow(installedInstanceId, windowPagePath)
+        this.openWindow(installedInstanceId, windowPagePath, reloadPage)
+      })
+
+      ipcMain?.handle(IPCHandleName.CLOSE_RUNNING_WINDOW, (_, installedInstanceId: string) => {
+        this.closeWindow(installedInstanceId)
       })
 
       ipcMain.handle(IPCHandleName.OPEN_PATH, (_, path: string) => {
@@ -55,22 +59,29 @@ export default class RunningAppWindowManager {
       })
     }
 
-    private openWindow(installedInstanceId: string, windowPagePath: string) {
-      const RENDERER_DIST = path.join(process.env.APP_ROOT, 'out/renderer')
+    private openWindow(installedInstanceId: string, windowPagePath: string, reloadPage: boolean = false) {
+      // const RENDERER_DIST = path.join(process.env.APP_ROOT, 'out/renderer')
       const preload = path.join(__dirname, '../preload/index.js')
       // const indexHtml = path.join(RENDERER_DIST, 'index.html')
-      const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
 
       if(this._allWindows.has(installedInstanceId)) {
         const targetChildWindow = this._allWindows.get(installedInstanceId)
-        targetChildWindow?.show()
-        return
+        console.log('openWindow',targetChildWindow, reloadPage)
+        if(targetChildWindow) {
+          if(reloadPage) {
+            targetChildWindow.close()
+            this._allWindows.delete(installedInstanceId)
+          } else {
+            targetChildWindow?.show()
+            return
+          }
+        }
       }
 
       const childWindow = new RunningAppWindow(ipcMain, {
         ...(process.platform !== 'darwin' ? { autoHideMenuBar: true } : {}),
         ...(process.platform === 'linux' ? { icon } : {}),
-        width: 1000,
+        width: 1180,
         height: 760,
         webPreferences: {
           preload,
@@ -80,6 +91,7 @@ export default class RunningAppWindowManager {
           webSecurity: false,
         },
       })
+
       this._allWindows.set(installedInstanceId, childWindow)
 
       childWindow.webContents.setWindowOpenHandler((data) => {
@@ -95,21 +107,35 @@ export default class RunningAppWindowManager {
         return { action: 'deny' }
       })
 
-      if (VITE_DEV_SERVER_URL) {
-        const url = UrlUtil.addQueryParam(`${VITE_DEV_SERVER_URL}#${windowPagePath}`,
-          'UPDATE_INSTALL_SCRIPTS', process.env.UPDATE_INSTALL_SCRIPTS)
-        childWindow.loadURL(url)
-      } else {
-        const path = UrlUtil.addQueryParam(ScriptPathUtil.getFrontendPath(),
-          'UPDATE_INSTALL_SCRIPTS', process.env.UPDATE_INSTALL_SCRIPTS)
-        childWindow.loadFile(path, { hash: windowPagePath })
-      }
 
+      this.loadPage(childWindow, windowPagePath)
       // this._allWins.set(installedInstanceId, childWindow)
       childWindow.on('closed', () => {
         this.onWindowClosed(installedInstanceId)
         this._allWindows.delete(installedInstanceId)
       })
+    }
+
+    private closeWindow(installedInstanceId: string) {
+      if(this._allWindows.has(installedInstanceId)) {
+        const targetChildWindow = this._allWindows.get(installedInstanceId)
+        targetChildWindow?.show()
+        if(targetChildWindow) {
+          targetChildWindow.close()
+        }
+      }
+    }
+
+    private loadPage(childWindow: RunningAppWindow, windowPagePath: string) {
+      const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
+      if (VITE_DEV_SERVER_URL) {
+        const url = UrlUtil.addQueryParam(`${VITE_DEV_SERVER_URL}#${windowPagePath}`,
+          'UPDATE_INSTALL_SCRIPTS', process.env.UPDATE_INSTALL_SCRIPTS)
+        childWindow.loadURL(url)
+      } else {
+        const path = ScriptPathUtil.getFrontendPath()
+        childWindow.loadFile(path, { hash: windowPagePath })
+      }
     }
 
     private regListeners() {

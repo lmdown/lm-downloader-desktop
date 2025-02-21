@@ -26,8 +26,8 @@ export default class MainWindowManager {
     }
     const preload = path.join(__dirname, '../preload/index.js')
     this.win = new BrowserWindow({
-      width: 1200,
-      height: 800,
+      width: 1280,
+      height: 860,
       // remove the default titlebar
       titleBarStyle: 'hidden',
       // expose window controlls in Windows/Linux

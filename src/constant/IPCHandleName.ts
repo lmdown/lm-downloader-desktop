@@ -1,5 +1,6 @@
 export const IPCHandleName = {
   OPEN_RUNNING_WINDOW: 'open-running-window',
+  CLOSE_RUNNING_WINDOW: 'close-running-window',
   OPEN_RUNNING_WINDOW_AND_INSTALL: 'open-running-window-and-install',
   RUNNING_STATUS_CHANGE: 'running-status-change',
   GET_BASE_CONFIG: 'get-base-config',
