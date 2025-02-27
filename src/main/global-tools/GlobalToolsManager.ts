@@ -8,6 +8,7 @@ import { execSync } from 'child_process';
 import { checkGitFilesExist, getGitInstallDir } from "./GitCheck";
 import LMDBaseConfig from "../../types/LMDBaseConfig";
 import LMDGlobalEnv from "../../types/LMDGlobalEnv";
+import FileUtil from "../util/FileUtil";
 
 export default class GlobalToolsManager {
 
@@ -104,6 +105,7 @@ export default class GlobalToolsManager {
     const installer7zUrl = 'https://www.7-zip.org/a/7zr.exe'
     fs.mkdirSync(unzipToolDir, {recursive: true})
     this.sevenZExec = path.join(unzipToolDir, '7zr.exe')
+    FileUtil.removeFile(this.sevenZExec)
     await DownloadUtil.download(installer7zUrl, this.sevenZExec)
     console.log('7z download ok. ', installer7zUrl)
   }
@@ -117,6 +119,7 @@ export default class GlobalToolsManager {
     fs.mkdirSync(gitDir, {recursive: true})
     const gitInstallerFilePath = path.join(gitDir, gitInstallerFileName)
     console.log('installerGitUrl', installerGitUrl)
+    FileUtil.removeFile(gitInstallerFilePath)
     await DownloadUtil.download(installerGitUrl, gitInstallerFilePath)
 
     // use 7z to extract portable git.

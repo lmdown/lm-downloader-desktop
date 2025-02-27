@@ -9,6 +9,7 @@ import ConfigPathUtil from "./util/ConfigPathUtil";
 import ReplaceUtil from "./util/ReplaceUtil";
 import LocaleUtil from "./util/LocaleUtil";
 import LMDBaseConfig from "../types/LMDBaseConfig";
+import GithubUrlUtil from "./util/GithubUrlUtil";
 export default class ConfigManager {
 
     CONFIG_FILE_NAME: string = 'lmd_base_config.env';
@@ -23,8 +24,8 @@ export default class ConfigManager {
         return ConfigManager.instance;
     }
 
-    init() {
-      this.checkAndInit()
+    async init() {
+      await this.checkAndInit()
       this.initHandlers()
     }
 
@@ -91,12 +92,28 @@ export default class ConfigManager {
       return EnvUtil.getEnvFile(configFilePath) as unknown as LMDBaseConfig
     }
 
-    checkAndInit() {
+    async checkAndInit () {
       const configFilePath = this.ensureConfigFileExist()
       EnvUtil.checkConfigKV(configFilePath)
+      // check github prefix
+      const githubPrefix: string = await this.checkGithubPrefix()
       const envFilePath = this.ensureEnvFileExist()
+      if(githubPrefix) {
+        this.updateENVVariables(githubPrefix)
+      }
       EnvUtil.checkEnvVarsKV(envFilePath)
       this.initUA()
+    }
+
+    async checkGithubPrefix() {
+      const latestGithubPrefix = await GithubUrlUtil.chooseGithubPrefix()
+      return latestGithubPrefix
+    }
+
+    async updateENVVariables(githubPrefix: string) {
+      const envVars = this.getENVVariables()
+      envVars.GITHUB_PROXY = githubPrefix
+      this.saveENVVariables(envVars)
     }
 
     initUA() {

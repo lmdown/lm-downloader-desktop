@@ -54,7 +54,7 @@ function initServer() {
 }
 
 app.whenReady().then(async () => {
-  ConfigManager.getInstance().init();
+  await ConfigManager.getInstance().init();
   // Locale
   LocaleManager.getInstance().init()
   MenuManager.getInstance().init()
