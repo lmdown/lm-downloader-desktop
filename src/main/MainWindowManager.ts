@@ -44,6 +44,7 @@ export default class MainWindowManager {
         nodeIntegration:true,
         contextIsolation: true,
         webSecurity: false,
+        webviewTag: true,
       },
     })
 

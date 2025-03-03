@@ -36,6 +36,10 @@ export default class LMDSystemManager {
       app.exit(0);
     });
 
+    ipcMain.handle(IPCHandleName.SUPPORT_WEBVIEW_TAG, (_) => {
+      return true
+    });
+
     ipcMain.handle(IPCHandleName.KILL_PROCESSES, (_, processNames: string[]) => {
       this.killProcesses(processNames)
     });

@@ -89,6 +89,7 @@ export default class RunningAppWindowManager {
           contextIsolation: true,
           nodeIntegrationInWorker: true,
           webSecurity: false,
+          webviewTag: true,
         },
       })
 

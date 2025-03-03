@@ -53,6 +53,9 @@ function initServer() {
   }
 }
 
+
+app.userAgentFallback = app.userAgentFallback.replace(/Electron\/[\d.]+/g, '');
+
 app.whenReady().then(async () => {
   await ConfigManager.getInstance().init();
   // Locale
