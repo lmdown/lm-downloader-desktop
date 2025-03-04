@@ -71,7 +71,9 @@ export default class RunningAppWindowManager {
       // const preload = path.join(__dirname, '../preload/index.js')
       const win = new BaseWindow({
         width: WindowConfig.RUNNING_WIN_WIDTH,
-        height: WindowConfig.RUNNING_WIN_HEIGHT
+        height: WindowConfig.RUNNING_WIN_HEIGHT,
+        ...(process.platform !== 'darwin' ? { autoHideMenuBar: true } : {}),
+        ...(process.platform === 'linux' ? { icon } : {}),
       })
       const view1 = this.createViewForWindow(win, windowPagePath,0, 44)
       if(appData?.url) {
