@@ -40,6 +40,10 @@ export default class LMDSystemManager {
       return true
     });
 
+    ipcMain.handle(IPCHandleName.SUPPORT_UAPP_WIN, (_) => {
+      return true
+    });
+
     ipcMain.handle(IPCHandleName.KILL_PROCESSES, (_, processNames: string[]) => {
       this.killProcesses(processNames)
     });

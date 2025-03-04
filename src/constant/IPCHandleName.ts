@@ -23,6 +23,6 @@ export const IPCHandleName = {
   KILL_PROCESSES: 'kill-processes',
 
   SUPPORT_WEBVIEW_TAG: 'support-webview-tag',
-  SHOW_CONTEXT_MENU: 'show-context-menu',
+  SUPPORT_UAPP_WIN: 'support-uapp-win',
 }
 
