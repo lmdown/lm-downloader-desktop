@@ -2,7 +2,15 @@
   "welcome": "Welcome",
   "Menu": {
       "Settings": "Settings...",
-      "About": "About LM Downloader"
+      "About": "About LM Downloader",
+      "Delete": "Delete",
+      "Paste": "Paste",
+      "Copy": "Copy",
+      "Cut": "Cut",
+      "Forward": "Forward",
+      "GoBack": "Back",
+      "Reload": "Reload",
+      "SelectAll": "Select All"
   },
   "Update": {
     "DialogTitle": "Need Update",

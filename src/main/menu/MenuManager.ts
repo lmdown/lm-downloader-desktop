@@ -1,4 +1,4 @@
-import { Menu, dialog, app, BrowserWindow, ipcMain } from "electron"
+import { Menu, dialog, app, BrowserWindow, ipcMain, MenuItem, ContextMenuParams, WebContentsView } from "electron"
 import { IPCChannelName } from "../../constant/IPCChannelName"
 import AboutUtil from "../util/AboutUtil"
 import { IPCHandleName } from "../../constant/IPCHandleName"
@@ -22,11 +22,11 @@ export default class MenuManager {
   }
 
   init() {
-    this.initMenu()
+    this.initWindowMenu()
     this.initHandlers()
   }
 
-  initMenu() {
+  initWindowMenu() {
     const i18n = LocaleManager.getInstance().i18nInstance
     const isMac = process.platform === 'darwin'
     const menuConfig = [
@@ -163,6 +163,76 @@ export default class MenuManager {
     Menu.setApplicationMenu(menu)
   }
 
+  initRightClickMenu(targetWindow: BrowserWindow | WebContentsView) {
+    targetWindow.webContents.on('context-menu', (event, params) => {
+      this.showContextMenu(targetWindow, params)
+    })
+  }
+
+  showContextMenu(targetWindow: BrowserWindow | WebContentsView,
+      params: ContextMenuParams) {
+    const i18n = LocaleManager.getInstance().i18nInstance
+    const menu = new Menu();
+
+    if (targetWindow.webContents.navigationHistory.canGoForward()) {
+      menu.append(new MenuItem({
+        label: i18n.t('Menu.Forward'),
+        click: () => targetWindow.webContents.navigationHistory.goForward(),
+      }));
+    }
+
+    if (targetWindow.webContents.navigationHistory.canGoBack()) {
+      menu.append(new MenuItem({
+        label: i18n.t('Menu.GoBack'),
+        click: () => targetWindow.webContents.navigationHistory.goBack(),
+      }));
+    }
+
+    menu.append(new MenuItem({
+      label: i18n.t('Menu.Reload'),
+      click: () => targetWindow.webContents.reload(),
+    }));
+
+    menu.append(new MenuItem({ type: 'separator' }));
+
+    if (params.editFlags.canCut) {
+      menu.append(new MenuItem({
+        label: i18n.t('Menu.Cut'),
+        click: () => targetWindow.webContents.cut(),
+      }));
+    }
+
+    if (params.editFlags.canCopy) {
+      menu.append(new MenuItem({
+        label: i18n.t('Menu.Copy'),
+        click: () => targetWindow.webContents.copy(),
+      }));
+    }
+
+    if (params.editFlags.canPaste) {
+      menu.append(new MenuItem({
+        label: i18n.t('Menu.Paste'),
+        click: () => targetWindow.webContents.paste(),
+      }));
+    }
+    if (params.editFlags.canDelete) {
+      menu.append(new MenuItem({
+        label: i18n.t('Menu.Delete'),
+        click: () => targetWindow.webContents.delete(),
+      }));
+    }
+
+    if (params.editFlags.canSelectAll) {
+      menu.append(new MenuItem({
+        label: i18n.t('Menu.SelectAll'),
+        click: () => targetWindow.webContents.selectAll(),
+      }));
+    }
+
+    // 显示菜单
+    menu.popup();
+  }
+
   initHandlers() {
     ipcMain.handle(IPCHandleName.SHOW_ABOUT, (_, arg) => {
       return this.info()
@@ -177,7 +247,5 @@ export default class MenuManager {
     this.mainWindow?.show()
     this.mainWindow?.webContents.send(IPCChannelName.OPEN_GLOBAL_CONFIG_DIALOG)
   }
-
-
 
 }

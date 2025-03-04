@@ -2,7 +2,15 @@
   "welcome": "欢迎！",
   "Menu": {
       "Settings": "设置...",
-      "About": "关于LM Downloader"
+      "About": "关于LM Downloader",
+      "Delete": "删除",
+      "Paste": "粘贴",
+      "Copy": "复制",
+      "Cut": "剪切",
+      "Forward": "前进",
+      "GoBack": "后退",
+      "Reload": "刷新",
+      "SelectAll": "全选"
   },
   "Update": {
     "DialogTitle": "更新提示",

@@ -2,6 +2,7 @@ import { BrowserWindow, shell } from "electron"
 import icon from '../resource/build/icons/256x256.png?asset'
 import path from "path"
 import ScriptPathUtil from "./util/ScriptPathUtil"
+import { WindowConfig } from "./apps/WindowConfig"
 
 export default class MainWindowManager {
 
@@ -26,8 +27,8 @@ export default class MainWindowManager {
     }
     const preload = path.join(__dirname, '../preload/index.js')
     this.win = new BrowserWindow({
-      width: 1280,
-      height: 860,
+      width: WindowConfig.MAIN_WIN_WIDTH,
+      height: WindowConfig.MAIN_WIN_HEIGHT,
       // remove the default titlebar
       titleBarStyle: 'hidden',
       // expose window controlls in Windows/Linux

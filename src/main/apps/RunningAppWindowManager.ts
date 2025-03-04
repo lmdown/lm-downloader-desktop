@@ -1,4 +1,4 @@
-import { app, BrowserWindow, IpcMain, dialog, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, IpcMain, dialog, shell, ipcMain, HandlerDetails, BaseWindow, WebContentsView, WebContents } from 'electron';
 import path from 'node:path'
 // import LocalAppRunner from './apps/LocalAppRunner';
 import { fileURLToPath } from 'node:url'
@@ -8,6 +8,9 @@ import { IPCChannelName } from '../../constant/IPCChannelName';
 import ScriptPathUtil from '../util/ScriptPathUtil';
 import icon from '../../resource/build/icons/256x256.png?asset'
 import UrlUtil from '../util/UrlUtil';
+import { WindowConfig } from './WindowConfig';
+import MenuManager from '../menu/MenuManager';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 /**
@@ -15,7 +18,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
  */
 export default class RunningAppWindowManager {
 
-    private _allWindows: Map<string, RunningAppWindow> = new Map();
+    private _allWindows: Map<string, BaseWindow> = new Map();
 
     constructor() {
       this.init()
@@ -50,6 +53,11 @@ export default class RunningAppWindowManager {
         this.openWindow(installedInstanceId, windowPagePath, reloadPage)
       })
 
+      ipcMain?.handle(IPCHandleName.OPEN_UAPP_RUNNING_WINDOW, (_,
+          installedInstanceId: string, windowPagePath: string, appData: object) => {
+        this.openUAppRunningWindow(installedInstanceId, windowPagePath, appData as {url:string})
+      })
+
       ipcMain?.handle(IPCHandleName.CLOSE_RUNNING_WINDOW, (_, installedInstanceId: string) => {
         this.closeWindow(installedInstanceId)
       })
@@ -59,11 +67,69 @@ export default class RunningAppWindowManager {
       })
     }
 
+    private openUAppRunningWindow(installedInstanceId, windowPagePath: string, appData: {url:string}) {
+      // const preload = path.join(__dirname, '../preload/index.js')
+      const win = new BaseWindow({
+        width: WindowConfig.RUNNING_WIN_WIDTH,
+        height: WindowConfig.RUNNING_WIN_HEIGHT
+      })
+      const view1 = this.createViewForWindow(win, windowPagePath,0, 44)
+      if(appData?.url) {
+        const view2 = this.createViewForWindow(win, appData?.url, 44, 0, true)
+      }
+      // appData?.url
+      this._allWindows.set(installedInstanceId, win)
+    }
+
+    private createViewForWindow(win:BaseWindow, url: string, viewY: number = 0,
+         viewHeight: number = 0, forceLoadUrl: boolean = false) {
+      const view1 = new WebContentsView({
+        webPreferences: {
+          nodeIntegration: true,
+          contextIsolation: true,
+          nodeIntegrationInWorker: true,
+          webSecurity: false,
+          webviewTag: true,
+        }
+      })
+      win.contentView.addChildView(view1)
+      if(forceLoadUrl){
+        view1.webContents.loadURL(url)
+      } else {
+        this.loadPage(view1.webContents, url)
+      }
+      view1.setBounds({
+        x: 0, y: 0,
+        width: WindowConfig.RUNNING_WIN_WIDTH,
+        height: 48
+      })
+      MenuManager.getInstance().initRightClickMenu(view1)
+
+      const updateSize = () => {
+        const bounds = win.getContentBounds()
+        let targetBounds
+        if(viewY === 0 && viewHeight !== 0) {
+          targetBounds = { x: 0, y: 0, width: bounds.width, height: viewHeight }
+        } else if(viewY !== 0 && viewHeight === 0) {
+          targetBounds = { x: 0, y: viewY, width: bounds.width, height: bounds.height - viewY }
+          // console.log('resize viewY', viewY, 'window bounds.height', bounds.height)
+          // console.log('resize targetBounds', targetBounds)
+        }
+        if(targetBounds) {
+          view1.setBounds(targetBounds)
+        }
+      }
+      win.on('resize', () => {
+        updateSize()
+      });
+      updateSize()
+      return view1
+    }
+
     private openWindow(installedInstanceId: string, windowPagePath: string, reloadPage: boolean = false) {
       // const RENDERER_DIST = path.join(process.env.APP_ROOT, 'out/renderer')
       const preload = path.join(__dirname, '../preload/index.js')
       // const indexHtml = path.join(RENDERER_DIST, 'index.html')
-
       if(this._allWindows.has(installedInstanceId)) {
         const targetChildWindow = this._allWindows.get(installedInstanceId)
         console.log('openWindow',targetChildWindow, reloadPage)
@@ -81,8 +147,8 @@ export default class RunningAppWindowManager {
       const childWindow = new RunningAppWindow(ipcMain, {
         ...(process.platform !== 'darwin' ? { autoHideMenuBar: true } : {}),
         ...(process.platform === 'linux' ? { icon } : {}),
-        width: 1180,
-        height: 760,
+        width: WindowConfig.RUNNING_WIN_WIDTH,
+        height: WindowConfig.RUNNING_WIN_HEIGHT,
         webPreferences: {
           preload,
           nodeIntegration: true,
@@ -108,13 +174,14 @@ export default class RunningAppWindowManager {
         return { action: 'deny' }
       })
 
-
       this.loadPage(childWindow, windowPagePath)
       // this._allWins.set(installedInstanceId, childWindow)
       childWindow.on('closed', () => {
         this.onWindowClosed(installedInstanceId)
         this._allWindows.delete(installedInstanceId)
       })
+
+      MenuManager.getInstance().initRightClickMenu(childWindow)
     }
 
     private closeWindow(installedInstanceId: string) {
@@ -127,7 +194,7 @@ export default class RunningAppWindowManager {
       }
     }
 
-    private loadPage(childWindow: RunningAppWindow, windowPagePath: string) {
+    private loadPage(childWindow: RunningAppWindow | WebContents, windowPagePath: string) {
       const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
       if (VITE_DEV_SERVER_URL) {
         const url = UrlUtil.addQueryParam(`${VITE_DEV_SERVER_URL}#${windowPagePath}`,

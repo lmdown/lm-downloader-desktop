@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, HandlerDetails } from 'electron'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import os from 'node:os'
@@ -14,6 +14,7 @@ import LocaleManager from './locales/LocaleManager'
 import GlobalToolsManager from './global-tools/GlobalToolsManager'
 import FileSystemManager from './file/FileSystemManager'
 import LMDSystemManager from './system/LMDSystemManager'
+import CommonWindowManager from './apps/CommonWindowManager'
 
 dotenv.config();
 
@@ -43,7 +44,9 @@ async function createWindow() {
   if (process.platform === 'win32') app.setAppUserModelId(app.getName())
 
   win = mainWindowMgr.createMainWindow()
-  MenuManager.getInstance().mainWindow = win
+  const menuManager = MenuManager.getInstance()
+  menuManager.mainWindow = win
+  menuManager.initRightClickMenu(win)
 }
 
 function initServer() {
@@ -104,3 +107,5 @@ app.on('activate', () => {
     createWindowLoadFiles()
   }
 })
+
+CommonWindowManager.init()
