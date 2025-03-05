@@ -10,6 +10,7 @@ import icon from '../../resource/build/icons/256x256.png?asset'
 import UrlUtil from '../util/UrlUtil';
 import { WindowConfig } from './WindowConfig';
 import MenuManager from '../menu/MenuManager';
+import { UniversalAIAppDTO } from '../../types/universal-app/UniversalAIAppDTO';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -54,8 +55,8 @@ export default class RunningAppWindowManager {
       })
 
       ipcMain?.handle(IPCHandleName.OPEN_UAPP_RUNNING_WINDOW, (_,
-          installedInstanceId: string, windowPagePath: string, appData: object) => {
-        this.openUAppRunningWindow(installedInstanceId, windowPagePath, appData as {url:string})
+        appName: string, windowPagePath: string, appData: UniversalAIAppDTO) => {
+        this.openUAppRunningWindow(appName, windowPagePath, appData)
       })
 
       ipcMain?.handle(IPCHandleName.CLOSE_RUNNING_WINDOW, (_, installedInstanceId: string) => {
@@ -67,20 +68,23 @@ export default class RunningAppWindowManager {
       })
     }
 
-    private openUAppRunningWindow(installedInstanceId, windowPagePath: string, appData: {url:string}) {
+    private openUAppRunningWindow(appName:string, windowPagePath: string, appData: UniversalAIAppDTO) {
       // const preload = path.join(__dirname, '../preload/index.js')
       const win = new BaseWindow({
+        ...(process.platform !== 'darwin' ? { autoHideMenuBar: true } : {}),
+        ...(process.platform === 'linux' ? { icon } : {}),
         width: WindowConfig.RUNNING_WIN_WIDTH,
         height: WindowConfig.RUNNING_WIN_HEIGHT,
         ...(process.platform !== 'darwin' ? { autoHideMenuBar: true } : {}),
         ...(process.platform === 'linux' ? { icon } : {}),
       })
-      const view1 = this.createViewForWindow(win, windowPagePath,0, 44)
+      this.createViewForWindow(win, windowPagePath,0, 44)
       if(appData?.url) {
-        const view2 = this.createViewForWindow(win, appData?.url, 44, 0, true)
+        this.createViewForWindow(win, appData?.url, 44, 0, true)
       }
+      win.title = appData?.name
       // appData?.url
-      this._allWindows.set(installedInstanceId, win)
+      this._allWindows.set(appName, win)
     }
 
     private createViewForWindow(win:BaseWindow, url: string, viewY: number = 0,
