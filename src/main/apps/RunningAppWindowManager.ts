@@ -74,13 +74,14 @@ export default class RunningAppWindowManager {
         ...(process.platform !== 'darwin' ? { autoHideMenuBar: true } : {}),
         ...(process.platform === 'linux' ? { icon } : {}),
         width: WindowConfig.RUNNING_WIN_WIDTH,
-        height: WindowConfig.RUNNING_WIN_HEIGHT,
-        ...(process.platform !== 'darwin' ? { autoHideMenuBar: true } : {}),
-        ...(process.platform === 'linux' ? { icon } : {}),
+        height: WindowConfig.RUNNING_WIN_HEIGHT
       })
       this.createViewForWindow(win, windowPagePath,0, 44)
       if(appData?.url) {
-        this.createViewForWindow(win, appData?.url, 44, 0, true)
+        const viewForApp = this.createViewForWindow(win, appData?.url, 44, 0, true)
+        viewForApp.webContents.addListener('page-title-updated', (event, title) => {
+          win.title = title
+        })
       }
       win.title = appData?.name
       // appData?.url
