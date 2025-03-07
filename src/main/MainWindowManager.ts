@@ -72,14 +72,18 @@ export default class MainWindowManager {
   }
 
   loadLMDHtml() {
+    console.log('loadLMDHtml')
     const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
+    let url
     if (process.env.NODE_ENV === 'development' && VITE_DEV_SERVER_URL) {
-        this.win?.loadURL(VITE_DEV_SERVER_URL)
-        // Open devTool if the app is not packaged
-        // win.webContents.openDevTools()
-      } else {
-        this.win?.loadFile(ScriptPathUtil.getFrontendPath())
-      }
+      url = VITE_DEV_SERVER_URL
+      // Open devTool if the app is not packaged
+      // win.webContents.openDevTools()
+    } else {
+      url = ScriptPathUtil.getFrontendUrl()
+      // this.win?.loadFile(ScriptPathUtil.getFrontendPath())
+    }
+    this.win?.loadURL(url)
   }
 
 }

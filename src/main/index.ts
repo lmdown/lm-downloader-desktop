@@ -49,14 +49,6 @@ async function createWindow() {
   menuManager.initRightClickMenu(win)
 }
 
-function initServer(onSuccess) {
-  const startLmdServer = process.env.START_LMD_SERVER!==undefined ? parseInt(process.env.START_LMD_SERVER) : 1
-  if(startLmdServer) {
-    new LMDServerManager(onSuccess)
-  }
-}
-
-
 app.userAgentFallback = app.userAgentFallback.replace(/Electron\/[\d.]+/g, '');
 
 app.whenReady().then(async () => {
@@ -68,9 +60,7 @@ app.whenReady().then(async () => {
   FileSystemManager.getInstance().init()
   LMDSystemManager.getInstance().init()
 
-  initServer(() =>{
-    createWindowLoadFiles()
-  })
+  await createWindowLoadFiles()
 })
 
 const createWindowLoadFiles = async () => {
@@ -81,9 +71,21 @@ const createWindowLoadFiles = async () => {
   if(shouldUpdateStory) {
     const updateResult = await new LMDScriptUpdater().update()
   }
-  // load main html page
-  console.log('loadLMDHtml')
-  mainWindowMgr.loadLMDHtml()
+  const startLoadPage = () => [
+    mainWindowMgr.loadLMDHtml()
+  ]
+  const startLmdServer = process.env.START_LMD_SERVER!==undefined ? parseInt(process.env.START_LMD_SERVER) : 1
+  if(startLmdServer) {
+    try {
+      new LMDServerManager(startLoadPage)
+    } catch(error) {
+      console.error('init server err', error)
+    } finally {
+      startLoadPage()
+    }
+  } else {
+    startLoadPage()
+  }
 }
 
 app.on('window-all-closed', () => {

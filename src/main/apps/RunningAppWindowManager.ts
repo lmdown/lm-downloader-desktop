@@ -203,14 +203,15 @@ export default class RunningAppWindowManager {
 
     private loadPage(childWindow: RunningAppWindow | WebContents, windowPagePath: string) {
       const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
+      let url
       if (VITE_DEV_SERVER_URL) {
-        const url = UrlUtil.addQueryParam(`${VITE_DEV_SERVER_URL}#${windowPagePath}`,
+        url = UrlUtil.addQueryParam(`${VITE_DEV_SERVER_URL}#${windowPagePath}`,
           'UPDATE_INSTALL_SCRIPTS', process.env.UPDATE_INSTALL_SCRIPTS)
-        childWindow.loadURL(url)
       } else {
-        const path = ScriptPathUtil.getFrontendPath()
-        childWindow.loadFile(path, { hash: windowPagePath })
+        url = ScriptPathUtil.getFrontendUrl()
+        // childWindow.loadFile(path, { hash: windowPagePath })
       }
+      childWindow.loadURL(url)
     }
 
     private regListeners() {
