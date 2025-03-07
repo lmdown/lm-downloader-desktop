@@ -49,10 +49,10 @@ async function createWindow() {
   menuManager.initRightClickMenu(win)
 }
 
-function initServer() {
+function initServer(onSuccess) {
   const startLmdServer = process.env.START_LMD_SERVER!==undefined ? parseInt(process.env.START_LMD_SERVER) : 1
   if(startLmdServer) {
-    new LMDServerManager()
+    new LMDServerManager(onSuccess)
   }
 }
 
@@ -68,8 +68,9 @@ app.whenReady().then(async () => {
   FileSystemManager.getInstance().init()
   LMDSystemManager.getInstance().init()
 
-  await createWindowLoadFiles()
-  initServer()
+  initServer(() =>{
+    createWindowLoadFiles()
+  })
 })
 
 const createWindowLoadFiles = async () => {

@@ -49,10 +49,9 @@ export default class MainWindowManager {
       },
     })
 
-    this.win.webContents.on('did-finish-load', () => {
-
-      this.win?.webContents.send('main-process-message', new Date().toLocaleString())
-    })
+    // this.win.webContents.on('did-finish-load', () => {
+    //   this.win?.webContents.send('main-process-message', new Date().toLocaleString())
+    // })
 
     this.win.on('ready-to-show', () => {
       this.win?.show()

@@ -6,8 +6,11 @@ import ConfigManager from '../ConfigManager';
 export default class LMDServerManager {
 
   private _configMgr:ConfigManager
-  constructor() {
+  private _onSuccess: Function
+
+  constructor(onSuccess: Function) {
     this._configMgr = ConfigManager.getInstance()
+    this._onSuccess = onSuccess
     this.init()
   }
 
@@ -26,12 +29,17 @@ export default class LMDServerManager {
     });
     // 监听子进程的消息
     serverProcess.on('message', (msg) => {
-      console.log('Message from server:', msg);
+      console.log('local server msg:', msg);
+      if(msg==='lmd-server-started') {
+        if(this._onSuccess) {
+          this._onSuccess()
+        }
+      }
     });
 
     // 处理子进程的关闭事件
     serverProcess.on('close', (code) => {
-      console.log('Server process exited with code:', code);
+      console.log('Server exited with code:', code);
     });
 
     process.on('exit', () => {

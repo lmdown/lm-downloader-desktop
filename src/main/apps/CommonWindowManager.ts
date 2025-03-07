@@ -33,8 +33,6 @@ export default class CommonWindowManager {
       )
 
       webContents.on('did-create-window', (newWindow, details) => {
-        // 在这里可以访问新创建的窗口对象 newWindow
-        // console.log('New window created:', newWindow);
         MenuManager.getInstance().initRightClickMenu(newWindow)
       });
 
