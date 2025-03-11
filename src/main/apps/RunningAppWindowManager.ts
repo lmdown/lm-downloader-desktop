@@ -70,6 +70,14 @@ export default class RunningAppWindowManager {
 
     private openUAppRunningWindow(appName:string, windowPagePath: string, appData: UniversalAIAppDTO) {
       // const preload = path.join(__dirname, '../preload/index.js')
+      // if(this._allWindows.has(appName)) {
+      //   const targetChildWindow = this._allWindows.get(appName)
+      //   if(targetChildWindow) {
+      //     targetChildWindow?.show()
+      //     return
+      //   }
+      // }
+
       const win = new BaseWindow({
         ...(process.platform !== 'darwin' ? { autoHideMenuBar: true } : {}),
         ...(process.platform === 'linux' ? { icon } : {}),
@@ -79,6 +87,7 @@ export default class RunningAppWindowManager {
       this.createViewForWindow(win, windowPagePath,0, 44)
       if(appData?.url) {
         const viewForApp = this.createViewForWindow(win, appData?.url, 44, 0, true)
+        // viewForApp.webContents.openDevTools()
         viewForApp.webContents.addListener('page-title-updated', (event, title) => {
           win.title = title
         })
@@ -209,6 +218,7 @@ export default class RunningAppWindowManager {
           'UPDATE_INSTALL_SCRIPTS', process.env.UPDATE_INSTALL_SCRIPTS)
       } else {
         url = ScriptPathUtil.getFrontendUrl()
+        url = UrlUtil.addQueryParam(`${url}#${windowPagePath}`, 'UPDATE_INSTALL_SCRIPTS', process.env.UPDATE_INSTALL_SCRIPTS)
         // childWindow.loadFile(path, { hash: windowPagePath })
       }
       childWindow.loadURL(url)

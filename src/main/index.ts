@@ -49,7 +49,7 @@ async function createWindow() {
   menuManager.initRightClickMenu(win)
 }
 
-app.userAgentFallback = app.userAgentFallback.replace(/Electron\/[\d.]+/g, '');
+app.userAgentFallback = app.userAgentFallback.replace(/Electron\/[\d.]+/g, '').replace(/lm-downloader\/[\d.]+/, '');
 
 app.whenReady().then(async () => {
   await ConfigManager.getInstance().init();
