@@ -8,6 +8,9 @@ LM Downloader is a free, open source, easy-to-use, and powerful AI Large Model A
 
 English · [中文](./README-zh.md)
 
+## 🔗 Links
+- [LM Downloader Homepage](https://daiyl.com)
+- [Get latest LM Downloader](https://gitee.com/lmdown/lm-downloader-desktop/releases)
 
 ## Snapshots
 
@@ -21,12 +24,7 @@ English · [中文](./README-zh.md)
 
 #### If Ollama is installed, you can change settings, and choose the models you want to download. Do it all without having to enter commands.
 
-<img width="220" src="docs/en/ollama-install-models-en.jpg">
-
-
-## Download
-
-- [Get latest LM Downloader](https://gitee.com/lmdown/lm-downloader-desktop/releases)
+<img width="220" src="docs/en/ollama-running-c.png">
 
 ## Recommended IDE Setup
 
@@ -82,7 +80,7 @@ Below is the architecture diagram of the entire project:
 
 <img width="220" src="docs/Architecture.png">
 
-## 🔗 Links
+## 🔗 Git Repository Links
 
 - [LM Downloader Desktop](https://gitee.com/lmdown/lm-downloader-desktop)
 - [LM Downloader Frontend](https://gitee.com/lmdown/lm-downloader-frontend)

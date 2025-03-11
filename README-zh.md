@@ -8,6 +8,10 @@
 
 [English](./README.md) · 中文
 
+## 🔗 链接
+- [魔当首页](https://daiyl.com)
+- [下载 最新版 魔当](https://gitee.com/lmdown/lm-downloader-desktop/releases)
+
 ## 软件截图
 
 #### 在魔当首页，能看到各种大模型App。
@@ -20,11 +24,7 @@
 
 #### 如果安装了Ollama，可设置各种参数，可选择要下载的模型，你可以无需输入命令，实现所有操作。
 
-<img width="220" src="docs/zh/ollama-install-models-zh.jpg">
-
-## 下载
-
-- [下载 最新版魔当](https://gitee.com/lmdown/lm-downloader-desktop/releases)
+<img width="220" src="docs/zh/ollama-running-c.png">
 
 ## 推荐的开发工具
 
@@ -87,7 +87,7 @@ npm run build:linux
 
 <img width="220" src="docs/Architecture.png">
 
-## 🔗 链接
+## 🔗 代码仓库链接
 
 - [LM Downloader Desktop](https://gitee.com/lmdown/lm-downloader-desktop)
 - [LM Downloader Frontend](https://gitee.com/lmdown/lm-downloader-frontend)
