@@ -88,7 +88,11 @@ export default class RunningAppWindowManager {
         const viewForApp = this.createViewForWindow(win, appData?.url, 44, 0, true)
         // viewForApp.webContents.openDevTools()
         viewForApp.webContents.addListener('page-title-updated', (event, title) => {
-          win.title = title
+          try{
+            win.title = title
+          } catch(error) {
+            console.error('set title error', error)
+          }
         })
       }
       win.title = appData?.name
