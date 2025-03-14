@@ -52,6 +52,16 @@ export default class LMDSystemManager {
       return SystemCommandUtil.runCommand(command);
     });
 
+    // return app name and version
+    ipcMain.handle(IPCHandleName.CHECK_LMD_APP_INFO, (_) => {
+      return {
+        name: app.name,
+        version: app.getVersion()
+      }
+    });
+
+
+
   }
 
   killProcesses(processNames: string[]): void {

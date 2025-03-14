@@ -24,5 +24,7 @@ export const IPCHandleName = {
 
   SUPPORT_WEBVIEW_TAG: 'support-webview-tag',
   SUPPORT_UAPP_WIN: 'support-uapp-win',
+
+  CHECK_LMD_APP_INFO: 'check-lmd-app-info',
 }
 

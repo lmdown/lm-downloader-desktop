@@ -77,7 +77,6 @@ export default class RunningAppWindowManager {
       //     return
       //   }
       // }
-
       const win = new BaseWindow({
         ...(process.platform !== 'darwin' ? { autoHideMenuBar: true } : {}),
         ...(process.platform === 'linux' ? { icon } : {}),
@@ -104,8 +103,8 @@ export default class RunningAppWindowManager {
           nodeIntegration: true,
           contextIsolation: true,
           nodeIntegrationInWorker: true,
-          webSecurity: false,
-          webviewTag: true,
+          webSecurity: true,
+          webviewTag: false,
         }
       })
       win.contentView.addChildView(view1)
@@ -130,6 +129,8 @@ export default class RunningAppWindowManager {
           targetBounds = { x: 0, y: viewY, width: bounds.width, height: bounds.height - viewY }
           // console.log('resize viewY', viewY, 'window bounds.height', bounds.height)
           // console.log('resize targetBounds', targetBounds)
+        } else {
+          targetBounds = { x: 0, y: viewY, width: bounds.width, height: bounds.height - viewY }
         }
         if(targetBounds) {
           view1.setBounds(targetBounds)
@@ -147,7 +148,11 @@ export default class RunningAppWindowManager {
       const preload = path.join(__dirname, '../preload/index.js')
       // const indexHtml = path.join(RENDERER_DIST, 'index.html')
       if(this._allWindows.has(installedInstanceId)) {
-        const targetChildWindow = this._allWindows.get(installedInstanceId)
+        let targetChildWindow = this._allWindows.get(installedInstanceId)
+        if(targetChildWindow?.isDestroyed) {
+          this._allWindows.delete(installedInstanceId)
+          targetChildWindow = undefined
+        }
         console.log('openWindow',targetChildWindow, reloadPage)
         if(targetChildWindow) {
           if(reloadPage) {
