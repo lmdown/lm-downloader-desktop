@@ -15,6 +15,7 @@ import GlobalToolsManager from './global-tools/GlobalToolsManager'
 import FileSystemManager from './file/FileSystemManager'
 import LMDSystemManager from './system/LMDSystemManager'
 import CommonWindowManager from './apps/CommonWindowManager'
+// import AppSchemeManager from './apps/AppSchemeManager'
 
 dotenv.config();
 
@@ -47,6 +48,7 @@ async function createWindow() {
   const menuManager = MenuManager.getInstance()
   menuManager.mainWindow = win
   menuManager.initRightClickMenu(win)
+  // AppSchemeManager.getInstance().init(win)
 }
 
 app.userAgentFallback = app.userAgentFallback.replace(/Electron\/[\d.]+/g, '').replace(/lm-downloader\/[\d.]+/, '');

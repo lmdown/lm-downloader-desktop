@@ -153,7 +153,7 @@ export default class RunningAppWindowManager {
       // const indexHtml = path.join(RENDERER_DIST, 'index.html')
       if(this._allWindows.has(installedInstanceId)) {
         let targetChildWindow = this._allWindows.get(installedInstanceId)
-        if(targetChildWindow?.isDestroyed) {
+        if(targetChildWindow?.isDestroyed()) {
           this._allWindows.delete(installedInstanceId)
           targetChildWindow = undefined
         }
