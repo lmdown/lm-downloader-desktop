@@ -13,6 +13,7 @@ import { ipcMain } from "electron";
 import { IPCHandleName } from "../../constant/IPCHandleName";
 import UpdateIndexDataUtil from "../util/UpdateIndexDataUtil";
 import { AIAppDepts } from "../update/UpdateIndexData";
+import MacToolsInstallUtil from "./MacToolsInstallUtil";
 
 export default class GlobalToolsManager {
 
@@ -76,13 +77,12 @@ export default class GlobalToolsManager {
       if(checkResult){
         this.addToOSUserPath()
       }
-    } else {
-      // TODO: mac install git
-      if(installGit) {
-        // await this.sleep(2000)
+    } else if(OSUtil.isMacOS()) {
+      checkResult = await MacToolsInstallUtil.checkGitInstalled();
+      if(!checkResult && installGit) {
+        await MacToolsInstallUtil.installXcodeCommandLineTools()
+        await MacToolsInstallUtil.waitForGitInstallation()
         checkResult = true
-      } else {
-        checkResult = false
       }
     }
     return checkResult
