@@ -89,7 +89,7 @@ export default class LMDScriptUpdater {
   getNodeModuleFileName() {
     const name = 'server_node_modules_${OS}_${ARCH}.zip'
     let result = name.replace('${OS}', this.getOSStr())
-    result = name.replace('${ARCH}', os.arch())
+    result = result.replace('${ARCH}', os.arch())
     return result
   }
 
