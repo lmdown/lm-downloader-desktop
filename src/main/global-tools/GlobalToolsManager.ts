@@ -71,13 +71,27 @@ export default class GlobalToolsManager {
           checkResult = true
         }
       }
-      this.addToOSUserPath()
+      if(checkResult){
+        this.addToOSUserPath()
+      }
     } else {
       // TODO: mac install git
-      checkResult = true
+      if(installGit) {
+        // await this.sleep(2000)
+        checkResult = true
+      } else {
+        checkResult = false
+      }
     }
     return checkResult
   }
+
+  // sleep(ms: number): Promise<void> {
+  //   return new Promise((resolve) => {
+  //       setTimeout(resolve, ms);
+  //   });
+  // };
+
 
   addToOSUserPath() {
     const configMgr = ConfigManager.getInstance()
