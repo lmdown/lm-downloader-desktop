@@ -8,7 +8,7 @@ export const LMDAppStoryConfig = {
 
   MASTER_ZIP_FILE_NAME: "master.zip",
 
-  LMD_APP_STORY_GIT_MASTER_ZIP: "https://d-1314735556.cos.ap-shanghai.myqcloud.com/pkgs/app-story/pack/1742813151/master.zip",
+  LMD_APP_STORY_GIT_PREFIX: "https://d-1314735556.cos.ap-shanghai.myqcloud.com/pkgs/app-story/pack/",
 
   LMD_APP_STORY_GIT_MASTER_DIR: "lm-downloader-app-story-master",
 

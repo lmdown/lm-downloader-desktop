@@ -61,8 +61,9 @@ export default class LMDScriptUpdater {
 
       if(!isEqual) {
         // Download to LMD_SCRIPTS_DIR. At first we should create version dir.
-        const appStoryPackageZipUrl = jsonData?.story_packages?.main_pack_prefix || LMDAppStoryConfig.LMD_APP_STORY_GIT_MASTER_ZIP
-        // const appStoryPackageZipUrl = 'http://127.0.0.1:8080/master.zip'
+        const appStoryPackageZipPrefix = jsonData?.story_packages?.main_pack_prefix || LMDAppStoryConfig.LMD_APP_STORY_GIT_PREFIX
+        const appStoryPackageZipUrl = appStoryPackageZipPrefix + LMDAppStoryConfig.MASTER_ZIP_FILE_NAME
+
         const storyDirAfterUnzip = `${scriptsDir}/${LMDAppStoryConfig.LMD_APP_STORY_GIT_MASTER_DIR}`
         const storyDir = `${scriptsDir}/${LMDAppStoryConfig.LMD_APP_STORY_DIR_NAME}`
         await DownloadUtil.download(appStoryPackageZipUrl, storyTempDownloadFilePath, false)
@@ -70,7 +71,8 @@ export default class LMDScriptUpdater {
 
         if(storyDir.includes('scripts/lm-downloader-app-story')) {
           this.moveFile(`${appStoryPath}/server/node_modules`, `${storyDirAfterUnzip}/server/node_modules`)
-          this.moveFile(`${appStoryPath}/server/server_node_modules_mac_arm64.zip`, `${storyDirAfterUnzip}/server/server_node_modules_mac_arm64.zip`)
+          const moduleFileName = this.getNodeModuleFileName()
+          this.moveFile(`${appStoryPath}/server/${moduleFileName}`, `${storyDirAfterUnzip}/server/${moduleFileName}`)
           fs.rmSync(storyDir, {recursive: true})
           this.moveFile(storyDirAfterUnzip, storyDir);
         }
@@ -82,6 +84,13 @@ export default class LMDScriptUpdater {
       console.error('DownloadAppStory err', err)
       return false
     }
+  }
+
+  getNodeModuleFileName() {
+    const name = 'server_node_modules_${OS}_${ARCH}.zip'
+    let result = name.replace('${OS}', this.getOSStr())
+    result = name.replace('${ARCH}', os.arch())
+    return result
   }
 
   moveFile(fromPath: string, toPath: string) {
