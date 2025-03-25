@@ -9,6 +9,8 @@ import { checkGitFilesExist, getGitInstallDir } from "./GitCheck";
 import LMDBaseConfig from "../../types/LMDBaseConfig";
 import LMDGlobalEnv from "../../types/LMDGlobalEnv";
 import FileUtil from "../util/FileUtil";
+import { ipcMain } from "electron";
+import { IPCHandleName } from "../../constant/IPCHandleName";
 
 export default class GlobalToolsManager {
 
@@ -29,12 +31,22 @@ export default class GlobalToolsManager {
       return GlobalToolsManager.instance;
   }
 
-  async install(): Promise<void>  {
+  init() {
+    ipcMain.handle(IPCHandleName.CHECK_GIT, async (_) => {
+      return await this.checkGit(false)
+    });
+
+    ipcMain.handle(IPCHandleName.INSTALL_GIT, async (_) => {
+      return await this.checkGit(true)
+    });
+  }
+
+  async checkGit(installGit: boolean): Promise<boolean>  {
+    let checkResult = false
     if(OSUtil.isWindows()) {
       const configMgr = ConfigManager.getInstance()
       this.currentBaseConfig = configMgr.getBaseConfig()
       this.globalEnv = configMgr.getENVVariables()
-      let checkResult = false
       const defaultGitInstallPath = configMgr.getDefaultGitInstallPath()
       if(this.globalEnv?.GIT_INSTALL_PATH) {
         checkResult = checkGitFilesExist(this.globalEnv.GIT_INSTALL_PATH)
@@ -52,13 +64,19 @@ export default class GlobalToolsManager {
         const gitInstallDir = getGitInstallDir()
         if(gitInstallDir) {
           configMgr.updateEnvGitInstallPath(gitInstallDir)
-        } else {
+          checkResult = true
+        } else if(installGit) {
           await this.installToolsForWindows()
           configMgr.updateEnvGitInstallPath(defaultGitInstallPath)
+          checkResult = true
         }
       }
       this.addToOSUserPath()
+    } else {
+      // TODO: mac install git
+      checkResult = true
     }
+    return checkResult
   }
 
   addToOSUserPath() {

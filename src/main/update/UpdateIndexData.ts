@@ -1,5 +1,7 @@
 export default interface UpdateIndexData {
 
+  version: string
+
   desktop_app: {
     min_version: string
   }

@@ -67,7 +67,7 @@ app.whenReady().then(async () => {
 
 const createWindowLoadFiles = async () => {
   createWindow()
-  await GlobalToolsManager.getInstance().install()
+  await GlobalToolsManager.getInstance().init()
   // load scripts
   const shouldUpdateStory = process.env.UPDATE_STORY!==undefined ? parseInt(process.env.UPDATE_STORY) : 1
   if(shouldUpdateStory) {
@@ -82,7 +82,6 @@ const createWindowLoadFiles = async () => {
       new LMDServerManager(startLoadPage)
     } catch(error) {
       console.error('init server err', error)
-    } finally {
       startLoadPage()
     }
   } else {

@@ -26,5 +26,8 @@ export const IPCHandleName = {
   SUPPORT_UAPP_WIN: 'support-uapp-win',
 
   CHECK_LMD_APP_INFO: 'check-lmd-app-info',
+
+  CHECK_GIT: 'check-git',
+  INSTALL_GIT: 'install-git',
 }
 

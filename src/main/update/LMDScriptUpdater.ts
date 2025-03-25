@@ -1,7 +1,7 @@
 import { exec } from 'child_process'
 import ConfigManager from '../ConfigManager'
 import path from 'path'
-import fs from 'fs'
+import fs, { lstat } from 'fs'
 import os from 'os'
 import appPackage from '../../../package.json'
 import UpdateIndexData from './UpdateIndexData'
@@ -11,22 +11,108 @@ import UncompressUtil from '../util/UncompressUtil'
 import DownloadUtil from '../util/DownloadUtil'
 import { app, dialog, shell } from 'electron'
 import LocaleManager from '../locales/LocaleManager'
+import { LMDAppStoryConfig } from '../../constant/LMDAppStoryConfig'
+import { fetchJsonWithRetry } from '../../api/fetch-with-retry'
 
 export default class LMDScriptUpdater {
 
   private _configMgr:ConfigManager = ConfigManager.getInstance()
 
   constructor() {
-
   }
 
   async update() {
-    await this.getFiles()
     console.log('getFile process finished.')
-    // this.checkDesktopVersion() // 检查当前桌面App是否与脚本兼容。如果不兼容，要显示弹窗，要求用户强制下载新版本
+    return await this.getFiles()
   }
 
-  cloneRepository(repoUrl, localPath) {
+  async fetchAppStoryFiles(): Promise<boolean> {
+    const updateStoryMethod = process.env.UPDATE_STORY_METHOD || 'http'
+    const baseConfig = this._configMgr.getBaseConfig()
+    const appStoryPath = baseConfig.LMD_APP_STORY_DIR
+    const scriptsDir = baseConfig.LMD_SCRIPTS_DIR
+    const appStoryGit = baseConfig.LMD_APP_STORY_GIT
+
+    if(updateStoryMethod === 'http') {
+      console.log('http download app story zip', appStoryGit)
+      return await this.httpDownloadAppStory(appStoryGit, scriptsDir, appStoryPath)
+    } else {
+      console.log('clone app story repo ', appStoryGit)
+      return await this.cloneRepository(appStoryGit, appStoryPath);
+    }
+  }
+
+  async httpDownloadAppStory(appStoryGit: string, scriptsDir: string, appStoryPath: string): Promise<boolean> {
+    try {
+      // appStoryPackageZipUrl,
+      // get remote update config index
+      const jsonData: UpdateIndexData = await fetchJsonWithRetry(LMDAppStoryConfig.UPDATE_CONFIG_URL, {
+        retries: 5
+      });
+      const appStoryVersion = jsonData.version || '0'
+      const storyTempDownloadDir = `${scriptsDir}/${appStoryVersion}`
+      const storyTempDownloadFilePath = `${scriptsDir}/${appStoryVersion}/${LMDAppStoryConfig.MASTER_ZIP_FILE_NAME}`
+
+      if (!fs.existsSync(storyTempDownloadDir)) {
+        fs.mkdirSync(storyTempDownloadDir);
+      }
+
+      const isEqual = this.compareLocalAppStoryVersion(appStoryPath, appStoryVersion)
+
+      if(!isEqual) {
+        // Download to LMD_SCRIPTS_DIR. At first we should create version dir.
+        const appStoryPackageZipUrl = appStoryGit + LMDAppStoryConfig.LMD_APP_STORY_GIT_MASTER_ZIP
+        // const appStoryPackageZipUrl = 'http://127.0.0.1:8080/master.zip'
+        const storyDirAfterUnzip = `${scriptsDir}/${LMDAppStoryConfig.LMD_APP_STORY_GIT_MASTER_DIR}`
+        const storyDir = `${scriptsDir}/${LMDAppStoryConfig.LMD_APP_STORY_DIR_NAME}`
+        await DownloadUtil.download(appStoryPackageZipUrl, storyTempDownloadFilePath, false)
+        await UncompressUtil.checkAndUnzip(storyTempDownloadFilePath, scriptsDir)
+
+        if(storyDir.includes('scripts/lm-downloader-app-story')) {
+          this.moveFile(`${appStoryPath}/server/node_modules`, `${storyDirAfterUnzip}/server/node_modules`)
+          this.moveFile(`${appStoryPath}/server/server_node_modules_mac_arm64.zip`, `${storyDirAfterUnzip}/server/server_node_modules_mac_arm64.zip`)
+          fs.rmSync(storyDir, {recursive: true})
+          this.moveFile(storyDirAfterUnzip, storyDir);
+        }
+
+        fs.rmSync(storyTempDownloadDir)
+      }
+      return true
+    } catch (err) {
+      console.error('DownloadAppStory err', err)
+      return false
+    }
+  }
+
+  moveFile(fromPath: string, toPath: string) {
+    if(fs.existsSync(fromPath)) {
+      fs.renameSync(fromPath, toPath);
+    } else {
+      console.warn('can not move. Target path dose not exist')
+    }
+  }
+
+  compareLocalAppStoryVersion(appStoryPath: string ,remoteVersion: string): boolean {
+    let updateIndexData: UpdateIndexData = {} as UpdateIndexData
+    let compareResult = false
+    const indexFilePath = path.join(appStoryPath, 'update_index.json')
+    if (!fs.existsSync(indexFilePath)) {
+      console.error(indexFilePath + ' dose not exist')
+    } else {
+      try {
+        updateIndexData = JSON.parse(fs.readFileSync(indexFilePath, {encoding:'utf8', flag:'r'}));
+        const localAppStoryVersion = updateIndexData.version
+        if (localAppStoryVersion === remoteVersion) {
+          compareResult = true
+        }
+      } catch(err) {
+        console.error('parse error', err)
+      }
+    }
+    return compareResult
+  }
+
+  cloneRepository(repoUrl, localPath): Promise<boolean> {
     return new Promise ((resolve, reject) => {
       exec(`git clone --depth=1 ${repoUrl} ${localPath}`, (error, stdout, stderr) => {
         if (error) {
@@ -42,12 +128,12 @@ export default class LMDScriptUpdater {
 
   }
 
-  pullLatestChanges(localPath) {
+  pullLatestChanges(localPath): Promise<boolean> {
     return new Promise ((resolve, reject) => {
       const pullCommand = 'git fetch origin master --depth=1 && git reset --hard origin/master'
       console.log("pullCommand:", pullCommand)
       exec(pullCommand, { cwd: localPath }, (error, stdout, stderr) => {
-        let pullResult = false
+        let pullResult: boolean = false
           if (error) {
               console.error(`error: `, error);
               console.error(`stderr: ${stderr}`);
@@ -63,12 +149,10 @@ export default class LMDScriptUpdater {
 
 
   async getFiles() {
-    // git clone and git pull
+    // return this.cloneRepository(appStoryGit, appStoryPath)
     const baseConfig = this._configMgr.getBaseConfig()
     const appStoryPath = baseConfig.LMD_APP_STORY_DIR
-    const appStoryGit = baseConfig.LMD_APP_STORY_GIT
-    console.log('clone app story repo ', appStoryGit)
-    return this.cloneRepository(appStoryGit, appStoryPath)
+    return this.fetchAppStoryFiles()
     .then((cloneAndPullResult) => {
       console.log('cloneAndPullResult: ', cloneAndPullResult)
       const checkResult = this.checkDesktopVersion(appStoryPath)
@@ -93,21 +177,20 @@ export default class LMDScriptUpdater {
           if(!fs.existsSync(depLocalFilePath)) {
             await DownloadUtil.download(depUrl, depLocalFilePath)
             needUncompress = true
-            console.log('download finished.')
+            console.log('download finished')
           }
           if(!fs.existsSync(path.join(fullServerDir, 'node_modules'))) {
             needUncompress = true
-            console.log('node_modules dose not exist.')
+            console.log('node_modules dose not exist')
           }
           if(needUncompress) {
-            console.log('start unzip.')
+            console.log('start unzip')
             await UncompressUtil.checkAndUnzip(depLocalFilePath, fullServerDir)
           } else {
-            console.log('skip unzip.')
+            console.log('skip unzip')
           }
         }
       } else {
-        console.log('不满足版本要求，无法更新')
         this.showForceUpdateDialog(currentVersion, minVersion)
       }
     })
@@ -140,7 +223,7 @@ export default class LMDScriptUpdater {
       cancelId: 1, //这个的值是如果直接把提示框×掉返回的值，这里设置成和“取消”按钮一样的值，下面的idx也会是1
     }).then(idx => {
       if (idx.response == 0) {
-        shell.openExternal('https://gitee.com/lmdown/lm-downloader-desktop')
+        shell.openExternal('https://daiyl.com')
       }
       app.quit()
     })

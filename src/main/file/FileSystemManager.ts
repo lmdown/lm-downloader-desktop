@@ -2,6 +2,10 @@ import { dialog, ipcMain } from 'electron'
 import { IPCHandleName } from '../../constant/IPCHandleName'
 import fs from 'fs'
 import DirInfo from '../../types/DirInfo'
+
+/**
+ * Open folder , select folder
+ */
 export default class FileSystemManager {
   static instance
 
