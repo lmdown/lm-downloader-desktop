@@ -6,6 +6,11 @@ export default interface UpdateIndexData {
     min_version: string
   }
 
+  story_packages: {
+    main_pack_file_name: string
+    main_pack_prefix: string
+  }
+
   frontend: {
     path: string
     depencencies: string[]
@@ -16,4 +21,14 @@ export default interface UpdateIndexData {
     depencencies: string[]
   }
 
+  ai_apps: {
+    depencencies: AIAppDepts
+  }
+
+}
+
+export interface AIAppDepts {
+  sevenz_url: string
+  git_file_name: string
+  git_file_prefix: string
 }

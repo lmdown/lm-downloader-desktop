@@ -22,7 +22,6 @@ export default class LMDScriptUpdater {
   }
 
   async update() {
-    console.log('getFile process finished.')
     return await this.getFiles()
   }
 
@@ -51,7 +50,8 @@ export default class LMDScriptUpdater {
       });
       const appStoryVersion = jsonData.version || '0'
       const storyTempDownloadDir = `${scriptsDir}/${appStoryVersion}`
-      const storyTempDownloadFilePath = `${scriptsDir}/${appStoryVersion}/${LMDAppStoryConfig.MASTER_ZIP_FILE_NAME}`
+      const packFileName = jsonData?.story_packages?.main_pack_file_name || LMDAppStoryConfig.MASTER_ZIP_FILE_NAME
+      const storyTempDownloadFilePath = `${storyTempDownloadDir}/${packFileName}`
 
       if (!fs.existsSync(storyTempDownloadDir)) {
         fs.mkdirSync(storyTempDownloadDir);
@@ -61,7 +61,7 @@ export default class LMDScriptUpdater {
 
       if(!isEqual) {
         // Download to LMD_SCRIPTS_DIR. At first we should create version dir.
-        const appStoryPackageZipUrl = appStoryGit + LMDAppStoryConfig.LMD_APP_STORY_GIT_MASTER_ZIP
+        const appStoryPackageZipUrl = jsonData?.story_packages?.main_pack_prefix || LMDAppStoryConfig.LMD_APP_STORY_GIT_MASTER_ZIP
         // const appStoryPackageZipUrl = 'http://127.0.0.1:8080/master.zip'
         const storyDirAfterUnzip = `${scriptsDir}/${LMDAppStoryConfig.LMD_APP_STORY_GIT_MASTER_DIR}`
         const storyDir = `${scriptsDir}/${LMDAppStoryConfig.LMD_APP_STORY_DIR_NAME}`
@@ -75,7 +75,7 @@ export default class LMDScriptUpdater {
           this.moveFile(storyDirAfterUnzip, storyDir);
         }
 
-        fs.rmSync(storyTempDownloadDir)
+        fs.rmSync(storyTempDownloadDir, {recursive: true})
       }
       return true
     } catch (err) {
@@ -88,14 +88,14 @@ export default class LMDScriptUpdater {
     if(fs.existsSync(fromPath)) {
       fs.renameSync(fromPath, toPath);
     } else {
-      console.warn('can not move. Target path dose not exist')
+      console.warn(fromPath+' dose not exist. can not move')
     }
   }
 
   compareLocalAppStoryVersion(appStoryPath: string ,remoteVersion: string): boolean {
     let updateIndexData: UpdateIndexData = {} as UpdateIndexData
     let compareResult = false
-    const indexFilePath = path.join(appStoryPath, 'update_index.json')
+    const indexFilePath = path.join(appStoryPath, LMDAppStoryConfig.UPDATE_CONFIG_FILE_NAME)
     if (!fs.existsSync(indexFilePath)) {
       console.error(indexFilePath + ' dose not exist')
     } else {
@@ -232,7 +232,7 @@ export default class LMDScriptUpdater {
   checkDesktopVersion(appStoryPath: string) {
     let versionMatch = false
     let updateIndexData: UpdateIndexData = {} as UpdateIndexData
-    const indexFilePath = path.join(appStoryPath, 'update_index.json')
+    const indexFilePath = path.join(appStoryPath, LMDAppStoryConfig.UPDATE_CONFIG_FILE_NAME)
     let currentVersion = ''
     if (!fs.existsSync(indexFilePath)) {
       console.error(indexFilePath + ' dose not exist')

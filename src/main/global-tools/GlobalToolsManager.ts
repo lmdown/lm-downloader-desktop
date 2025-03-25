@@ -11,6 +11,8 @@ import LMDGlobalEnv from "../../types/LMDGlobalEnv";
 import FileUtil from "../util/FileUtil";
 import { ipcMain } from "electron";
 import { IPCHandleName } from "../../constant/IPCHandleName";
+import UpdateIndexDataUtil from "../util/UpdateIndexDataUtil";
+import { AIAppDepts } from "../update/UpdateIndexData";
 
 export default class GlobalToolsManager {
 
@@ -86,13 +88,6 @@ export default class GlobalToolsManager {
     return checkResult
   }
 
-  // sleep(ms: number): Promise<void> {
-  //   return new Promise((resolve) => {
-  //       setTimeout(resolve, ms);
-  //   });
-  // };
-
-
   addToOSUserPath() {
     const configMgr = ConfigManager.getInstance()
     //再读取git安装路径，存到path中
@@ -126,26 +121,29 @@ export default class GlobalToolsManager {
       console.error('GLOBAL_TOOLS_DIR value is not correct: ', this.appGlobalToolsDir)
       return
     }
-    await this.install7z()
-    await this.installGit()
+
+    const aiAppDepts = UpdateIndexDataUtil.getAIAppsDepts()
+
+    await this.install7z(aiAppDepts)
+    await this.installGit(aiAppDepts)
   }
 
-  async install7z() {
+  async install7z(aiAppDepts: AIAppDepts | null) {
     // for windows, download 7z console executable and portable git
-
     const unzipToolDir = path.join(this.appGlobalToolsDir, '/7z')
-    const installer7zUrl = 'https://www.7-zip.org/a/7zr.exe'
+    const installer7zUrl = aiAppDepts?.sevenz_url || 'https://www.7-zip.org/a/7zr.exe'
     fs.mkdirSync(unzipToolDir, {recursive: true})
     this.sevenZExec = path.join(unzipToolDir, '7zr.exe')
     FileUtil.removeFile(this.sevenZExec)
     await DownloadUtil.download(installer7zUrl, this.sevenZExec)
-    console.log('7z download ok. ', installer7zUrl)
+    // console.log('7z download ok. ', installer7zUrl)
   }
 
-  async installGit() {
-    const gitInstallerFileName = 'PortableGit-2.47.1.2-64-bit.7z.exe'
+  async installGit(aiAppDepts: AIAppDepts | null) {
+    const gitInstallerFileName = aiAppDepts?.git_file_name || 'PortableGit-2.47.1.2-64-bit.7z.exe'
+    const installerGitUrlPrefix = aiAppDepts?.git_file_prefix || 'https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.2/'
     const installerGitUrl = await GithubUrlUtil.addProxy(
-      `https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.2/${gitInstallerFileName}`
+      `${installerGitUrlPrefix}${gitInstallerFileName}`
     )
     const gitDir = path.join(this.appGlobalToolsDir, '/git')
     fs.mkdirSync(gitDir, {recursive: true})
