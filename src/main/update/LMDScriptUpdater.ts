@@ -96,7 +96,11 @@ export default class LMDScriptUpdater {
 
   moveFile(fromPath: string, toPath: string) {
     if(fs.existsSync(fromPath)) {
-      fs.renameSync(fromPath, toPath);
+      try {
+        fs.renameSync(fromPath, toPath);
+      } catch(err) {
+        console.error('movefile', err)
+      }
     } else {
       console.warn(fromPath+' dose not exist. can not move')
     }
