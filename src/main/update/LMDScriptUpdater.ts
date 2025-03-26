@@ -13,6 +13,7 @@ import { app, dialog, shell } from 'electron'
 import LocaleManager from '../locales/LocaleManager'
 import { LMDAppStoryConfig } from '../../constant/LMDAppStoryConfig'
 import { fetchJsonWithRetry } from '../../api/fetch-with-retry'
+import FileUtil from '../util/FileUtil'
 
 export default class LMDScriptUpdater {
 
@@ -73,11 +74,11 @@ export default class LMDScriptUpdater {
           this.moveFile(`${appStoryPath}/server/node_modules`, `${storyDirAfterUnzip}/server/node_modules`)
           const moduleFileName = this.getNodeModuleFileName()
           this.moveFile(`${appStoryPath}/server/${moduleFileName}`, `${storyDirAfterUnzip}/server/${moduleFileName}`)
-          fs.rmSync(storyDir, {recursive: true})
+          FileUtil.removeFile(storyDir)
           this.moveFile(storyDirAfterUnzip, storyDir);
         }
 
-        fs.rmSync(storyTempDownloadDir, {recursive: true})
+        FileUtil.removeFile(storyTempDownloadDir)
       }
       return true
     } catch (err) {

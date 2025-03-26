@@ -28,7 +28,8 @@
     "axios": "^1.8.4",
     "compare-versions": "^6.1.1",
     "dotenv": "^16.4.7",
-    "electron-log": "^5.2.4"
+    "electron-log": "^5.2.4",
+    "rimraf": "^6.0.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
