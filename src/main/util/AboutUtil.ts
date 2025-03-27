@@ -9,7 +9,8 @@ export default class AboutUtil {
   static info(_mainWindow: BrowserWindow) {
     const __dirname = path.dirname(fileURLToPath(import.meta.url))
     const appDetailInfo =
-      `Github: https://github.com/lmdown\n`
+      `https://daiyl.com\n`
+      + `Github: https://github.com/lmdown\n`
       + `Gitee: https://gitee.com/lmdown\n`
       + '\n'
       + `Electron Ver: ${process.versions.electron}\n`

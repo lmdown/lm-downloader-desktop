@@ -227,9 +227,9 @@ export default class LMDScriptUpdater {
   showForceUpdateDialog(currentVersion: string, minVersion: string) {
     const i18n = LocaleManager.getInstance().i18nInstance
     let outOfDateFullTip = i18n.t('Update.OutOfDate')
-    const requiredVersionLabel = i18n.t('Update.RequiredVersion')
+    // const requiredVersionLabel = i18n.t('Update.RequiredVersion')
     const yourVersionLabel = i18n.t('Update.YourVersion')
-    outOfDateFullTip = `${outOfDateFullTip}\n${requiredVersionLabel}${minVersion}\n${yourVersionLabel}${currentVersion}`
+    outOfDateFullTip = `${outOfDateFullTip}\n${yourVersionLabel}${currentVersion}`
 
     dialog.showMessageBox({
       type: 'info',
