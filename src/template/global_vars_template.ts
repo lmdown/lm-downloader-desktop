@@ -9,5 +9,5 @@ export const DEFAULT_GLOBAL_ENV: LMDGlobalEnv = {
   HF_MIRROR: 'https://hf-mirror.com/',
   HF_HOME: '',
   // HF_HOME: '${LMD_DATA_ROOT}/scripts/global-tools/hf',
-  GITHUB_PROXY: 'https://gh.llkk.cc/',
+  GITHUB_PROXY: 'https://github.moeyy.xyz/',
 }

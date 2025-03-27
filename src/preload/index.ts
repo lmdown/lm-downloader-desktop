@@ -80,7 +80,8 @@ function useLoading() {
   z-index: 9;
   width: 100vw;
   height: 100vh;
-  justify-content: center;
+  justify-content:center;
+  background-color:#FFF;
 }
 .app-loading-wrap .logo-and-name {
   display: flex;

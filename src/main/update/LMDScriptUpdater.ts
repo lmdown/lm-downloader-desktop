@@ -59,6 +59,10 @@ export default class LMDScriptUpdater {
       console.log('equal', isEqual)
       if(!isEqual) {
 
+        if (!fs.existsSync(scriptsDir)) {
+          fs.mkdirSync(scriptsDir);
+        }
+
         if (!fs.existsSync(storyTempDownloadDir)) {
           fs.mkdirSync(storyTempDownloadDir);
         }
