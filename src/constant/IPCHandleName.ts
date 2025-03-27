@@ -12,6 +12,8 @@ export const IPCHandleName = {
   GET_ENV_VARIABLES: 'get-env-variables',
   SAVE_ENV_VARIABLES: 'save-env-variables',
 
+  GET_LMD_PRELOAD_PROGRESS: 'get-lmd-preload-progress',
+
   SHOW_ABOUT: 'show-about',
   OPEN_PATH: 'open-path',
   SELECT_DIR: 'select-dir',

@@ -4,9 +4,8 @@ export default interface LMDUpdateConfig {
   //
   LMD_APP_STORY_PACKAGE: string
 
-  // frontend_app.zip
+  // frontend_app.zip includes: js and css assets, and images.
   // frontend_libs.zip
-  // frontend_images.zip
   FRONTEND_APP_PACKAGE: string
   FRONTEND_LIB_PACKAGE: string
   FRONTEND_IMAGES_PACKAGE: string

@@ -67,19 +67,25 @@ app.whenReady().then(async () => {
 
 const createWindowLoadFiles = async () => {
   createWindow()
+  mainWindowMgr.updateLoadProgress(8)
   await GlobalToolsManager.getInstance().init()
+  mainWindowMgr.updateLoadProgress(12)
   // load scripts
   const shouldUpdateStory = process.env.UPDATE_STORY!==undefined ? parseInt(process.env.UPDATE_STORY) : 1
   if(shouldUpdateStory) {
     const updateResult = await new LMDScriptUpdater().update()
   }
-  const startLoadPage = () => [
+  mainWindowMgr.updateLoadProgress(20)
+  const startLoadPage = () => {
+    mainWindowMgr.updateLoadProgress(80)
     mainWindowMgr.loadLMDHtml()
-  ]
+    mainWindowMgr.updateLoadProgress(99)
+  }
   const startLmdServer = process.env.START_LMD_SERVER!==undefined ? parseInt(process.env.START_LMD_SERVER) : 1
   if(startLmdServer) {
     try {
       new LMDServerManager(startLoadPage)
+      mainWindowMgr.updateLoadProgress(60)
     } catch(error) {
       console.error('init server err', error)
       startLoadPage()

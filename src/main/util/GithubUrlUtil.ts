@@ -44,7 +44,7 @@ export default class GithubUrlUtil {
     const timeoutId = setTimeout(() => controller.abort(), timeout);
     try {
       const response = await fetch(url, { ...options, signal });
-      clearTimeout(timeoutId); // 清除超时定时器
+      clearTimeout(timeoutId);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }

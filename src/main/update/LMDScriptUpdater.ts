@@ -50,17 +50,18 @@ export default class LMDScriptUpdater {
         retries: 5
       });
       const appStoryVersion = jsonData.version || '0'
+      console.log('remote app story Ver', appStoryVersion)
       const storyTempDownloadDir = `${scriptsDir}/${appStoryVersion}`
       const packFileName = jsonData?.story_packages?.main_pack_file_name || LMDAppStoryConfig.MASTER_ZIP_FILE_NAME
       const storyTempDownloadFilePath = `${storyTempDownloadDir}/${packFileName}`
 
-      if (!fs.existsSync(storyTempDownloadDir)) {
-        fs.mkdirSync(storyTempDownloadDir);
-      }
-
       const isEqual = this.compareLocalAppStoryVersion(appStoryPath, appStoryVersion)
-
+      console.log('equal', isEqual)
       if(!isEqual) {
+
+        if (!fs.existsSync(storyTempDownloadDir)) {
+          fs.mkdirSync(storyTempDownloadDir);
+        }
         // Download to LMD_SCRIPTS_DIR. At first we should create version dir.
         const appStoryPackageZipPrefix = jsonData?.story_packages?.main_pack_prefix || LMDAppStoryConfig.LMD_APP_STORY_GIT_PREFIX
         const appStoryPackageZipUrl = appStoryPackageZipPrefix + LMDAppStoryConfig.MASTER_ZIP_FILE_NAME
@@ -77,9 +78,9 @@ export default class LMDScriptUpdater {
           FileUtil.removeFile(storyDir)
           this.moveFile(storyDirAfterUnzip, storyDir);
         }
-
         FileUtil.removeFile(storyTempDownloadDir)
       }
+
       return true
     } catch (err) {
       console.error('DownloadAppStory err', err)
@@ -116,6 +117,7 @@ export default class LMDScriptUpdater {
       try {
         updateIndexData = JSON.parse(fs.readFileSync(indexFilePath, {encoding:'utf8', flag:'r'}));
         const localAppStoryVersion = updateIndexData.version
+        console.log('localAppStoryVersion', localAppStoryVersion)
         if (localAppStoryVersion === remoteVersion) {
           compareResult = true
         }
