@@ -75,6 +75,10 @@ export default class MainWindowManager {
     })
     // win.webContents.on('will-navigate', (event, url) => { }) #344
     this.loadTempEmptyHtml()
+
+    this.win.on("closed", () => {
+      this.win = null
+    })
     return this.win
   }
 

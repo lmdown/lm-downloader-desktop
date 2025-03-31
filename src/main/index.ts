@@ -15,6 +15,7 @@ import GlobalToolsManager from './global-tools/GlobalToolsManager'
 import FileSystemManager from './file/FileSystemManager'
 import LMDSystemManager from './system/LMDSystemManager'
 import CommonWindowManager from './apps/CommonWindowManager'
+import TrayMenuManager from './menu/TrayMenuManager'
 // import AppSchemeManager from './apps/AppSchemeManager'
 
 dotenv.config();
@@ -53,6 +54,20 @@ async function createWindow() {
 
 app.userAgentFallback = app.userAgentFallback.replace(/Electron\/[\d.]+/g, '').replace(/lm-downloader\/[\d.]+/, '');
 
+const createOrShowMainWindow = (focus: boolean = false) => {
+  const allWindows = BrowserWindow.getAllWindows()
+  if (allWindows.length === 0) {
+    console.log('no window. create one')
+    createWindow()
+    mainWindowMgr.loadLMDHtml()
+    // createWindowLoadFiles()
+  } else {
+    if(focus) {
+      allWindows[0].focus()
+    }
+  }
+}
+
 app.whenReady().then(async () => {
   await ConfigManager.getInstance().init();
   // Locale
@@ -61,7 +76,7 @@ app.whenReady().then(async () => {
   new RunningAppWindowManager();
   FileSystemManager.getInstance().init()
   LMDSystemManager.getInstance().init()
-
+  TrayMenuManager.getInstance().init(createOrShowMainWindow)
   await createWindowLoadFiles()
 })
 
@@ -97,8 +112,8 @@ const createWindowLoadFiles = async () => {
 
 app.on('window-all-closed', () => {
   win = null
-  app.quit()
-  // if (process.platform !== 'darwin') app.quit()
+  // app.quit()
+  if (process.platform !== 'darwin') app.quit()
 })
 
 app.on('second-instance', () => {
@@ -110,12 +125,7 @@ app.on('second-instance', () => {
 })
 
 app.on('activate', () => {
-  const allWindows = BrowserWindow.getAllWindows()
-  if (allWindows.length) {
-    allWindows[0].focus()
-  } else {
-    createWindowLoadFiles()
-  }
+  createOrShowMainWindow()
 })
 
 CommonWindowManager.init()

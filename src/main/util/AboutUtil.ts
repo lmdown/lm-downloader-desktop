@@ -2,12 +2,15 @@ import path, { resolve } from "path";
 import os from 'os'
 import { fileURLToPath } from "url"
 import { dialog, app, BrowserWindow } from "electron"
+import LocaleManager from "../locales/LocaleManager";
 
 
 export default class AboutUtil {
 
   static info(_mainWindow: BrowserWindow) {
     const __dirname = path.dirname(fileURLToPath(import.meta.url))
+    const i18n = LocaleManager.getInstance().i18nInstance
+    const appName = i18n.t('Menu.AppName')
     const appDetailInfo =
       `https://daiyl.com\n`
       + `Github: https://github.com/lmdown\n`
@@ -20,7 +23,7 @@ export default class AboutUtil {
     const logoPath = path.join(appRoot, 'src/resource', 'lmd-logo.png')
     dialog.showMessageBox(_mainWindow, {
       title: 'About',
-      message: `${app.name} v${app.getVersion()}`,
+      message: `${appName} v${app.getVersion()}`,
       detail: appDetailInfo,
       buttons: ['OK'],
       icon: resolve(logoPath)

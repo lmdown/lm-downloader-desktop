@@ -96,11 +96,10 @@ export default class ConfigManager {
       const configFilePath = this.ensureConfigFileExist()
       EnvUtil.checkConfigKV(configFilePath)
       // check github prefix
-      const githubPrefix: string = await this.checkGithubPrefix()
       const envFilePath = this.ensureEnvFileExist()
-      if(githubPrefix) {
-        this.updateENVVariables(githubPrefix)
-      }
+      this.checkGithubPrefix().then((githubPrefix: string) => {
+        this.updateENVVariables(githubPrefix || '')
+      })
       EnvUtil.checkEnvVarsKV(envFilePath)
       this.initUA()
     }

@@ -10,7 +10,10 @@
       "Forward": "Forward",
       "GoBack": "Back",
       "Reload": "Reload",
-      "SelectAll": "Select All"
+      "SelectAll": "Select All",
+      "AppName": "LM Downloader",
+      "Quit": "Quit",
+      "ShowWindow": "Open LM Downlaoder"
   },
   "Update": {
     "DialogTitle": "Need Update",

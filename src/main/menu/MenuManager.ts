@@ -6,7 +6,7 @@ import LocaleManager from "../locales/LocaleManager"
 
 export default class MenuManager {
 
-  public mainWindow: BrowserWindow
+  public mainWindow: BrowserWindow | null = null
 
   static instance;
 
@@ -240,7 +240,9 @@ export default class MenuManager {
   }
 
   info() {
-    AboutUtil.info(this.mainWindow)
+    if(this.mainWindow) {
+      AboutUtil.info(this.mainWindow)
+    }
   }
 
   showGlobalConfig() {

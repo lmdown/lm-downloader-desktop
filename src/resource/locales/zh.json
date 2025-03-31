@@ -2,7 +2,7 @@
   "welcome": "欢迎！",
   "Menu": {
       "Settings": "设置...",
-      "About": "关于LM Downloader",
+      "About": "关于魔当(LM Downloader)",
       "Delete": "删除",
       "Paste": "粘贴",
       "Copy": "复制",
@@ -10,13 +10,16 @@
       "Forward": "前进",
       "GoBack": "后退",
       "Reload": "刷新",
-      "SelectAll": "全选"
+      "SelectAll": "全选",
+      "AppName": "魔当(LM Downloader)",
+      "Quit": "退出",
+      "ShowWindow": "显示主窗口"
   },
   "Update": {
     "DialogTitle": "更新提示",
     "Download": "下载",
     "Close": "关闭",
-    "OutOfDate": "版本已经过时，请下载新版本的魔当？",
+    "OutOfDate": "版本已经过时，请下载新版魔当。",
     "RequiredVersion": "最低版本要求：",
     "YourVersion": "当前版本："
   },
