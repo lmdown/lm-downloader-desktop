@@ -8,7 +8,7 @@ export default class TrayMenuManager {
 
   private tray: Tray|null = null
 
-  private showMainWindow: Function | null = null
+  private showMainWindow: ((focus:boolean)=>void) | null = null
 
   static instance;
 
@@ -19,12 +19,12 @@ export default class TrayMenuManager {
       return TrayMenuManager.instance;
   }
 
-  init(createOrShowMainWindow: Function) {
+  init(createOrShowMainWindow: (focus:boolean)=>void) {
     this.showMainWindow = createOrShowMainWindow
 
     const appRoot = process.env.APP_ROOT = path.join(__dirname, '../..')
     const logoPath = path.join(appRoot, 'src/resource', 'lmd-logo.png')
-    const trayIcon = nativeImage.createFromPath(logoPath).resize({ width: 16, height: 16 });
+    const trayIcon = nativeImage.createFromPath(logoPath).resize({ width: 20, height: 20 });
     this.tray = new Tray(trayIcon);
     // this.tray = new Tray(logoPath);
     const i18n = LocaleManager.getInstance().i18nInstance

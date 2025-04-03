@@ -6,9 +6,9 @@ import ConfigManager from '../ConfigManager';
 export default class LMDServerManager {
 
   private _configMgr:ConfigManager
-  private _onSuccess: Function
+  private _onSuccess: () => void
 
-  constructor(onSuccess: Function) {
+  constructor(onSuccess: () => void) {
     this._configMgr = ConfigManager.getInstance()
     this._onSuccess = onSuccess
     this.init()
