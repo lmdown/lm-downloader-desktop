@@ -42,6 +42,18 @@ export default class TrayMenuManager {
       { label: i18n.t('Menu.Quit'), click: () => app.quit() },
     ]);
     this.tray.setContextMenu(contextMenu);
+
+    this.tray.on('click', () => {
+      if (this.showMainWindow) {
+        this.showMainWindow(true)
+      }
+    });
+
+    app.on('before-quit', () => {
+      if (this.tray) {
+        this.tray.destroy();
+      }
+    });
   }
 
 }
