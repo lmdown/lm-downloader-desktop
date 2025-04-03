@@ -3,7 +3,7 @@ import os from 'os'
 import { fileURLToPath } from "url"
 import { dialog, app, BrowserWindow } from "electron"
 import LocaleManager from "../locales/LocaleManager";
-
+import iconPath from '../../resource/build/icons/256x256.png?asset';
 
 export default class AboutUtil {
 
@@ -26,7 +26,8 @@ export default class AboutUtil {
       message: `${appName} v${app.getVersion()}`,
       detail: appDetailInfo,
       buttons: ['OK'],
-      icon: resolve(logoPath)
+      // icon: resolve(logoPath)
+      icon: iconPath
     });
   }
 

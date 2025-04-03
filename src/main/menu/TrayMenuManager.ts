@@ -1,6 +1,7 @@
 import { app, BrowserWindow, Menu, nativeImage, Tray } from "electron";
 import path from "path";
 import LocaleManager from "../locales/LocaleManager";
+import iconPath from '../../resource/build/icons/256x256.png?asset';
 
 export default class TrayMenuManager {
 
@@ -22,9 +23,13 @@ export default class TrayMenuManager {
   init(createOrShowMainWindow: (focus:boolean)=>void) {
     this.showMainWindow = createOrShowMainWindow
 
-    const appRoot = process.env.APP_ROOT = path.join(__dirname, '../..')
-    const logoPath = path.join(appRoot, 'src/resource', 'lmd-logo.png')
-    const trayIcon = nativeImage.createFromPath(logoPath).resize({ width: 20, height: 20 });
+    // const iconPath = app.isPackaged
+    //   ? path.join(process.resourcesPath, 'out/main/chunks', '256x256-Br1RnEV9.png')
+    //   : path.join(__dirname, '../../src/resource', 'lmd-logo.png');
+
+    // const appRoot = process.env.APP_ROOT = path.join(__dirname, '../..')
+    // const logoPath = path.join(appRoot, 'src/resource', 'lmd-logo.png')
+    const trayIcon = nativeImage.createFromPath(iconPath).resize({ width: 20, height: 20 });
     this.tray = new Tray(trayIcon);
     // this.tray = new Tray(logoPath);
     const i18n = LocaleManager.getInstance().i18nInstance
