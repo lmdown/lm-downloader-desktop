@@ -6,6 +6,7 @@ import path from "path";
 import fs from "fs";
 import ConfigPathUtil from "../util/ConfigPathUtil";
 import LocaleUtil from "../util/LocaleUtil";
+import OSUtil from "../util/OSUtil";
 
 export default class RootDirChecker {
 
@@ -16,9 +17,11 @@ export default class RootDirChecker {
       const parentDirExist = fs.existsSync(parentDir)
       console.log('parentDir', parentDir)
       if(!parentDirExist) {
-        app.show()
+        if(OSUtil.isMacOS()) {
+          app.show()
+        }
         app.focus()
-        console.log('root dir dose not exist.')
+        console.log('root dir dose not exist')
         const fullMsg = i18n.t('DirCheck.CheckPathMsg') + parentDir
           + i18n.t('DirCheck.ResetPathMsg')
         dialog.showMessageBox({
