@@ -12,8 +12,7 @@
       "Reload": "刷新",
       "SelectAll": "全选",
       "AppName": "魔当(LM Downloader)",
-      "Quit": "退出",
-      "ShowWindow": "显示主窗口"
+      "Quit": "退出"
   },
   "Update": {
     "DialogTitle": "更新提示",

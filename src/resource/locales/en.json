@@ -12,8 +12,7 @@
       "Reload": "Reload",
       "SelectAll": "Select All",
       "AppName": "LM Downloader",
-      "Quit": "Quit",
-      "ShowWindow": "Open LM Downlaoder"
+      "Quit": "Quit"
   },
   "Update": {
     "DialogTitle": "Need Update",
