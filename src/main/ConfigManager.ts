@@ -1,4 +1,4 @@
-import { IpcMain, app, ipcMain } from "electron";
+import { ipcMain } from "electron";
 import * as path from 'path';
 import * as fs from 'fs';
 import { IPCHandleName } from "../constant/IPCHandleName";
@@ -10,6 +10,8 @@ import ReplaceUtil from "./util/ReplaceUtil";
 import LocaleUtil from "./util/LocaleUtil";
 import LMDBaseConfig from "../types/LMDBaseConfig";
 import GithubUrlUtil from "./util/GithubUrlUtil";
+import LMDBaseConfigAndRootDir from "../types/LMDBaseConfigAndRootDir";
+
 export default class ConfigManager {
 
     CONFIG_FILE_NAME: string = 'lmd_base_config.env';
@@ -24,7 +26,7 @@ export default class ConfigManager {
         return ConfigManager.instance;
     }
 
-    async init() {
+    async init(): Promise<void> {
       await this.checkAndInit()
       this.initHandlers()
     }
@@ -35,13 +37,13 @@ export default class ConfigManager {
       })
 
       ipcMain.handle(IPCHandleName.GET_DEFAULT_ROOT_DIR, (_) => {
-        const configAndDir = ConfigPathUtil.getRootDir()
-        return configAndDir.rootDir
+        return this.getDefaultRootDir()
       })
 
       ipcMain.handle(IPCHandleName.GET_DEFAULT_CONFIG_AND_ROOT_DIR, (_) => {
-        const configAndDir = ConfigPathUtil.getRootDir()
-        return configAndDir
+        return this.getDefaultConfigAndRootDir()
+        // const configAndDir = ConfigPathUtil.getRootDir()
+        // return configAndDir
       })
 
       ipcMain.handle(IPCHandleName.SAVE_BASE_CONFIG, (_, configData) => {
@@ -70,6 +72,16 @@ export default class ConfigManager {
       const {rootDir} = ConfigPathUtil.getRootDir()
       ReplaceUtil.replaceVars(defaultGlobalEnv, '${LMD_DATA_ROOT}', rootDir);
       return defaultGlobalEnv.GIT_INSTALL_PATH
+    }
+
+    getDefaultRootDir(): string {
+      const configAndDir = ConfigPathUtil.getRootDir()
+      return configAndDir.rootDir
+    }
+
+    getDefaultConfigAndRootDir(): LMDBaseConfigAndRootDir {
+      const configAndDir = ConfigPathUtil.getRootDir()
+      return configAndDir
     }
 
     updateEnvGitInstallPath(value: string) {

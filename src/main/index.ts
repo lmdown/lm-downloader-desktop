@@ -16,6 +16,7 @@ import FileSystemManager from './file/FileSystemManager'
 import LMDSystemManager from './system/LMDSystemManager'
 import CommonWindowManager from './apps/CommonWindowManager'
 import TrayMenuManager from './menu/TrayMenuManager'
+import RootDirChecker from './check/RootDirChecker'
 // import AppSchemeManager from './apps/AppSchemeManager'
 
 dotenv.config();
@@ -69,10 +70,15 @@ const createOrShowMainWindow = (focus: boolean = false) => {
 }
 
 app.whenReady().then(async () => {
-  await ConfigManager.getInstance().init();
-  // Locale
+  await ConfigManager.getInstance().init()
   LocaleManager.getInstance().init()
   MenuManager.getInstance().init()
+
+  const dirCheckResult = RootDirChecker.checkRootDirAvailable();
+  if(!dirCheckResult) {
+    return
+  }
+
   new RunningAppWindowManager();
   FileSystemManager.getInstance().init()
   LMDSystemManager.getInstance().init()

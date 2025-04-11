@@ -23,6 +23,14 @@
     "RequiredVersion": "最低版本要求：",
     "YourVersion": "当前版本："
   },
+  "DirCheck": {
+    "Cancel": "取消",
+    "Quit": "退出",
+    "ResetAndRestart": "重置路径并重启",
+    "DialogTitle": "数据路径无法访问",
+    "CheckPathMsg": "请检查此路径能否正常访问：\n",
+    "ResetPathMsg": "\n也可重置为默认存储路径。"
+  },
   "RunningWindow": {
     "DialogTitle":"退出确认",
     "DialogMessage":"确认退出应用吗?",

@@ -23,6 +23,14 @@
     "RequiredVersion": "Required version:",
     "YourVersion": "Current Version:"
   },
+  "DirCheck": {
+    "Cancel": "Cancel",
+    "Quit": "Quit",
+    "ResetAndRestart": "Reset Path & Restart",
+    "DialogTitle": "Data path inaccessible",
+    "CheckPathMsg": "Check if this path is accessible:\n",
+    "ResetPathMsg": "\nYou can also reset to the default storage path."
+  },
   "RunningWindow": {
     "DialogTitle":"Exit Confirm",
     "DialogMessage":"Do you want to exit?",

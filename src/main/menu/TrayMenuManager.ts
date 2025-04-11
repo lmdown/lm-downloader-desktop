@@ -39,9 +39,12 @@ export default class TrayMenuManager {
       {
         label: i18n.t('Menu.AppName'),
         click: () => {
-          if (this.showMainWindow) {
-            this.showMainWindow(true)
-          }
+          // if (this.showMainWindow) {
+          //   this.showMainWindow(true)
+          // }
+
+          app.show()
+          app.focus()
         }
       },
       { label: i18n.t('Menu.Quit'), click: () => app.quit() },
@@ -49,9 +52,12 @@ export default class TrayMenuManager {
     this.tray.setContextMenu(contextMenu);
 
     this.tray.on('click', () => {
-      if (this.showMainWindow) {
-        this.showMainWindow(true)
-      }
+      // if (this.showMainWindow) {
+      //   this.showMainWindow(true)
+      // }
+
+      app.show()
+      app.focus()
     });
 
     app.on('before-quit', () => {

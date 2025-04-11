@@ -18,9 +18,8 @@ export default class LocaleManager {
   public i18nInstance: I18n = i18n
 
   init() {
-
     const localesDir = path.join(__dirname, 'locales');
-    i18n.init(localesDir); // 初始化时指定语言文件所在的目录
+    i18n.init(localesDir);
 
     const baseConfig = ConfigManager.getInstance().getBaseConfig()
     const systemLocale = LocaleUtil.getLocaleMainProcess(baseConfig.LMD_LOCALE)
@@ -28,7 +27,7 @@ export default class LocaleManager {
     // const userLanguage = app.getLocale().substring(0, 2); // 获取用户的语言环境
     i18n.setLocale(systemLocale);
 
-    console.log(i18n.t('welcome'));
+    // console.log(i18n.t('welcome'));
 
   }
 }
