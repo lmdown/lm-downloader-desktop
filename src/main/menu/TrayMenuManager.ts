@@ -2,6 +2,7 @@ import { app, BrowserWindow, Menu, nativeImage, Tray } from "electron";
 import path from "path";
 import LocaleManager from "../locales/LocaleManager";
 import iconPath from '../../resource/build/icons/256x256.png?asset';
+import OSUtil from "../util/OSUtil";
 
 export default class TrayMenuManager {
 
@@ -39,12 +40,9 @@ export default class TrayMenuManager {
       {
         label: i18n.t('Menu.AppName'),
         click: () => {
-          // if (this.showMainWindow) {
-          //   this.showMainWindow(true)
-          // }
-
-          app.show()
-          app.focus()
+          if (this.showMainWindow) {
+            this.showMainWindow(true)
+          }
         }
       },
       { label: i18n.t('Menu.Quit'), click: () => app.quit() },
@@ -52,12 +50,16 @@ export default class TrayMenuManager {
     this.tray.setContextMenu(contextMenu);
 
     this.tray.on('click', () => {
-      // if (this.showMainWindow) {
-      //   this.showMainWindow(true)
-      // }
 
-      app.show()
-      app.focus()
+      if(OSUtil.isMacOS()) {
+        app.show()
+        app.focus()
+      } else {
+        if (this.showMainWindow) {
+          this.showMainWindow(true)
+        }
+      }
+
     });
 
     app.on('before-quit', () => {
