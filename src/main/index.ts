@@ -58,7 +58,7 @@ app.userAgentFallback = app.userAgentFallback.replace(/Electron\/[\d.]+/g, '').r
 const createOrShowMainWindow = (focus: boolean = false) => {
   const allWindows = BrowserWindow.getAllWindows()
   if (allWindows.length === 0) {
-    console.log('no window. create one')
+    // console.log('no window. create one')
     createWindow()
     mainWindowMgr.loadLMDHtml()
     // createWindowLoadFiles()

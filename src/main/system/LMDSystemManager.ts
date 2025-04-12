@@ -72,14 +72,14 @@ export default class LMDSystemManager {
             const command: string = `taskkill /F /IM "${processName}"`;
             exec(command, (error: ExecException | null, stdout: string, stderr: string) => {
                 if (error) {
-                    console.error(`执行命令时出错: ${error.message}`);
+                    console.error(`kill error: ${error.message}`);
                     return;
                 }
                 if (stderr) {
-                    console.error(`命令执行产生错误输出: ${stderr}`);
+                    console.error(`kill error: ${stderr}`);
                     return;
                 }
-                console.log(`成功杀掉进程: ${processName}`);
+                console.log(`kill: ${processName}`);
             });
         });
     } else if (currentPlatform === 'darwin' || currentPlatform === 'linux') {
@@ -88,21 +88,21 @@ export default class LMDSystemManager {
             exec(command, (error: ExecException | null, stdout: string, stderr: string) => {
                 if (error) {
                     if (error.code === 1) {
-                        console.log(`未找到进程: ${processName}`);
+                        console.log(`no process: ${processName}`);
                     } else {
-                        console.error(`执行命令时出错: ${error.message}`);
+                        console.error(`kill error: ${error.message}`);
                     }
                     return;
                 }
                 if (stderr) {
-                    console.error(`命令执行产生错误输出: ${stderr}`);
+                    console.error(`kill error: ${stderr}`);
                     return;
                 }
-                console.log(`成功杀掉进程: ${processName}`);
+                console.log(`kill: ${processName}`);
             });
         });
     } else {
-        console.error('不支持的操作系统');
+        console.error('not supported');
     }
   }
 

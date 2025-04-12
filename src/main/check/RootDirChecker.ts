@@ -4,8 +4,6 @@ import { i18n } from "../locales/i18n";
 import ConfigManager from "../ConfigManager";
 import path from "path";
 import fs from "fs";
-import ConfigPathUtil from "../util/ConfigPathUtil";
-import LocaleUtil from "../util/LocaleUtil";
 import OSUtil from "../util/OSUtil";
 
 export default class RootDirChecker {
@@ -21,7 +19,7 @@ export default class RootDirChecker {
           app.show()
         }
         app.focus()
-        console.log('root dir dose not exist')
+        console.log('parentDir dose not exist')
         const fullMsg = i18n.t('DirCheck.CheckPathMsg') + parentDir
           + i18n.t('DirCheck.ResetPathMsg')
         dialog.showMessageBox({
@@ -36,8 +34,6 @@ export default class RootDirChecker {
         }).then(idx => {
           if (idx.response == 0) {
             // reset path and restart app
-            const defaultConfigAndDir = ConfigPathUtil.getRootDir()
-            defaultConfigAndDir.rootDir
             this.resetDefaultRootDir()
             app.relaunch();
             app.exit(0);
@@ -55,10 +51,8 @@ export default class RootDirChecker {
     static resetDefaultRootDir() {
       const configMgr = ConfigManager.getInstance()
       const defaultRootDir = configMgr.getDefaultRootDir()
-      const baseConfig = ConfigManager.getInstance().getBaseConfig()
-      const systemLocale = LocaleUtil.getLocaleMainProcess(baseConfig.LMD_LOCALE)
 
-      configMgr.ensureConfigFileExist(defaultRootDir, systemLocale)
+      configMgr.ensureConfigFileExist(defaultRootDir)
     }
 
 

@@ -12,7 +12,7 @@ export default class UncompressUtil {
     } else if (os.platform() === 'darwin') {
       await this.unzipWithCmd(zipFilePath, outputDir);
     } else {
-      console.error('不支持的操作系统');
+      console.error('not supported');
     }
   }
 
