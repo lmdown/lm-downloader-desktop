@@ -9,7 +9,7 @@ export default class FileUtil {
         // fs.unlinkSync(filePath)
         console.log('file removed:', filePath)
       } else {
-        console.log('file dose not exist:', filePath)
+        console.log('file does not exist:', filePath)
       }
     } catch (err) {
       console.error('remove file error:', err)

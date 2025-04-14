@@ -10,7 +10,7 @@ export default class MacToolsInstallUtil {
       console.log('checkGitInstalled stdout', stdout)
       return true;
     } catch (error) {
-      console.error('Git dose not exist');
+      console.error('Git does not exist');
       return false;
     }
   }

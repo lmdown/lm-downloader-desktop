@@ -19,7 +19,7 @@ export default class RootDirChecker {
           app.show()
         }
         app.focus()
-        console.log('parentDir dose not exist')
+        console.log('parentDir does not exist')
         const fullMsg = i18n.t('DirCheck.CheckPathMsg') + parentDir
           + i18n.t('DirCheck.ResetPathMsg')
         dialog.showMessageBox({

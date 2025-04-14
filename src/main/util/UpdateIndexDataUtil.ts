@@ -12,7 +12,7 @@ export default class UpdateIndexDataUtil {
     let updateIndexData: UpdateIndexData = {} as UpdateIndexData
     const indexFilePath = path.join(appStoryPath, LMDAppStoryConfig.UPDATE_CONFIG_FILE_NAME)
     if (!fs.existsSync(indexFilePath)) {
-      console.error(indexFilePath + ' dose not exist')
+      console.error(indexFilePath + ' does not exist')
     } else {
       try {
         updateIndexData = JSON.parse(fs.readFileSync(indexFilePath, {encoding:'utf8', flag:'r'}));

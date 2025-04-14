@@ -107,7 +107,7 @@ export default class LMDScriptUpdater {
         console.error('movefile', err)
       }
     } else {
-      console.warn(fromPath+' dose not exist. can not move')
+      console.warn(fromPath+' does not exist. can not move')
     }
   }
 
@@ -116,7 +116,7 @@ export default class LMDScriptUpdater {
     let compareResult = false
     const indexFilePath = path.join(appStoryPath, LMDAppStoryConfig.UPDATE_CONFIG_FILE_NAME)
     if (!fs.existsSync(indexFilePath)) {
-      console.error(indexFilePath + ' dose not exist')
+      console.error(indexFilePath + ' does not exist')
     } else {
       try {
         updateIndexData = JSON.parse(fs.readFileSync(indexFilePath, {encoding:'utf8', flag:'r'}));
@@ -201,7 +201,7 @@ export default class LMDScriptUpdater {
           }
           if(!fs.existsSync(path.join(fullServerDir, 'node_modules'))) {
             needUncompress = true
-            console.log('node_modules dose not exist')
+            console.log('node_modules does not exist')
           }
           if(needUncompress) {
             console.log('start unzip')
@@ -255,7 +255,7 @@ export default class LMDScriptUpdater {
     const indexFilePath = path.join(appStoryPath, LMDAppStoryConfig.UPDATE_CONFIG_FILE_NAME)
     let currentVersion = ''
     if (!fs.existsSync(indexFilePath)) {
-      console.error(indexFilePath + ' dose not exist')
+      console.error(indexFilePath + ' does not exist')
     } else {
       try {
         updateIndexData = JSON.parse(fs.readFileSync(indexFilePath, {encoding:'utf8', flag:'r'}));
