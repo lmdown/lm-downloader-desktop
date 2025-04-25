@@ -78,6 +78,7 @@ width: 100vw;
 height: 100vh;
 justify-content:center;
 background-color:#FFF;
+app-region: drag;
 }
 .app-loading-wrap .logo-and-name {
 display: flex;
@@ -92,10 +93,7 @@ border-radius: 6px;
 overflow: hidden;
 margin: 10px auto;
 }
-.progress-bar{
-height: 100%;width: 0;background-color: #FA6400;
-border-radius: 6px;transition: width 0.3s ease-in-out;
-}`
+.progress-bar{height: 100%;width: 0;background-color: #FA6400;border-radius: 6px;transition: width 0.3s ease-in-out;}`
   const oStyle = document.createElement('style')
   const oDiv = document.createElement('div')
 

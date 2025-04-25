@@ -53,6 +53,25 @@ mac:
   icon: src/resource/build/icons/icon.icns
 dmg:
   artifactName: ${name}-${version}-${arch}.${ext}
+  window:
+    width: 550
+    height: 480
+  contents:
+    - x: 130
+      y: 200
+      type: file
+    - x: 410
+      y: 200
+      type: link
+      path: /Applications
+    - x: 215
+      y: 300
+      type: file
+      path: "scripts/已损坏修复.command"
+    - x: 338
+      y: 300
+      type: file
+      path: "scripts/FixApp.command"
 linux:
   target:
     - AppImage

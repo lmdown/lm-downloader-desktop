@@ -94,7 +94,7 @@ const createWindowLoadFiles = async () => {
   // load scripts
   const shouldUpdateStory = process.env.UPDATE_STORY!==undefined ? parseInt(process.env.UPDATE_STORY) : 1
   if(shouldUpdateStory) {
-    const updateResult = await new LMDScriptUpdater().update()
+    await new LMDScriptUpdater().update()
   }
   mainWindowMgr.updateLoadProgress(20)
   const startLoadPage = () => {
