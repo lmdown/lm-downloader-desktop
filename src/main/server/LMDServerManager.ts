@@ -15,8 +15,6 @@ export default class LMDServerManager {
   }
 
   init() {
-    // this.checkNodeModules()
-    // 启动 Express 服务器
     const serverDir = this.getServerDir()
     const config = this._configMgr.getBaseConfig()
     const serverFilePath = path.join(serverDir, 'start.js')
@@ -27,7 +25,12 @@ export default class LMDServerManager {
       cwd: serverDir,
       env: fullEnv
     });
-    // 监听子进程的消息
+
+    serverProcess.on('disconnect', (e) => {console.log('lmd server disconnect', e)})
+    serverProcess.on('error', (e) => {console.log('lmd server error', e)})
+    serverProcess.on('exit', (e) => {console.log('lmd server exit', e)})
+    serverProcess.on('spawn', (e) => {console.log('lmd server spawn', e)})
+
     serverProcess.on('message', (msg) => {
       console.log('local server msg:', msg);
       if(msg==='lmd-server-started') {
@@ -37,7 +40,6 @@ export default class LMDServerManager {
       }
     });
 
-    // 处理子进程的关闭事件
     serverProcess.on('close', (code) => {
       console.log('Server exited with code:', code);
     });

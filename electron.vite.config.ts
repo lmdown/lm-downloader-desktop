@@ -4,12 +4,12 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 export default defineConfig({
   main: {
     build: {
-      // minify: 'terser',
-      // terserOptions: {
-      //   format: {
-      //     comments: false,
-      //   },
-      // },
+      minify: 'terser',
+      terserOptions: {
+        format: {
+          comments: false,
+        },
+      },
     },
     plugins: [
       externalizeDepsPlugin(),

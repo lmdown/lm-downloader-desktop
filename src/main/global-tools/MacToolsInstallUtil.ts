@@ -6,7 +6,7 @@ export default class MacToolsInstallUtil {
   static async checkGitInstalled(): Promise<boolean> {
     try {
       const execAsync = promisify(exec);
-      const { stdout } = await execAsync('git -v');
+      const { stdout } = await execAsync('git --version');
       console.log('checkGitInstalled stdout', stdout)
       return true;
     } catch (error) {

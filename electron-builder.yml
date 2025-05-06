@@ -1,4 +1,4 @@
-appId: com.lmdownloader.desktop
+appId: com.daiyl.lmd
 productName: LM Downloader
 directories:
   buildResources: build
@@ -37,6 +37,9 @@ nsis:
   createStartMenuShortcut: true # 创建开始菜单图标
 
 mac:
+  gatekeeperAssess: false
+  hardenedRuntime: true
+  entitlements: "build/entitlements.mac.plist"
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
