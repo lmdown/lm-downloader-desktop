@@ -37,6 +37,7 @@ nsis:
   createStartMenuShortcut: true # 创建开始菜单图标
 
 mac:
+  category: public.app-category.developer-tools
   gatekeeperAssess: false
   hardenedRuntime: true
   entitlements: "build/entitlements.mac.plist"
@@ -56,25 +57,6 @@ mac:
   icon: src/resource/build/icons/icon.icns
 dmg:
   artifactName: ${name}-${version}-${arch}.${ext}
-  window:
-    width: 550
-    height: 480
-  contents:
-    - x: 130
-      y: 200
-      type: file
-    - x: 410
-      y: 200
-      type: link
-      path: /Applications
-    - x: 215
-      y: 300
-      type: file
-      path: "scripts/已损坏修复"
-    - x: 338
-      y: 300
-      type: file
-      path: "scripts/FixApp"
 linux:
   target:
     - AppImage
