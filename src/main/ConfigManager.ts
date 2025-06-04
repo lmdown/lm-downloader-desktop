@@ -51,7 +51,14 @@ export default class ConfigManager {
       ipcMain.handle(IPCHandleName.SAVE_BASE_CONFIG, (_, configData) => {
         configData = typeof configData === 'object' ? configData : JSON.parse(configData)
         const parsedConfigData: LMDBaseConfig = configData
-        const configFilePath = this.ensureConfigFileExist(parsedConfigData.LMD_DATA_ROOT, parsedConfigData.LMD_LOCALE)
+
+        const oldConfig = this.getBaseConfig()
+        let ignoreSaveError = false
+        if(oldConfig.LMD_DATA_ROOT !== parsedConfigData.LMD_DATA_ROOT) {
+          ignoreSaveError = true
+        }
+        const configFilePath = this.ensureConfigFileExist(
+          parsedConfigData.LMD_DATA_ROOT, parsedConfigData.LMD_LOCALE, ignoreSaveError)
         // return this.saveBaseConfigData(configFilePath, configData);
         // return EnvUtil.writeEnvFile(configFilePath, configData)
       })
@@ -140,7 +147,7 @@ export default class ConfigManager {
       });
     }
 
-    ensureConfigFileExist(newRootVal: string = '', locale: string = '') {
+    ensureConfigFileExist(newRootVal: string = '', locale: string = '', ignoreSaveError: boolean = false) {
       const {rootDir, tempConfig} = ConfigPathUtil.getRootDir()
       const tempConfigCloned = Object.assign({}, tempConfig)
       const configFilePath = path.join(rootDir, this.CONFIG_FILE_NAME);
@@ -154,8 +161,16 @@ export default class ConfigManager {
           tempConfigCloned.LMD_LOCALE = locale
         }
         ReplaceUtil.replaceVars(tempConfigCloned, '${LMD_DATA_ROOT}', tempConfigCloned.LMD_DATA_ROOT);
-        EnvUtil.writeEnvFile(configFilePath, tempConfigCloned)
-
+        try {
+          EnvUtil.writeEnvFile(configFilePath, tempConfigCloned)
+        } catch (err) {
+          console.log('newRootVal', newRootVal)
+          if(ignoreSaveError) {
+            console.error("ignore this error. go ahead.", err)
+          } else {
+            throw err
+          }
+        }
         this.saveRootDirToCoreConfig(tempConfigCloned.LMD_DATA_ROOT)
       }
       return configFilePath;
