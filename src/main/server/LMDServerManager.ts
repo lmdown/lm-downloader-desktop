@@ -2,6 +2,7 @@ import { fork } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import ConfigManager from '../ConfigManager';
+import { app } from 'electron';
 
 export default class LMDServerManager {
 
@@ -16,11 +17,14 @@ export default class LMDServerManager {
 
   init() {
     const serverDir = this.getServerDir()
+    const LMD_USER_DATA_PATH = app.getPath('userData')
     const config = this._configMgr.getBaseConfig()
     const serverFilePath = path.join(serverDir, 'start.js')
     console.log('serverFilePath', serverFilePath)
     let fullEnv = Object.assign({}, config)
     fullEnv = Object.assign(fullEnv, process.env)
+    // @ts-ignore
+    fullEnv.LMD_USER_DATA_PATH = LMD_USER_DATA_PATH;
     const serverProcess = fork(serverFilePath, {
       cwd: serverDir,
       env: fullEnv

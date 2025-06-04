@@ -11,6 +11,7 @@ import LocaleUtil from "./util/LocaleUtil";
 import LMDBaseConfig from "../types/LMDBaseConfig";
 import GithubUrlUtil from "./util/GithubUrlUtil";
 import LMDBaseConfigAndRootDir from "../types/LMDBaseConfigAndRootDir";
+import { session } from 'electron';
 
 export default class ConfigManager {
 
@@ -128,7 +129,6 @@ export default class ConfigManager {
     }
 
     initUA() {
-      const { session } = require('electron');
       session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
         let userAgent = details.requestHeaders['User-Agent'];
         if (userAgent) {
@@ -154,6 +154,7 @@ export default class ConfigManager {
         }
         ReplaceUtil.replaceVars(tempConfigCloned, '${LMD_DATA_ROOT}', tempConfigCloned.LMD_DATA_ROOT);
         EnvUtil.writeEnvFile(configFilePath, tempConfigCloned)
+        ConfigPathUtil.setRootDir(tempConfigCloned.LMD_DATA_ROOT)
       }
       return configFilePath;
     }

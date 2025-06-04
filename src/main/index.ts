@@ -17,6 +17,7 @@ import LMDSystemManager from './system/LMDSystemManager'
 import CommonWindowManager from './apps/CommonWindowManager'
 import TrayMenuManager from './menu/TrayMenuManager'
 import RootDirChecker from './check/RootDirChecker'
+import ConfigSyncManager from './config/ConfigSyncManager'
 // import AppSchemeManager from './apps/AppSchemeManager'
 
 dotenv.config();
@@ -70,6 +71,7 @@ const createOrShowMainWindow = (focus: boolean = false) => {
 }
 
 app.whenReady().then(async () => {
+  new ConfigSyncManager().syncToBaseConfig()
   await ConfigManager.getInstance().init()
   LocaleManager.getInstance().init()
   MenuManager.getInstance().init()
