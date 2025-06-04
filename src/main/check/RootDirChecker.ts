@@ -15,14 +15,27 @@ export default class RootDirChecker {
       const parentDirExist = fs.existsSync(parentDir)
       console.log('parentDir', parentDir)
       if(!parentDirExist) {
-        if(OSUtil.isMacOS()) {
-          app.show()
-        }
-        app.focus()
-        console.log('parentDir does not exist')
         const fullMsg = i18n.t('DirCheck.CheckPathMsg') + parentDir
           + i18n.t('DirCheck.ResetPathMsg')
-        dialog.showMessageBox({
+        this.showDialog(fullMsg)
+        return false
+      } else {
+        return true
+      }
+    }
+
+    // static checkScriptDirAvailable(): boolean {
+    //   const parentDirExist = fs.existsSync(parentDir)
+    // }
+
+    static showDialog(fullMsg) {
+      if(OSUtil.isMacOS()) {
+        app.show()
+      }
+      app.focus()
+      console.log('parentDir does not exist')
+
+      dialog.showMessageBox({
           type: 'info',
           title: i18n.t('DirCheck.DialogTitle'),
           message: fullMsg,
@@ -42,10 +55,12 @@ export default class RootDirChecker {
             app.exit(0);
           }
         })
-        return false
-      } else {
-        return true
-      }
+    }
+
+    static showDirCommonError(dir: string): void {
+      const fullMsg = i18n.t('DirCheck.CheckPathMsg') + dir
+        + i18n.t('DirCheck.ResetPathMsg')
+      this.showDialog(fullMsg)
     }
 
     static resetDefaultRootDir() {

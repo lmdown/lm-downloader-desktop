@@ -14,6 +14,7 @@ import LocaleManager from '../locales/LocaleManager'
 import { LMDAppStoryConfig } from '../../constant/LMDAppStoryConfig'
 import { fetchJsonWithRetry } from '../../api/fetch-with-retry'
 import FileUtil from '../util/FileUtil'
+import RootDirChecker from '../check/RootDirChecker'
 
 export default class LMDScriptUpdater {
 
@@ -59,9 +60,18 @@ export default class LMDScriptUpdater {
       console.log('equal', isEqual)
       if(!isEqual) {
 
-        if (!fs.existsSync(scriptsDir)) {
-          fs.mkdirSync(scriptsDir);
+        try {
+          if (!fs.existsSync(scriptsDir)) {
+            fs.mkdirSync(scriptsDir, { recursive: true });
+          }
+        } catch (err) {
+          const errMsg: string = err?.message
+          console.error('create scripts dir Error', err)
+          if(errMsg && errMsg.includes('EACCES')) {
+            RootDirChecker.showDirCommonError(scriptsDir)
+          }
         }
+
 
         if (!fs.existsSync(storyTempDownloadDir)) {
           fs.mkdirSync(storyTempDownloadDir);
