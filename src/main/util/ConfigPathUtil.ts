@@ -31,7 +31,7 @@ export default class ConfigPathUtil {
   static setRootDir(rootDir: string) {
     const coreConfigManager = CoreConfigManager.getInstance()
     const result = coreConfigManager.saveRootDir(rootDir)
-    console.log('setRootDir result', result)
+    // console.log('setRootDir result', result)
   }
 
 }

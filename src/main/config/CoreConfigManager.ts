@@ -5,9 +5,9 @@ import { app } from 'electron';
 export class CoreConfigManager {
   private readonly configPath: string;
 
-  constructor(fileName: string = 'config.json') {
+  constructor(fileName: string = 'lmd_core_config.json') {
     this.configPath = path.join(app.getPath('userData'), fileName);
-    console.log('CoreConfigManager this.configPath', this.configPath)
+    console.log('CoreConfigManager configPath', this.configPath)
   }
 
   static ROOT_DIR_KEY = 'lmd_data_root_dir'
