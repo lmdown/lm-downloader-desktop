@@ -28,6 +28,7 @@ process.env.APP_ROOT = path.join(__dirname, '../..')
 
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'out/renderer')
 
+new ConfigSyncManager().syncToBaseConfig()
 new LogManager();
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
@@ -71,7 +72,6 @@ const createOrShowMainWindow = (focus: boolean = false) => {
 }
 
 app.whenReady().then(async () => {
-  new ConfigSyncManager().syncToBaseConfig()
   await ConfigManager.getInstance().init()
   LocaleManager.getInstance().init()
   MenuManager.getInstance().init()

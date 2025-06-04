@@ -12,6 +12,7 @@ import LMDBaseConfig from "../types/LMDBaseConfig";
 import GithubUrlUtil from "./util/GithubUrlUtil";
 import LMDBaseConfigAndRootDir from "../types/LMDBaseConfigAndRootDir";
 import { session } from 'electron';
+import { CoreConfigManager } from "./config/CoreConfigManager";
 
 export default class ConfigManager {
 
@@ -154,9 +155,16 @@ export default class ConfigManager {
         }
         ReplaceUtil.replaceVars(tempConfigCloned, '${LMD_DATA_ROOT}', tempConfigCloned.LMD_DATA_ROOT);
         EnvUtil.writeEnvFile(configFilePath, tempConfigCloned)
-        ConfigPathUtil.setRootDir(tempConfigCloned.LMD_DATA_ROOT)
+
+        this.saveRootDirToCoreConfig(tempConfigCloned.LMD_DATA_ROOT)
       }
       return configFilePath;
+    }
+
+    saveRootDirToCoreConfig(rootDir) {
+      const coreConfigManager = CoreConfigManager.getInstance()
+      const result = coreConfigManager.saveRootDir(rootDir)
+      // console.log('setRootDir ', rootDir, ' result ', result)
     }
 
     ensureEnvFileExist() {

@@ -10,19 +10,28 @@ export default class ConfigSyncManager {
       const rootDir = CoreConfigManager.getInstance().getRootDir()
 
       const configMgr = ConfigManager.getInstance()
+      const baseConfig = configMgr.getBaseConfig()
 
+      console.log('rootDir:', rootDir)
 
-      const baseConfig = ConfigManager.getInstance().getBaseConfig()
-      if(rootDir !== baseConfig.LMD_DATA_ROOT) {
-        console.log('rootDirs in CoreConfig and BaseConfig are different. start sync.')
-        configMgr.ensureConfigFileExist(rootDir)
+      if(rootDir) {
+        if(rootDir !== baseConfig.LMD_DATA_ROOT) {
+          console.log('rootDirs in CoreConfig and BaseConfig are different. start sync.')
+          configMgr.ensureConfigFileExist(rootDir)
+        } else {
+          console.log('rootDirs in CoreConfig and BaseConfig are the same. don\'t sync.')
+        }
       } else {
-        console.log('rootDirs in CoreConfig and BaseConfig are the same. don\'t sync.')
+        console.log('rootDir is empty. get from base config file.', rootDir)
+        configMgr.saveRootDirToCoreConfig(baseConfig.LMD_DATA_ROOT)
       }
     } catch (err) {
       console.error('syncToBaseConfig error', err)
+
     }
 
   }
+
+
 
 }

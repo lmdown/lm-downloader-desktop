@@ -37,6 +37,7 @@ export class CoreConfigManager {
   public get<T>(key: string, defaultValue: T): T {
     try {
       if (!fs.existsSync(this.configPath)) {
+        // console.log('return default value')
         return defaultValue;
       }
 

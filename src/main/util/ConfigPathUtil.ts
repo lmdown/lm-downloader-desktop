@@ -14,8 +14,6 @@ export default class ConfigPathUtil {
     const dataRootFromCoreConfig: string = coreConfigManager.getRootDir()
     if(dataRootFromCoreConfig) {
       configAndRootDir.rootDir = dataRootFromCoreConfig
-    } else {
-      this.setRootDir(configAndRootDir.rootDir)
     }
     return configAndRootDir
   }
@@ -26,12 +24,6 @@ export default class ConfigPathUtil {
     const tempConfig: LMDBaseConfig = DEFAULT_LMD_BASE_CONFIG;
     const rootDir = tempConfig.LMD_DATA_ROOT.replace('${documents}', userDocumentsPath)
     return {rootDir, tempConfig}
-  }
-
-  static setRootDir(rootDir: string) {
-    const coreConfigManager = CoreConfigManager.getInstance()
-    const result = coreConfigManager.saveRootDir(rootDir)
-    // console.log('setRootDir result', result)
   }
 
 }
