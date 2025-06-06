@@ -70,7 +70,11 @@ const createOrShowMainWindow = (focus: boolean = false) => {
 
 app.whenReady().then(async () => {
 
-  new ConfigSyncManager().syncToBaseConfig()
+  const configSyncResult = new ConfigSyncManager().syncToBaseConfig()
+  if(!configSyncResult) {
+    return
+  }
+
   new LogManager();
 
   const dirCheckResult = RootDirChecker.checkRootDirAvailable();

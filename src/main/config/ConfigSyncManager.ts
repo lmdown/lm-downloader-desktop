@@ -7,7 +7,7 @@ export default class ConfigSyncManager {
 
   // if rootDirs in CoreConfig and BaseConfig are different.
   // synchronize the value from CoreConfig to BaseConfig.
-  syncToBaseConfig() {
+  syncToBaseConfig(): boolean {
     try {
       const rootDir = CoreConfigManager.getInstance().getRootDir()
 
@@ -38,7 +38,10 @@ export default class ConfigSyncManager {
         }
         RootDirChecker.showDirCommonError(err.path)
       }
+      return false
     }
+
+    return true
 
   }
 
