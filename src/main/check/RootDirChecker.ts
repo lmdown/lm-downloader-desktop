@@ -5,6 +5,7 @@ import ConfigManager from "../ConfigManager";
 import path from "path";
 import fs from "fs";
 import OSUtil from "../util/OSUtil";
+import { CoreConfigManager } from "../config/CoreConfigManager";
 
 export default class RootDirChecker {
 
@@ -66,8 +67,10 @@ export default class RootDirChecker {
     static resetDefaultRootDir() {
       const configMgr = ConfigManager.getInstance()
       const defaultRootDir = configMgr.getDefaultRootDir()
-
-      configMgr.ensureConfigFileExist(defaultRootDir)
+      // console.log('resetDefaultRootDir', defaultRootDir)
+      const coreConfigManager = CoreConfigManager.getInstance()
+      const result = coreConfigManager.saveRootDir(defaultRootDir)
+      // configMgr.ensureConfigFileExist(defaultRootDir, '', true)
     }
 
 

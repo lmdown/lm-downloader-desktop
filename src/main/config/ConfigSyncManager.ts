@@ -1,4 +1,6 @@
+import RootDirChecker from "../check/RootDirChecker";
 import ConfigManager from "../ConfigManager";
+import LocaleManager from "../locales/LocaleManager";
 import { CoreConfigManager } from "./CoreConfigManager";
 
 export default class ConfigSyncManager {
@@ -27,7 +29,15 @@ export default class ConfigSyncManager {
       }
     } catch (err) {
       console.error('syncToBaseConfig error', err)
-
+      const errMsg: string = err?.message
+      if(errMsg && errMsg.includes('EACCES')) {
+        try {
+          LocaleManager.getInstance().initByDefaultLocale()
+        } catch (err) {
+          console.error('LocaleManager init error', err)
+        }
+        RootDirChecker.showDirCommonError(err.path)
+      }
     }
 
   }

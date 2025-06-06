@@ -84,12 +84,14 @@ export default class ConfigManager {
     }
 
     getDefaultRootDir(): string {
-      const configAndDir = ConfigPathUtil.getRootDir()
+      const configAndDir = ConfigPathUtil.getDefaultRoot()
+      // const configAndDir = ConfigPathUtil.getRootDir()
       return configAndDir.rootDir
     }
 
     getDefaultConfigAndRootDir(): LMDBaseConfigAndRootDir {
-      const configAndDir = ConfigPathUtil.getRootDir()
+      const configAndDir = ConfigPathUtil.getDefaultRoot()
+      // const configAndDir = ConfigPathUtil.getRootDir()
       return configAndDir
     }
 
@@ -199,7 +201,7 @@ export default class ConfigManager {
 
     ensureDirectoryExistence(dirPath) {
       if (!fs.existsSync(dirPath)) {
-        fs.mkdirSync(dirPath);
+        fs.mkdirSync(dirPath,{recursive: true});
       }
     }
 

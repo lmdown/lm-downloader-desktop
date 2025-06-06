@@ -30,4 +30,13 @@ export default class LocaleManager {
     // console.log(i18n.t('welcome'));
 
   }
+
+  initByDefaultLocale() {
+    const locale: string = LocaleUtil.getDefaultLocale()
+    const localeForMainProcess = LocaleUtil.getLocaleMainProcess(locale)
+    const localesDir = path.join(__dirname, 'locales');
+    i18n.init(localesDir);
+    i18n.setLocale(localeForMainProcess);
+  }
+
 }

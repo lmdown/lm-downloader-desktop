@@ -28,9 +28,6 @@ process.env.APP_ROOT = path.join(__dirname, '../..')
 
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'out/renderer')
 
-new ConfigSyncManager().syncToBaseConfig()
-new LogManager();
-
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 
 // Disable GPU Acceleration for Windows 7
@@ -72,14 +69,20 @@ const createOrShowMainWindow = (focus: boolean = false) => {
 }
 
 app.whenReady().then(async () => {
-  await ConfigManager.getInstance().init()
-  LocaleManager.getInstance().init()
-  MenuManager.getInstance().init()
+
+  new ConfigSyncManager().syncToBaseConfig()
+  new LogManager();
 
   const dirCheckResult = RootDirChecker.checkRootDirAvailable();
   if(!dirCheckResult) {
     return
   }
+
+  await ConfigManager.getInstance().init()
+  LocaleManager.getInstance().init()
+  MenuManager.getInstance().init()
+
+
 
   new RunningAppWindowManager();
   FileSystemManager.getInstance().init()
