@@ -30,7 +30,7 @@ export default class ConfigSyncManager {
     } catch (err) {
       console.error('syncToBaseConfig error', err)
       const errMsg: string = err?.message
-      if(errMsg && errMsg.includes('EACCES')) {
+      if(errMsg && err?.path) {
         try {
           LocaleManager.getInstance().initByDefaultLocale()
         } catch (err) {
