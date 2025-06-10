@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import ConfigManager from '../ConfigManager';
 import { app } from 'electron';
+import ProcessControlUtil from '../util/process/ProcessControlUtil';
 
 export default class LMDServerManager {
 
@@ -15,12 +16,15 @@ export default class LMDServerManager {
     this.init()
   }
 
-  init() {
-    const serverDir = this.getServerDir()
+  async init() {
+    const serverDir = this._configMgr.getServerDir()
     const LMD_USER_DATA_PATH = app.getPath('userData')
     const config = this._configMgr.getBaseConfig()
     const serverFilePath = path.join(serverDir, 'start.js')
     console.log('serverFilePath', serverFilePath)
+
+    await this.checkAndCloseOldProcess(serverDir)
+
     let fullEnv = Object.assign({}, config)
     fullEnv = Object.assign(fullEnv, process.env)
     // @ts-ignore
@@ -55,7 +59,7 @@ export default class LMDServerManager {
   }
 
   checkNodeModules() {
-    const serverDir = this.getServerDir()
+    const serverDir = this._configMgr.getServerDir()
     const nodeModulesDir = 'node_modules'
     const serverModulesDir = 'server_modules'
     const nodeModulesFullDir = path.join(serverDir, nodeModulesDir)
@@ -71,10 +75,12 @@ export default class LMDServerManager {
     }
   }
 
-  getServerDir() {
-    const baseConfig = this._configMgr.getBaseConfig()
-    return path.join(baseConfig.LMD_APP_STORY_DIR, 'server')
-    // return path.join(process.env.APP_ROOT, serverDir)
+  async checkAndCloseOldProcess(serverDir: string) {
+    try {
+      await ProcessControlUtil.checkPortAndCloseProcess(serverDir)
+    } catch (err) {
+      console.error('checkAndCloseOldProcess', err)
+    }
   }
 
 }

@@ -1,11 +1,15 @@
 import path from "path";
 import ConfigManager from "../ConfigManager";
+import ServerConfigManager from "../config/ServerConfigManager";
 
 export default class ScriptPathUtil {
 
   static getFrontendUrl() {
+    const config= ServerConfigManager.getInstance().getServerConfig()
     // default local server host and port
-    return 'http://localhost:19312'
+    const host = config.HOST || 'localhost'
+    const port = config.PORT || '19312'
+    return `http://${host}:${port}`
   }
 
   // static getFrontendPath() {

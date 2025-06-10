@@ -205,4 +205,9 @@ export default class ConfigManager {
       }
     }
 
+    getServerDir() {
+      const baseConfig = this.getBaseConfig()
+      return path.join(baseConfig.LMD_APP_STORY_DIR, 'server')
+    }
+
 }
