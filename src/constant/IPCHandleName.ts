@@ -17,6 +17,9 @@ export const IPCHandleName = {
   SHOW_ABOUT: 'show-about',
   OPEN_PATH: 'open-path',
   SELECT_DIR: 'select-dir',
+  SHOW_ITEM_IN_FOLDER: 'show-item-in-folder',
+  SUPPORT_SHOW_ITEM_IN_FOLDER: 'support-show-item-in-folder',
+
   GET_PROCESS_ENV: 'get-process-env',
 
   RESTART_APP: 'restart-app',

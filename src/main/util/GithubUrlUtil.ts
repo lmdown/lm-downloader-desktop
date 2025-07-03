@@ -32,7 +32,7 @@ export default class GithubUrlUtil {
       firstPrefix = ghpList[0]
     } catch (err) {
       console.error(err)
-      firstPrefix = 'https://github.moeyy.xyz/'
+      firstPrefix = 'https://jiashu.1win.eu.org/'
     }
 
     return firstPrefix

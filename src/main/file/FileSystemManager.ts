@@ -1,4 +1,4 @@
-import { dialog, ipcMain } from 'electron'
+import { dialog, ipcMain, shell } from 'electron'
 import { IPCHandleName } from '../../constant/IPCHandleName'
 import fs from 'fs'
 import DirInfo from '../../types/DirInfo'
@@ -48,6 +48,14 @@ export default class FileSystemManager {
         }
       }
     )
+
+    ipcMain.handle(IPCHandleName.SHOW_ITEM_IN_FOLDER, (_, path: string) => {
+      shell.showItemInFolder(path)
+    })
+
+    ipcMain.handle(IPCHandleName.SUPPORT_SHOW_ITEM_IN_FOLDER, (_) => {
+      return true
+    });
   }
 
   getSubdirectoriesAndFiles(dirPath: string, dirInfo: DirInfo): Promise<DirInfo> {
