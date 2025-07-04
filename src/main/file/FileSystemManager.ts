@@ -50,7 +50,13 @@ export default class FileSystemManager {
     )
 
     ipcMain.handle(IPCHandleName.SHOW_ITEM_IN_FOLDER, (_, path: string) => {
-      shell.showItemInFolder(path)
+      const exist = fs.existsSync(path)
+      if(exist) {
+        shell.showItemInFolder(path)
+        return true
+      } else {
+        return false
+      }
     })
 
     ipcMain.handle(IPCHandleName.SUPPORT_SHOW_ITEM_IN_FOLDER, (_) => {
