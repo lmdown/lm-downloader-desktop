@@ -32,7 +32,7 @@ export default class GithubUrlUtil {
       firstPrefix = ghpList[0]
     } catch (err) {
       console.error(err)
-      firstPrefix = 'https://jiashu.1win.eu.org/'
+      firstPrefix = 'https://git.yylx.win/'
     }
 
     return firstPrefix
@@ -41,6 +41,7 @@ export default class GithubUrlUtil {
   static async fetchDataWithTimeout(url, options = {}, timeout = 5000) {
     const controller = new AbortController();
     const signal = controller.signal;
+    console.log('call fetchDataWithTimeout()')
     const timeoutId = setTimeout(() => controller.abort(), timeout);
     try {
       const response = await fetch(url, { ...options, signal });

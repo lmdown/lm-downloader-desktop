@@ -49,7 +49,7 @@ export default class LMDScriptUpdater {
       // get remote update config index
       const jsonData: UpdateIndexData = await fetchJsonWithRetry(LMDAppStoryConfig.UPDATE_CONFIG_URL, {
         retries: 5,
-        delayMs: 50
+        delayMs: 1200
       });
       const appStoryVersion = jsonData.version || '0'
       console.log('remote app story Ver', appStoryVersion)
