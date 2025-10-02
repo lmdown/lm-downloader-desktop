@@ -7,7 +7,7 @@ interface ErrorInfo {
 }
 
 export default class AppErrorHandler {
-  private isAppReady = false;
+  isMainWindowCreated = false;
 
   constructor() {
     this.setupErrorHandlers();
@@ -15,17 +15,13 @@ export default class AppErrorHandler {
 
   setupErrorHandlers(): void {
     process.on('uncaughtException', (error: Error) => {
-      this.handleError('Start Error 启动失败 [ue]', error);
+      this.handleError('Error 出错 [ue]', error);
     });
 
-    // 处理未处理的 Promise 拒绝
     process.on('unhandledRejection', (reason: unknown, promise: Promise<any>) => {
       const error = reason instanceof Error ? reason : new Error(String(reason));
       console.error('unhandled Promise rejection:', error);
-
-      if (!this.isAppReady) {
-        this.handleError('Start Error 启动失败 [ur]', error);
-      }
+      this.handleError('Error 失败 [ur]', error);
     });
   }
 
@@ -35,18 +31,22 @@ export default class AppErrorHandler {
   handleError(title: string, error: Error): void {
     console.error(`${title}:`, error);
 
-    dialog.showErrorBox(
-      title,
-      `${error.message}\n\n` +
-      `Please restart this app or contact our technical support team. 请重启程序或联系技术支持。https://seemts.com/`
-    );
+    if(!this.isMainWindowCreated) {
+      dialog.showErrorBox(
+        title,
+        `${error.message}\n\n` +
+        `Please restart this app or contact our technical support team. 请重启程序或联系技术支持。https://seemts.com/`
+      );
+    } else {
+      console.log('isMainWindowCreated true. only log')
+    }
 
     this.logError(error);
 
     // exit app
-    setTimeout(() => {
-      process.exit(1);
-    }, 1000);
+    // setTimeout(() => {
+    //   process.exit(1);
+    // }, 1000);
   }
 
   /**

@@ -91,13 +91,12 @@ app.whenReady().then(async () => {
   LocaleManager.getInstance().init()
   MenuManager.getInstance().init()
 
-
-
   new RunningAppWindowManager();
   FileSystemManager.getInstance().init()
   LMDSystemManager.getInstance().init()
   TrayMenuManager.getInstance().init(createOrShowMainWindow)
   await createWindowLoadFiles()
+  appErrorHandler.isMainWindowCreated = true
 }).catch((error: Error) => {
   console.error('on ready error', error)
   appErrorHandler.handleError('Ready Error 初始化出错', error);
