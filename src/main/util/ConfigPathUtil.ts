@@ -20,7 +20,15 @@ export default class ConfigPathUtil {
 
 
   static getDefaultRoot(): LMDBaseConfigAndRootDir {
-    const userDocumentsPath = app.getPath('documents');
+    let userDocumentsPath = ''
+    try {
+      userDocumentsPath = app.getPath('documents');
+    } catch (err) {
+      // console.error('cant get documents dir',err)
+      const userHomePath = app.getPath('home');
+      console.error('user home append /Documents')
+      userDocumentsPath = userHomePath + '/Documents';
+    }
     const tempConfig: LMDBaseConfig = DEFAULT_LMD_BASE_CONFIG;
     const rootDir = tempConfig.LMD_DATA_ROOT.replace('${documents}', userDocumentsPath)
     return {rootDir, tempConfig}

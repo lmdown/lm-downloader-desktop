@@ -35,6 +35,7 @@ export default class AppErrorHandler {
       dialog.showErrorBox(
         title,
         `${error.message}\n\n` +
+        `${error.stack}\n\n` +
         `Please restart this app or contact our technical support team. 请重启程序或联系技术支持。https://seemts.com/`
       );
     } else {

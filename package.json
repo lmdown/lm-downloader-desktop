@@ -1,6 +1,6 @@
 {
   "name": "lm-downloader",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "魔当 LM Downloader Desktop App",
   "main": "./out/main/index.js",
   "author": "Wuhan Jianshanxing Technology Co., Ltd.",
