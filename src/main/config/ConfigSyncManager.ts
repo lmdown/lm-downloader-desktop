@@ -37,6 +37,8 @@ export default class ConfigSyncManager {
           console.error('LocaleManager init error', err)
         }
         RootDirChecker.showDirCommonError(err.path)
+      } else {
+        throw err
       }
       return false
     }

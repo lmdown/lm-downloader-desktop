@@ -1,4 +1,5 @@
 import { app, BrowserWindow, shell, ipcMain, HandlerDetails } from 'electron'
+import AppErrorHandler from './AppErrorHandler'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import os from 'node:os'
@@ -19,6 +20,10 @@ import TrayMenuManager from './menu/TrayMenuManager'
 import RootDirChecker from './check/RootDirChecker'
 import ConfigSyncManager from './config/ConfigSyncManager'
 // import AppSchemeManager from './apps/AppSchemeManager'
+
+const appErrorHandler = new AppErrorHandler()
+
+appErrorHandler.setupErrorHandlers()
 
 dotenv.config();
 
@@ -93,7 +98,10 @@ app.whenReady().then(async () => {
   LMDSystemManager.getInstance().init()
   TrayMenuManager.getInstance().init(createOrShowMainWindow)
   await createWindowLoadFiles()
-})
+}).catch((error: Error) => {
+  console.error('on ready error', error)
+  appErrorHandler.handleError('Ready Error 初始化出错', error);
+});
 
 const createWindowLoadFiles = async () => {
   createWindow()
