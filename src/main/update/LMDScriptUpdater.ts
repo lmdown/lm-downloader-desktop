@@ -280,6 +280,13 @@ export default class LMDScriptUpdater {
         }
       } catch(err) {
         console.error('parse error', err)
+        setTimeout(()=>{
+          throw err
+        }, 100)
+        setTimeout(()=>{
+          const indexFileContent = fs.readFileSync(indexFilePath, {encoding:'utf8', flag:'r'})
+          throw new Error('IndexFile data is not correct \n ' + indexFilePath + ' \n ' +  indexFileContent)
+        }, 110)
       }
     }
     return {versionMatch, updateIndexData, currentVersion}

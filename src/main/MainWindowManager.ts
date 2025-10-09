@@ -5,6 +5,7 @@ import ScriptPathUtil from "./util/ScriptPathUtil"
 import { WindowConfig } from "./apps/WindowConfig"
 import { IPCChannelName } from "../constant/IPCChannelName"
 import { IPCHandleName } from "../constant/IPCHandleName"
+import ConfigManager from "./ConfigManager"
 
 export default class MainWindowManager {
 
@@ -36,6 +37,13 @@ export default class MainWindowManager {
     if(this.win) {
       return this.win
     }
+    const lmdBaseConfig = ConfigManager.getInstance().getBaseConfig()
+
+    process.env.LMD_LOCALE = lmdBaseConfig.LMD_LOCALE
+    //@ts-ignore
+    process.env.LMD_DATA_ROOT = lmdBaseConfig.LMD_DATA_ROOT
+    //@ts-ignore
+    process.env.LMD_LOGS_DIR = lmdBaseConfig.LMD_DATA_ROOT + '/logs'
     const preload = path.join(__dirname, '../preload/index.js')
     this.win = new BrowserWindow({
       width: WindowConfig.MAIN_WIN_WIDTH,

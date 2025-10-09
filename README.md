@@ -9,7 +9,7 @@ LM Downloader is a free, open source, easy-to-use, and powerful AI Large Model A
 English · [中文](./README-zh.md)
 
 ## 🔗 Links
-- [LM Downloader Homepage](https://daiyl.com)
+- [LM Downloader Homepage](https://seemts.com)
 - [Get latest LM Downloader](https://gitee.com/lmdown/lm-downloader-desktop/releases)
 
 ## Snapshots

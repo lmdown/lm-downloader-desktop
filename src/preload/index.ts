@@ -59,6 +59,9 @@ const safeDOM = {
  * https://matejkustec.github.io/SpinThatShit
  */
 function useLoading() {
+  const envData = process.env
+  const dataRootDir = envData.LMD_DATA_ROOT
+  const lmdLogsDir = envData.LMD_LOGS_DIR
   const className = `loaders-css__square-spin`
   const styleContent = `
 
@@ -84,6 +87,11 @@ app-region: drag;
 display: flex;
 align-items: center;
 justify-content: center;
+font-family: Helvetica, Inter, system-ui, Avenir, Arial, sans-serif;
+line-height: 1.5;
+font-weight: 400;
+color: rgba(255, 255, 255, 0.87);
+app-region: none;
 }
 .lmd-title{font-size:30px;color: #333; margin: 0}
 .progress-container{
@@ -91,9 +99,16 @@ width: 220px;height: 12px;
 background-color: #e0e0e0;
 border-radius: 6px;
 overflow: hidden;
-margin: 10px auto;
+margin: 4px auto;
 }
-.progress-bar{height: 100%;width: 0;background-color: #FA6400;border-radius: 6px;transition: width 0.3s ease-in-out;}`
+.progress-bar{height: 100%;width: 0;background-color: #FA6400;border-radius: 6px;transition: width 0.3s ease-in-out;}
+.dir-link{font-size:12px;color: #AAA; text-decoration: underline; cursor: pointer;}
+#progress-value{font-size:12px;color: #AAA; flex:1;}
+#error-container{border: #FA6400 1px solid; border-radius: 8px; width: 510px; padding:5px; margin: 20px auto 0 auto; app-region: none;}
+#error-title{padding: 4px; font-weight: bold; font-size: 14px; }
+#error-content{padding: 4px; color: #777; font-size: 12px; overflow: auto; margin: 0; min-height: 100px; max-height: 300px; }
+#copy-btn{color: #FA6400; cursor:pointer; font-size: 12px; text-decoration: underline;}
+`
   const oStyle = document.createElement('style')
   const oDiv = document.createElement('div')
 
@@ -104,9 +119,23 @@ margin: 10px auto;
   return {
     changeProgress(val) {
       const progressBar = document.getElementById('progressBar');
+      console.log('changeProgress', val)
       if(progressBar){
         progressBar.style.width = val+'%';
+        const progressValueEl = document.getElementById('progress-value')
+        if(progressValueEl) {
+          progressValueEl.innerText = val+'%';
+        }
       }
+    },
+    appendErrorInfo(errorInfo: string) {
+      const errorContainer = document.getElementById('error-container')
+      if(errorContainer?.style) {
+        errorContainer.style.display = 'block'
+      }
+      const errorContent = document.getElementById('error-content')
+      errorContent?.appendChild(document.createTextNode(errorInfo+"\n"))
+
     },
     appendLoading(showProgress) {
       const progressStr = !showProgress ? '' :
@@ -120,7 +149,19 @@ margin: 10px auto;
   <div id="lmd-name-container" style="padding-left: 20px">
     <h2 class="lmd-title">LM Downloader</h2>
     ${progressStr}
+    <div style="display: flex; padding:0 4px; gap: 4px">
+      <div id="progress-value">0%</div>
+      <div class="dir-link" onclick="ipcRenderer.invoke('open-path', '${dataRootDir}')">Data &gt;</div>&nbsp;&nbsp;
+      <div class="dir-link" onclick="ipcRenderer.invoke('open-path', '${lmdLogsDir}')">Logs &gt;</div>
+    </div>
   </div>
+</div>
+<div id="error-container" style="display:none;">
+<div id="error-title">
+<span>错误信息</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span id="copy-btn" onclick="const text = document.getElementById('error-content').innerText;const textarea = document.createElement('textarea'); textarea.value = text;textarea.style.position = 'fixed';document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);">复制全部</span>
+</div>
+<pre id="error-content"></pre>
 </div>
 `
       safeDOM.append(document.head, oStyle)
@@ -135,13 +176,16 @@ margin: 10px auto;
 
 // ----------------------------------------------------------------------
 
-const { appendLoading, removeLoading, changeProgress } = useLoading()
+const { appendLoading, removeLoading, changeProgress, appendErrorInfo } = useLoading()
 domReady().then(()=>{
     ipcRenderer.invoke('get-lmd-preload-progress').then(value => {
       appendLoading(true)
       changeProgress(value)
       ipcRenderer.on('preload-progress', (event, progress) => {
         changeProgress(progress)
+      })
+      ipcRenderer.on('preload-error-info', (event, errorInfo) => {
+        appendErrorInfo(errorInfo)
       })
     }).catch(()=>{
       appendLoading(false)

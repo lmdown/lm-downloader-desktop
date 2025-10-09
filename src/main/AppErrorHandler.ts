@@ -1,4 +1,5 @@
 import { app, dialog, BrowserWindow } from 'electron';
+import { IPCChannelName } from '../constant/IPCChannelName';
 
 interface ErrorInfo {
   message: string;
@@ -8,10 +9,11 @@ interface ErrorInfo {
 
 export default class AppErrorHandler {
   isMainWindowCreated = false;
+  win: BrowserWindow|null = null;
 
-  constructor() {
-    this.setupErrorHandlers();
-  }
+  // constructor() {
+  //   this.setupErrorHandlers();
+  // }
 
   setupErrorHandlers(): void {
     process.on('uncaughtException', (error: Error) => {
@@ -44,6 +46,10 @@ export default class AppErrorHandler {
 
     this.logError(error);
 
+    // display error info under the logo
+
+    this.win?.webContents.send(IPCChannelName.PRELOAD_ERROR_INFO, error.stack)
+
     // exit app
     // setTimeout(() => {
     //   process.exit(1);
@@ -51,7 +57,7 @@ export default class AppErrorHandler {
   }
 
   /**
-   * save log erro
+   * save log error
    */
   private logError(error: Error): void {
     const errorInfo: ErrorInfo = {

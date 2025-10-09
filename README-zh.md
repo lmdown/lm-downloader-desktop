@@ -9,7 +9,7 @@
 [English](./README.md) · 中文
 
 ## 🔗 链接
-- [魔当首页](https://daiyl.com)
+- [魔当首页](https://seemts.com)
 - [下载 最新版 魔当](https://gitee.com/lmdown/lm-downloader-desktop/releases)
 
 ## 软件截图

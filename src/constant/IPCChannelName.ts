@@ -5,5 +5,6 @@ export const IPCChannelName = {
   OPEN_APP_DETAIL_PAGE: 'open-app-detail-page',
 
   PRELOAD_PROGRESS: 'preload-progress',
+  PRELOAD_ERROR_INFO: 'preload-error-info',
 
 }

@@ -31,7 +31,7 @@ export default class LMDServerManager {
     fullEnv.LMD_USER_DATA_PATH = LMD_USER_DATA_PATH;
     const serverProcess = fork(serverFilePath, {
       cwd: serverDir,
-      env: fullEnv
+      env: fullEnv as unknown as NodeJS.ProcessEnv,
     });
 
     serverProcess.on('disconnect', (e) => {console.log('lmd server disconnect', e)})
@@ -44,6 +44,11 @@ export default class LMDServerManager {
       if(msg==='lmd-server-started') {
         if(this._onSuccess) {
           this._onSuccess()
+        }
+      } else if(typeof msg === 'string') {
+        const errObj = JSON.parse(msg)
+        if(errObj.type === 'lmd-server-exception' || errObj.type === 'lmd-server-rejection'){
+          throw errObj
         }
       }
     });

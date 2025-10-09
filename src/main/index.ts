@@ -51,6 +51,8 @@ async function createWindow() {
   if (process.platform === 'win32') app.setAppUserModelId(app.getName())
 
   win = mainWindowMgr.createMainWindow()
+  appErrorHandler.isMainWindowCreated = true
+  appErrorHandler.win = win
   const menuManager = MenuManager.getInstance()
   menuManager.mainWindow = win
   menuManager.initRightClickMenu(win)
@@ -96,7 +98,6 @@ app.whenReady().then(async () => {
   LMDSystemManager.getInstance().init()
   TrayMenuManager.getInstance().init(createOrShowMainWindow)
   await createWindowLoadFiles()
-  appErrorHandler.isMainWindowCreated = true
 }).catch((error: Error) => {
   console.error('on ready error', error)
   appErrorHandler.handleError('Ready Error 初始化出错', error);
