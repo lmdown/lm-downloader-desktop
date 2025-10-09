@@ -41,9 +41,9 @@ export default class MainWindowManager {
 
     process.env.LMD_LOCALE = lmdBaseConfig.LMD_LOCALE
     //@ts-ignore
-    process.env.LMD_DATA_ROOT = lmdBaseConfig.LMD_DATA_ROOT
+    process.env.LMD_DATA_ROOT = lmdBaseConfig.LMD_DATA_ROOT.replace(/\\/g, '/')
     //@ts-ignore
-    process.env.LMD_LOGS_DIR = lmdBaseConfig.LMD_DATA_ROOT + '/logs'
+    process.env.LMD_LOGS_DIR = lmdBaseConfig.LMD_DATA_ROOT.replace(/\\/g, '/') + '/logs'
     const preload = path.join(__dirname, '../preload/index.js')
     this.win = new BrowserWindow({
       width: WindowConfig.MAIN_WIN_WIDTH,
