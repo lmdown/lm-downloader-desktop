@@ -14,6 +14,7 @@ import { IPCHandleName } from "../../constant/IPCHandleName";
 import UpdateIndexDataUtil from "../util/UpdateIndexDataUtil";
 import { AIAppDepts } from "../update/UpdateIndexData";
 import MacToolsInstallUtil from "./MacToolsInstallUtil";
+import GitAccept from "./GitAccept";
 
 export default class GlobalToolsManager {
 
@@ -79,8 +80,10 @@ export default class GlobalToolsManager {
       }
     } else if(OSUtil.isMacOS()) {
       checkResult = await MacToolsInstallUtil.checkGitInstalled();
+      checkResult = false
       if(!checkResult && installGit) {
         await MacToolsInstallUtil.installXcodeCommandLineTools()
+        await GitAccept.gitAcceptOnMac()
         await MacToolsInstallUtil.waitForGitInstallation()
         checkResult = true
       }
@@ -163,5 +166,6 @@ export default class GlobalToolsManager {
       console.error('extract portable git err', error);
     }
   }
+
 
 }
