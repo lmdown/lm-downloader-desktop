@@ -80,7 +80,6 @@ export default class GlobalToolsManager {
       }
     } else if(OSUtil.isMacOS()) {
       checkResult = await MacToolsInstallUtil.checkGitInstalled();
-      checkResult = false
       if(!checkResult && installGit) {
         await MacToolsInstallUtil.installXcodeCommandLineTools()
         await GitAccept.gitAcceptOnMac()
