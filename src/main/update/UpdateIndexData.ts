@@ -31,4 +31,6 @@ export interface AIAppDepts {
   sevenz_url: string
   git_file_name: string
   git_file_prefix: string
+  git_file_name_v2: string
+  git_file_prefix_v2: string
 }

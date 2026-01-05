@@ -158,8 +158,8 @@ margin: 4px auto;
 </div>
 <div id="error-container" style="display:none;">
 <div id="error-title">
-<span>错误信息</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<span id="copy-btn" onclick="const text = document.getElementById('error-content').innerText;const textarea = document.createElement('textarea'); textarea.value = text;textarea.style.position = 'fixed';document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);">复制全部</span>
+<span>错误信息 Error</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span id="copy-btn" onclick="const text = document.getElementById('error-content').innerText;const textarea = document.createElement('textarea'); textarea.value = text;textarea.style.position = 'fixed';document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);">复制 Copy</span>
 </div>
 <pre id="error-content"></pre>
 </div>

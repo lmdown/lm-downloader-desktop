@@ -142,11 +142,14 @@ export default class GlobalToolsManager {
   }
 
   async installGit(aiAppDepts: AIAppDepts | null) {
-    const gitInstallerFileName = aiAppDepts?.git_file_name || 'PortableGit-2.47.1.2-64-bit.7z.exe'
-    const installerGitUrlPrefix = aiAppDepts?.git_file_prefix || 'https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.2/'
-    const installerGitUrl = await GithubUrlUtil.addProxy(
-      `${installerGitUrlPrefix}${gitInstallerFileName}`
-    )
+    const gitInstallerFileName = aiAppDepts?.git_file_name_v2 || 'PortableGit-2.51.2-64-bit.7z.exe'
+    const installerGitUrlPrefix = aiAppDepts?.git_file_prefix_v2 || 'https://registry.npmmirror.com/-/binary/git-for-windows/v2.51.2.windows.1/'
+
+    let gitTempUrl = `${installerGitUrlPrefix}${gitInstallerFileName}`
+    let installerGitUrl = gitTempUrl;
+    if (gitTempUrl.startsWith('https://github.com')) {
+      installerGitUrl = await GithubUrlUtil.addProxy(gitTempUrl)
+    }
     const gitDir = path.join(this.appGlobalToolsDir, '/git')
     fs.mkdirSync(gitDir, {recursive: true})
     const gitInstallerFilePath = path.join(gitDir, gitInstallerFileName)
