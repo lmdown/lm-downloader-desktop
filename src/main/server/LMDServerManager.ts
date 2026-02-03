@@ -29,6 +29,11 @@ export default class LMDServerManager {
     fullEnv = Object.assign(fullEnv, process.env)
     // @ts-ignore
     fullEnv.LMD_USER_DATA_PATH = LMD_USER_DATA_PATH;
+
+    if(!fs.existsSync(serverFilePath)) {
+      // 本地服务文件丢失
+      throw new Error('local server file missing: ' + serverFilePath)
+    }
     const serverProcess = fork(serverFilePath, {
       cwd: serverDir,
       env: fullEnv as unknown as NodeJS.ProcessEnv,
@@ -40,7 +45,7 @@ export default class LMDServerManager {
     serverProcess.on('spawn', (e) => {console.log('lmd server spawn', e)})
 
     serverProcess.on('message', (msg) => {
-      console.log('local server msg:', msg);
+      console.log('Local server msg:', msg);
       if(msg==='lmd-server-started') {
         if(this._onSuccess) {
           this._onSuccess()
@@ -55,6 +60,9 @@ export default class LMDServerManager {
 
     serverProcess.on('close', (code) => {
       console.log('Server exited with code:', code);
+      if(code!=0) {
+        throw new Error('Local server failed to start. code: ' + code)
+      }
     });
 
     process.on('exit', () => {

@@ -62,6 +62,7 @@ function useLoading() {
   const envData = process.env
   const dataRootDir = envData.LMD_DATA_ROOT
   const lmdLogsDir = envData.LMD_LOGS_DIR
+  const lmdAppStoryDir = envData.LMD_APP_STORY_DIR
   const className = `loaders-css__square-spin`
   const styleContent = `
 
@@ -107,6 +108,7 @@ margin: 4px auto;
 #error-container{border: #FA6400 1px solid; border-radius: 8px; width: 510px; padding:5px; margin: 20px auto 0 auto; app-region: none;}
 #error-title{padding: 4px; font-weight: bold; font-size: 14px; }
 #error-content{padding: 4px; color: #777; font-size: 12px; overflow: auto; margin: 0; min-height: 100px; max-height: 300px; }
+#clear-restart-btn{color: #00ba3e; cursor:pointer; font-size: 12px; text-decoration: underline;}
 #copy-btn{color: #FA6400; cursor:pointer; font-size: 12px; text-decoration: underline;}
 `
   const oStyle = document.createElement('style')
@@ -158,8 +160,9 @@ margin: 4px auto;
 </div>
 <div id="error-container" style="display:none;">
 <div id="error-title">
-<span>错误信息 Error</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<span id="copy-btn" onclick="const text = document.getElementById('error-content').innerText;const textarea = document.createElement('textarea'); textarea.value = text;textarea.style.position = 'fixed';document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);">复制 Copy</span>
+<span>错误 Error</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span id="copy-btn" onclick="const text = document.getElementById('error-content').innerText;const textarea = document.createElement('textarea'); textarea.value = text;textarea.style.position = 'fixed';document.body.appendChild(textarea);textarea.select();document.execCommand('copy');document.body.removeChild(textarea);">复制 Copy</span>&nbsp;&nbsp;
+<span id="clear-restart-btn" onclick="ipcRenderer.invoke('clear-restart-app', '${lmdAppStoryDir}')">修复并重启 Fix & Restart</span>
 </div>
 <pre id="error-content"></pre>
 </div>

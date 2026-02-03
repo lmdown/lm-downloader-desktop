@@ -34,5 +34,8 @@ export const IPCHandleName = {
 
   CHECK_GIT: 'check-git',
   INSTALL_GIT: 'install-git',
+  // clear story dir and restart app
+  CLEAR_RESTART_APP: 'clear-restart-app',
+
 }
 

@@ -5,6 +5,7 @@ import { IPCHandleName } from '../../constant/IPCHandleName'
 import { exec, ExecException } from 'child_process';
 import { platform } from 'os';
 import SystemCommandUtil from '../util/SystemCommandUtil';
+import AppSysUtil from './AppSysUtil';
 
 export default class LMDSystemManager {
   static instance
@@ -28,8 +29,11 @@ export default class LMDSystemManager {
     })
 
     ipcMain.handle(IPCHandleName.RESTART_APP, (_) => {
-      app.relaunch();
-      app.exit(0);
+      AppSysUtil.exitAndRestartApp()
+    });
+
+    ipcMain.handle(IPCHandleName.CLEAR_RESTART_APP, (event, dir: string) => {
+      AppSysUtil.clearDirAndRestartApp(dir)
     });
 
     ipcMain.handle(IPCHandleName.EXIT_APP, (_) => {
