@@ -1,10 +1,16 @@
 appId: com.daiyl.lmd
 productName: LM Downloader
+electronLanguages:
+  - zh-CN
+  - en-US
 directories:
   buildResources: build
 files:
   - 'out/*'
   - 'out/**'
+  - "!**/.DS_Store"
+  - "!**/LICENSE.electron.txt"
+  - "!**/LICENSES.chromium.html"
   - '!**/.vscode/*'
   - '!src/*'
   - '!electron.vite.config.{js,ts,mjs,cjs}'
@@ -19,6 +25,7 @@ win:
     - target: nsis
       arch:
         - x64
+  compression: maximum
   executableName: lm-downloader
   artifactName: ${productName}-Windows-${version}-Setup.${ext}
   icon: src/resource/build/icons/icon.ico
@@ -53,10 +60,12 @@ mac:
       arch:
         - x64
         - arm64
+  compression: maximum
   artifactName: ${productName}-Mac-${arch}-${version}-Installer.${ext}
   icon: src/resource/build/icons/icon.icns
 dmg:
   artifactName: ${name}-${version}-${arch}.${ext}
+  format: ULFO
 linux:
   target:
     - AppImage
