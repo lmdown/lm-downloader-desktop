@@ -1,5 +1,6 @@
 appId: com.daiyl.lmd
 productName: LM Downloader
+copyright: "Copyright © 2026 LM Downloader"
 electronLanguages:
   - zh-CN
   - en-US

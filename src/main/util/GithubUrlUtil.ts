@@ -25,7 +25,7 @@ export default class GithubUrlUtil {
     // get config
     let firstPrefix: string
     try {
-      const url = 'https://gitee.com/lmdown/lm-downloader-app-story/raw/master/ghp.json';
+      const url = 'https://q01.seemts.com/pkgs/update/ghp.json';
       const configData = await this.fetchDataWithTimeout(url);
       console.log('getAvailableGithubPrefix configData', configData)
       const ghpList = configData.gh_prefix

@@ -10,7 +10,7 @@ English · [中文](./README-zh.md)
 
 ## 🔗 Links
 - [LM Downloader Homepage](https://seemts.com)
-- [Get latest LM Downloader](https://gitee.com/lmdown/lm-downloader-desktop/releases)
+- [Get latest LM Downloader](https://github.com/lmdown/lm-downloader-desktop/releases)
 
 ## Snapshots
 
@@ -73,21 +73,6 @@ npm run build:mac
 # For Linux
 npm run build:linux
 ```
-
-## LM Downloader Full Architecture
-
-Below is the architecture diagram of the entire project:
-
-<img width="220" src="docs/Architecture.png">
-
-## 🔗 Git Repository Links
-
-- [LM Downloader Desktop](https://gitee.com/lmdown/lm-downloader-desktop)
-- [LM Downloader Frontend](https://gitee.com/lmdown/lm-downloader-frontend)
-- [LM Downloader Local Server](https://gitee.com/lmdown/lm-downloader-local-server)
-- [LM Downloader App Story](https://gitee.com/lmdown/lm-downloader-app-story)
-- [LMD Install Scripts](https://gitee.com/lmdown/lm-downloader-app-story)
-
 
 ## License
 

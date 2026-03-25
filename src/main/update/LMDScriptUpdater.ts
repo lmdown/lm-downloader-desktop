@@ -35,15 +35,15 @@ export default class LMDScriptUpdater {
     const appStoryGit = baseConfig.LMD_APP_STORY_GIT
 
     if(updateStoryMethod === 'http') {
-      console.log('http download app story zip', appStoryGit)
-      return await this.httpDownloadAppStory(appStoryGit, scriptsDir, appStoryPath)
+      console.log('download app story zip')
+      return await this.httpDownloadAppStory(scriptsDir, appStoryPath)
     } else {
-      console.log('clone app story repo ', appStoryGit)
+      console.log('clone app story repo', appStoryGit)
       return await this.cloneRepository(appStoryGit, appStoryPath);
     }
   }
 
-  async httpDownloadAppStory(appStoryGit: string, scriptsDir: string, appStoryPath: string): Promise<boolean> {
+  async httpDownloadAppStory(scriptsDir: string, appStoryPath: string): Promise<boolean> {
     try {
       // appStoryPackageZipUrl,
       // get remote update config index

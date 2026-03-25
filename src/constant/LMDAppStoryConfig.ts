@@ -2,7 +2,7 @@ export const LMDAppStoryConfig = {
 
   UPDATE_CONFIG_FILE_NAME: 'update_index.json',
 
-  UPDATE_CONFIG_URL: 'https://gitee.com/lmdown/lm-downloader-app-story/raw/master/update_index.json',
+  UPDATE_CONFIG_URL: 'https://q01.seemts.com/pkgs/update/update_index.json',
 
   LMD_APP_STORY_DIR_NAME: "lm-downloader-app-story",
 

@@ -12,15 +12,16 @@ export default class AboutUtil {
     const i18n = LocaleManager.getInstance().i18nInstance
     const appName = i18n.t('Menu.AppName')
     const appDetailInfo =
-      `https://daiyl.com\n`
+      `https://seemts.com\n`
+      +`https://daiyl.com\n`
       + `Github: https://github.com/lmdown\n`
       + `Gitee: https://gitee.com/lmdown\n`
       + '\n'
       + `Electron Ver: ${process.versions.electron}\n`
       + `Node.js Ver: ${process.versions.node}\n`
       + `OS Ver: ${os.type()} ${os.arch()} ${os.release()}`
-    const appRoot = process.env.APP_ROOT = path.join(__dirname, '../..')
-    const logoPath = path.join(appRoot, 'src/resource', 'lmd-logo.png')
+    // const appRoot = process.env.APP_ROOT = path.join(__dirname, '../..')
+    // const logoPath = path.join(appRoot, 'src/resource', 'lmd-logo.png')
     dialog.showMessageBox(_mainWindow, {
       title: 'About',
       message: `${appName} v${app.getVersion()}`,

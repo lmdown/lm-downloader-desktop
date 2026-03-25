@@ -10,7 +10,7 @@
 
 ## 🔗 链接
 - [魔当首页](https://seemts.com)
-- [下载 最新版 魔当](https://gitee.com/lmdown/lm-downloader-desktop/releases)
+- [下载 最新版 魔当](https://github.com/lmdown/lm-downloader-desktop/releases)
 
 ## 软件截图
 
@@ -80,21 +80,6 @@ npm run build:mac
 # For Linux
 npm run build:linux
 ```
-
-## 完整架构
-
-以下是整个项目的架构图：
-
-<img width="220" src="docs/Architecture.png">
-
-## 🔗 代码仓库链接
-
-- [LM Downloader Desktop](https://gitee.com/lmdown/lm-downloader-desktop)
-- [LM Downloader Frontend](https://gitee.com/lmdown/lm-downloader-frontend)
-- [LM Downloader Local Server](https://gitee.com/lmdown/lm-downloader-local-server)
-- [LM Downloader App Story](https://gitee.com/lmdown/lm-downloader-app-story)
-- [LMD Install Scripts](https://gitee.com/lmdown/lm-downloader-app-story)
-
 
 ## 许可证
 
